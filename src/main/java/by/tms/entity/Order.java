@@ -1,5 +1,6 @@
 package by.tms.entity;
 
+import by.tms.entity.user.Account;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,9 +11,6 @@ import lombok.ToString;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -29,11 +27,8 @@ import java.util.List;
 @Builder
 @Entity
 @Table(schema = "library_hibernate")
-public class Order {
+public class Order extends BaseEntity<Long> {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
     @ManyToMany
     @JoinTable(
             name = "order_book",
@@ -44,7 +39,7 @@ public class Order {
     private List<Book> book;
     @ManyToOne(fetch = FetchType.LAZY)
     @ToString.Exclude
-    private User user;
+    private Account account;
     @Column(name = "rental_time", nullable = false)
     private LocalDateTime rentalTime;
     @Column(name = "rental_period", nullable = false)

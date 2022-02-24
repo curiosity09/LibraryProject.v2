@@ -7,13 +7,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
+import javax.persistence.Column;;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.util.List;
 
 @Getter
 @Setter
@@ -23,11 +21,11 @@ import javax.persistence.Table;
 @Builder
 @Entity
 @Table(schema = "library_hibernate")
-public class Genre {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Genre extends BaseEntity<Long> {
+
     @Column(unique = true, nullable = false)
     private String name;
-
+    @OneToMany(mappedBy = "genre")
+    @ToString.Exclude
+    List<Book> books;
 }

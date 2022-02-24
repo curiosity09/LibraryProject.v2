@@ -1,4 +1,4 @@
-package by.tms.entity;
+package by.tms.entity.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,7 +23,7 @@ public class UserData {
     private String name;
     @Column(name = "last_name")
     private String surname;
-    @Column(name = "phone_number")
+    @Column(name = "phone_number", length = 13)
     private String phoneNumber;
     @Column(name = "email")
     private String emailAddress;

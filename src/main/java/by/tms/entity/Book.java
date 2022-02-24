@@ -8,15 +8,13 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.Column;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import java.util.List;
 
 @Getter
 @Setter
@@ -26,21 +24,25 @@ import javax.persistence.Table;
 @Builder
 @Entity
 @Table(schema = "library_hibernate")
-public class Book {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Book extends BaseEntity<Long> {
+
     private String name;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id")
+    @ToString.Exclude
     private Author author;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "genre_id")
+    @ToString.Exclude
     private Genre genre;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "section_id")
+    @ToString.Exclude
     private Section section;
     private int quantity;
     @Column(name = "publication_year")
     private int publicationYear;
+    @ManyToMany(mappedBy = "book")
+    @ToString.Exclude
+    List<Order> orders;
 }
