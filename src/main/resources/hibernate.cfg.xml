@@ -21,6 +21,9 @@
     <mapping class="by.tms.entity.Author"/>
     <mapping class="by.tms.entity.Book"/>
     <mapping class="by.tms.entity.Order"/>
-    <mapping class="by.tms.entity.User"/>
+    <mapping class="by.tms.entity.user.Account"/>
+    <mapping class="by.tms.entity.user.User"/>
+    <mapping class="by.tms.entity.user.Librarian"/>
+    <mapping class="by.tms.entity.user.Admin"/>
   </session-factory>
 </hibernate-configuration>
