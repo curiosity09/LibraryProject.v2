@@ -22,7 +22,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-@ToString
+@ToString(callSuper = true)
 @Entity
 @DiscriminatorValue("librarian")
 @PrimaryKeyJoinColumn(name = "account_id")

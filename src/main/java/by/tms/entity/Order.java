@@ -26,7 +26,7 @@ import java.util.List;
 @ToString
 @Builder
 @Entity
-@Table(schema = "library_hibernate")
+@Table(name = "`order`", schema = "library_hibernate")
 public class Order extends BaseEntity<Long> {
 
     @ManyToMany
@@ -35,10 +35,8 @@ public class Order extends BaseEntity<Long> {
             schema = "library_hibernate",
             joinColumns = @JoinColumn(name = "order_id"),
             inverseJoinColumns = @JoinColumn(name = "book_id"))
-    @ToString.Exclude
     private List<Book> book;
     @ManyToOne(fetch = FetchType.LAZY)
-    @ToString.Exclude
     private Account account;
     @Column(name = "rental_time", nullable = false)
     private LocalDateTime rentalTime;

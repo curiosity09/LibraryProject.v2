@@ -19,11 +19,11 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-@ToString
 @Entity
+@ToString(callSuper = true)
 @DiscriminatorValue("user")
 @PrimaryKeyJoinColumn(name = "account_id")
-@Table(schema = "library_hibernate")
+@Table(name = "`user`", schema = "library_hibernate")
 public class User extends Account {
 
     @Column(name = "is_banned")

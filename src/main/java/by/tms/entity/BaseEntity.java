@@ -1,14 +1,21 @@
 package by.tms.entity;
 
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
-import javax.persistence.Table;
 import java.io.Serializable;
 
+@Getter
+@Setter
+@ToString
 @MappedSuperclass
-@Table(schema = "library_hibernate")
 public abstract class BaseEntity<P extends Serializable> {
 
     @Id
