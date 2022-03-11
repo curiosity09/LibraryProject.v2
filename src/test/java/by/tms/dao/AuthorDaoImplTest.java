@@ -1,78 +1,70 @@
 package by.tms.dao;
 
-import by.tms.dao.impl.AuthorDaoImpl;
+import by.tms.config.DatabaseConfigTest;
 import by.tms.entity.Author;
 import by.tms.util.TestDataImporter;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.event.annotation.AfterTestMethod;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
-public class AuthorDaoImplTest {
+import static org.junit.jupiter.api.Assertions.*;
 
-    private final AuthorDao authorDao = AuthorDaoImpl.getInstance();
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = DatabaseConfigTest.class)
+@Transactional
+class AuthorDaoImplTest {
+
+    @Autowired
+    private AuthorDao authorDao;
+    @Autowired
     private SessionFactory sessionFactory;
 
-    @Before
+    @BeforeEach
     public void initDb() {
-        sessionFactory = new Configuration().configure().buildSessionFactory();
-        TestDataImporter.getInstance().importTestData(sessionFactory);
+        TestDataImporter.importTestData(sessionFactory);
     }
 
-    @After
-    public void finish() {
+    @AfterTestMethod
+    public void flush() {
         sessionFactory.close();
     }
 
     @Test
-    public void findAll() {
-        try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
-            List<Author> results = authorDao.findAll(session);
-            Assert.assertEquals(2, results.size());
-            session.getTransaction().commit();
-        }
+    void findAll() {
+        List<Author> results = authorDao.findAll();
+        assertEquals(3, results.size());
     }
 
     @Test
-    public void findById() {
-        try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
-            Optional<Author> byId = authorDao.findById(session, 1L);
-            byId.ifPresent(author -> Assert.assertEquals("Борис Акунин", author.getFullName()));
-            session.getTransaction().commit();
-        }
+    void findById() {
+        Optional<Author> byId = authorDao.findById(1L);
+        byId.ifPresent(author -> assertEquals("Борис Акунин", author.getFullName()));
     }
 
     @Test
-    public void add() {
-        try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
-            authorDao.add(session, Author.builder().fullName("Анджей Сапковский").build());
-            Optional<Author> genre = authorDao.findByFullName(session, "Анджей Сапковский");
-            Assert.assertTrue(genre.isPresent());
-            session.getTransaction().commit();
-        }
+    void add() {
+        authorDao.save(Author.builder().fullName("Анджей Сапковский").build());
+        Optional<Author> genre = authorDao.findByFullName("Анджей Сапковский");
+        assertTrue(genre.isPresent());
     }
 
     @Test
-    public void update() {
-        try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
-            Optional<Author> byId = authorDao.findById(session, 2L);
-            byId.ifPresent(author -> {
-                author.setFullName("Джордж Мартин");
-                authorDao.update(session, author);
-            });
-            Optional<Author> updatedAuthor = authorDao.findById(session, 2L);
-            updatedAuthor.ifPresent(author -> Assert.assertEquals("Джордж Мартин", author.getFullName()));
-            session.getTransaction().commit();
-        }
+    void update() {
+        Optional<Author> byId = authorDao.findById(2L);
+        byId.ifPresent(author -> {
+            author.setFullName("Джордж Мартин");
+            authorDao.update(author);
+        });
+        Optional<Author> updatedAuthor = authorDao.findById(2L);
+        updatedAuthor.ifPresent(author -> assertEquals("Джордж Мартин", author.getFullName()));
     }
 }

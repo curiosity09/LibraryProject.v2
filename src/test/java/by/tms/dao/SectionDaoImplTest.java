@@ -1,78 +1,83 @@
 package by.tms.dao;
 
-import by.tms.dao.impl.SectionDaoImpl;
+import by.tms.config.DatabaseConfigTest;
 import by.tms.entity.Section;
 import by.tms.util.TestDataImporter;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.event.annotation.AfterTestMethod;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
-public class SectionDaoImplTest {
+import static org.junit.jupiter.api.Assertions.*;
 
-    private final SectionDao sectionDao = SectionDaoImpl.getInstance();
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = DatabaseConfigTest.class)
+@Transactional
+class SectionDaoImplTest {
+
+    @Autowired
+    private SectionDao sectionDao;
+    @Autowired
     private SessionFactory sessionFactory;
 
-    @Before
+    @BeforeEach
     public void initDb() {
-        sessionFactory = new Configuration().configure().buildSessionFactory();
-        TestDataImporter.getInstance().importTestData(sessionFactory);
+        TestDataImporter.importTestData(sessionFactory);
     }
 
-    @After
-    public void finish() {
+    @AfterTestMethod
+    public void flush() {
         sessionFactory.close();
     }
 
     @Test
-    public void findAll() {
-        try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
-            List<Section> results = sectionDao.findAll(session);
-            Assert.assertEquals(3, results.size());
-            session.getTransaction().commit();
-        }
+    void findAll() {
+        List<Section> results = sectionDao.findAll();
+        assertEquals(3, results.size());
     }
 
     @Test
-    public void findById() {
-        try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
-            Optional<Section> byId = sectionDao.findById(session, 1L);
-            byId.ifPresent(section -> Assert.assertEquals("Дошкольная литература", section.getName()));
-            session.getTransaction().commit();
-        }
+    void findById() {
+        Optional<Section> byId = sectionDao.findById(1L);
+        byId.ifPresent(section -> assertEquals("Дошкольная литература", section.getName()));
     }
 
     @Test
-    public void add() {
-        try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
-            sectionDao.add(session, Section.builder().name("Plants").build());
-            Optional<Section> plants = sectionDao.findByName(session, "Plants");
-            Assert.assertTrue(plants.isPresent());
-            session.getTransaction().commit();
-        }
+    void add() {
+        sectionDao.save(Section.builder().name("Plants").build());
+        Optional<Section> plants = sectionDao.findByName("Plants");
+        assertTrue(plants.isPresent());
     }
 
     @Test
-    public void update() {
-        try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
-            Optional<Section> byId = sectionDao.findById(session, 2L);
-            byId.ifPresent(section -> {
-                section.setName("Planets");
-                sectionDao.update(session, section);
-            });
-            Optional<Section> updatedSection = sectionDao.findById(session, 2L);
-            updatedSection.ifPresent(section -> Assert.assertEquals("Planets", section.getName()));
-            session.getTransaction().commit();
-        }
+    void update() {
+        Optional<Section> byId = sectionDao.findById(2L);
+        byId.ifPresent(section -> {
+            section.setName("Planets");
+            sectionDao.update(section);
+        });
+        Optional<Section> updatedSection = sectionDao.findById(2L);
+        updatedSection.ifPresent(section -> assertEquals("Planets", section.getName()));
+    }
+
+    @Test
+    void delete() {
+        Optional<Section> byId = sectionDao.findById(3L);
+        byId.ifPresent(section -> sectionDao.delete(section));
+        Optional<Section> deleted = sectionDao.findById(3L);
+        assertFalse(deleted.isPresent());
+    }
+
+    @Test
+    void isSectionExist() {
+        assertTrue(sectionDao.isExist(2L));
     }
 }

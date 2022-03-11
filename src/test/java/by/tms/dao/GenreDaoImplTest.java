@@ -1,78 +1,75 @@
 package by.tms.dao;
 
-import by.tms.dao.impl.GenreDaoImpl;
+import by.tms.config.DatabaseConfigTest;
 import by.tms.entity.Genre;
 import by.tms.util.TestDataImporter;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.event.annotation.AfterTestMethod;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
-public class GenreDaoImplTest {
+import static org.junit.jupiter.api.Assertions.*;
 
-    private final GenreDao genreDao = GenreDaoImpl.getInstance();
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = DatabaseConfigTest.class)
+@Transactional
+class GenreDaoImplTest {
+
+    @Autowired
+    private GenreDao genreDao;
+    @Autowired
     private SessionFactory sessionFactory;
 
-    @Before
+    @BeforeEach
     public void initDb() {
-        sessionFactory = new Configuration().configure().buildSessionFactory();
-        TestDataImporter.getInstance().importTestData(sessionFactory);
+        TestDataImporter.importTestData(sessionFactory);
     }
 
-    @After
-    public void finish() {
+    @AfterTestMethod
+    public void flush() {
         sessionFactory.close();
     }
 
     @Test
-    public void findAll() {
-        try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
-            List<Genre> results = genreDao.findAll(session);
-            Assert.assertEquals(2, results.size());
-            session.getTransaction().commit();
-        }
+    void findAll() {
+        List<Genre> results = genreDao.findAll();
+        assertEquals(3, results.size());
     }
 
     @Test
-    public void findById() {
-        try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
-            Optional<Genre> byId = genreDao.findById(session, 1L);
-            byId.ifPresent(section -> Assert.assertEquals("Детектив", section.getName()));
-            session.getTransaction().commit();
-        }
+    void findById() {
+        Optional<Genre> byId = genreDao.findById(1L);
+        byId.ifPresent(section -> assertEquals("Детектив", section.getName()));
     }
 
     @Test
-    public void add() {
-        try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
-            genreDao.add(session, Genre.builder().name("Комедия").build());
-            Optional<Genre> genre = genreDao.findByName(session, "Комедия");
-            Assert.assertTrue(genre.isPresent());
-            session.getTransaction().commit();
-        }
+    void isExist() {
+        assertTrue(genreDao.isExist(3L));
     }
 
     @Test
-    public void update() {
-        try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
-            Optional<Genre> byId = genreDao.findById(session, 2L);
-            byId.ifPresent(genre -> {
-                genre.setName("Roman");
-                genreDao.update(session, genre);
-            });
-            Optional<Genre> updatedGenre = genreDao.findById(session, 2L);
-            updatedGenre.ifPresent(genre -> Assert.assertEquals("Roman", genre.getName()));
-            session.getTransaction().commit();
-        }
+    void add() {
+        genreDao.save(Genre.builder().name("Комедия").build());
+        Optional<Genre> genre = genreDao.findByName("Комедия");
+        assertTrue(genre.isPresent());
+    }
+
+    @Test
+    void update() {
+        Optional<Genre> byId = genreDao.findById(2L);
+        byId.ifPresent(genre -> {
+            genre.setName("Roman");
+            genreDao.update(genre);
+        });
+        Optional<Genre> updatedGenre = genreDao.findById(2L);
+        updatedGenre.ifPresent(genre -> assertEquals("Roman", genre.getName()));
     }
 }

@@ -1,83 +1,74 @@
 package by.tms.dao;
 
-
-import by.tms.dao.impl.BookDaoImpl;
+import by.tms.config.DatabaseConfigTest;
 import by.tms.entity.Book;
 import by.tms.util.TestDataImporter;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.event.annotation.AfterTestMethod;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
-public class BookDaoImplTest {
+import static org.junit.jupiter.api.Assertions.*;
 
-    private final BookDao bookDao = BookDaoImpl.getInstance();
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = DatabaseConfigTest.class)
+@Transactional
+class BookDaoImplTest {
+
+    @Autowired
+    private BookDao bookDao;
+    @Autowired
     private SessionFactory sessionFactory;
 
-    @Before
+    @BeforeEach
     public void initDb() {
-        sessionFactory = new Configuration().configure().buildSessionFactory();
-        TestDataImporter.getInstance().importTestData(sessionFactory);
+        TestDataImporter.importTestData(sessionFactory);
     }
 
-    @After
-    public void finish() {
+    @AfterTestMethod
+    public void flush() {
         sessionFactory.close();
     }
 
     @Test
-    public void findAll() {
-        try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
-            List<Book> results = bookDao.findAll(session);
-            Assert.assertEquals(3, results.size());
-            session.getTransaction().commit();
-        }
+    void findAll() {
+        List<Book> results = bookDao.findAll();
+        assertEquals(3, results.size());
     }
 
     @Test
-    public void findById() {
-        try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
-            Optional<Book> byId = bookDao.findById(session, 1L);
-            byId.ifPresent(book -> {
-                Assert.assertEquals("Азазело", book.getName());
-                Assert.assertEquals("Борис Акунин", book.getAuthor().getFullName());
-            });
-            session.getTransaction().commit();
-        }
+    void findById() {
+        Optional<Book> byId = bookDao.findById(1L);
+        byId.ifPresent(book -> {
+            assertEquals("Азазело", book.getName());
+            assertEquals("Борис Акунин", book.getAuthor().getFullName());
+        });
     }
 
     @Test
-    public void add() {
-        try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
-            Book book = Book.builder().name("Владычица озера").quantity(1).publicationYear(1999).build();
-            bookDao.add(session, book);
-            Optional<Book> byId = bookDao.findById(session, 4L);
-            Assert.assertTrue(byId.isPresent());
-            session.getTransaction().commit();
-        }
+    void add() {
+        Book book = Book.builder().name("Владычица озера").quantity(1).publicationYear(1999).build();
+        Long id = bookDao.save(book);
+        Optional<Book> byId = bookDao.findById(id);
+        assertTrue(byId.isPresent());
     }
 
     @Test
-    public void update() {
-        try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
-            Optional<Book> byId = bookDao.findById(session, 1L);
-            byId.ifPresent(book -> {
-                book.setName("Последнее желание");
-                bookDao.update(session, book);
-            });
-            Optional<Book> updatedBook = bookDao.findById(session, 1L);
-            updatedBook.ifPresent(book -> Assert.assertEquals("Последнее желание", book.getName()));
-            session.getTransaction().commit();
-        }
+    void update() {
+        Optional<Book> byId = bookDao.findById(1L);
+        byId.ifPresent(book -> {
+            book.setName("Последнее желание");
+            bookDao.update(book);
+        });
+        Optional<Book> updatedBook = bookDao.findById(1L);
+        updatedBook.ifPresent(book -> assertEquals("Последнее желание", book.getName()));
     }
 }
