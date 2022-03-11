@@ -1,6 +1,6 @@
 package by.tms.entity;
 
-import by.tms.entity.user.Account;
+import by.tms.entity.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -37,7 +37,7 @@ public class Order extends BaseEntity<Long> {
             inverseJoinColumns = @JoinColumn(name = "book_id"))
     private List<Book> book;
     @ManyToOne(fetch = FetchType.LAZY)
-    private Account account;
+    private User account;
     @Column(name = "rental_time", nullable = false)
     private LocalDateTime rentalTime;
     @Column(name = "rental_period", nullable = false)
