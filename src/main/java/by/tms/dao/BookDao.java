@@ -1,11 +1,10 @@
 package by.tms.dao;
 
 import by.tms.entity.Book;
-import org.hibernate.Session;
 
 import java.util.List;
 
-public interface BookDao extends GenericDao<Book>{
+public interface BookDao extends GenericDao<Long, Book>{
 
-    List<Book> findByName(Session session, String name);
+    List<Book> findByName(String name);
 }

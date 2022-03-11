@@ -1,11 +1,10 @@
 package by.tms.dao;
 
 import by.tms.entity.Order;
-import org.hibernate.Session;
 
 import java.util.List;
 
-public interface OrderDao extends GenericDao<Order>{
+public interface OrderDao extends GenericDao<Long, Order>{
 
-    List<Order> findAllByUsername(Session session, String username);
+    List<Order> findAllByUsername(String username);
 }

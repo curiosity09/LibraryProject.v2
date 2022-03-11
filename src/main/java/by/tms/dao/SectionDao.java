@@ -1,11 +1,10 @@
 package by.tms.dao;
 
 import by.tms.entity.Section;
-import org.hibernate.Session;
 
 import java.util.Optional;
 
-public interface SectionDao extends GenericDao<Section> {
+public interface SectionDao extends GenericDao<Long, Section> {
 
-    Optional<Section> findByName(Session session, String name);
+    Optional<Section> findByName(String name);
 }

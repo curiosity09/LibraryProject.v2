@@ -1,20 +1,22 @@
 package by.tms.dao;
 
-import org.hibernate.Session;
+import by.tms.entity.BaseEntity;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
 
-public interface GenericDao<T> {
+public interface GenericDao<P extends Serializable, E extends BaseEntity<P>> {
 
-    List<T> findAll(Session session);
+    List<E> findAll();
 
-    void add(Session session, T t);
+    P save(E entity);
 
-    void update(Session session, T t);
+    void update(E entity);
 
-    void delete(Session session, T t);
+    void delete(E entity);
 
-    Optional<T> findById(Session session, Long id);
+    Optional<E> findById(P id);
+
+    boolean isExist(P id);
 }
-

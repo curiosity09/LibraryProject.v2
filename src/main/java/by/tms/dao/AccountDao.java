@@ -4,26 +4,31 @@ import by.tms.entity.user.Account;
 import by.tms.entity.user.Admin;
 import by.tms.entity.user.Librarian;
 import by.tms.entity.user.User;
-import org.hibernate.Session;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface AccountDao extends GenericDao<Account> {
+public interface AccountDao extends GenericDao<Long, Account> {
 
-    List<User> findAllUsers(Session session);
+    List<User> findAllUsers();
 
-    List<User> findAllDebtors(Session session);
+    List<User> findAllDebtors();
 
-    boolean isExist(Session session, Long id);
+    List<Admin> findAllAdmins();
 
-    List<Admin> findAllAdmins(Session session);
+    List<Librarian> findAllLibrarians();
 
-    List<Librarian> findAllLibrarians(Session session);
+    Optional<Librarian> findLibrarianByUsername(String username);
 
-    Optional<Account> findByUsername(Session session, String username);
+    Optional<Librarian> findLibrarianById(Long id);
 
-    void blockUser(Session session, User user);
+    Optional<Admin> findAdminById(Long id);
 
-    void unblockUser(Session session, User user);
+    Optional<User> findUserByUsername(String username);
+
+    Optional<User> findUserById(Long id);
+
+    void blockUser(User user);
+
+    void unblockUser(User user);
 }
