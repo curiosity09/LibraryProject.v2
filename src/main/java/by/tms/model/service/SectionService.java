@@ -1,0 +1,23 @@
+package by.tms.service;
+
+import by.tms.dto.SectionDto;
+
+import java.util.List;
+import java.util.Optional;
+
+public interface SectionService {
+
+    List<SectionDto> findAllSection();
+
+    Long addNewSection(SectionDto sectionDto);
+
+    Optional<SectionDto> findSectionByName(String sectionName);
+
+    void updateSection(SectionDto sectionDto);
+
+    void deleteSection(SectionDto sectionDto);
+
+    boolean isSectionExist(Long id);
+
+    Optional<SectionDto> findSectionById(Long id);
+}
