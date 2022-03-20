@@ -20,10 +20,10 @@ import java.util.Objects;
 import java.util.Properties;
 
 @Configuration
-@ComponentScan("by.tms")
+@ComponentScan("by.tms.model")
 @PropertySource("classpath:db.properties")
 @EnableTransactionManagement
-public class DatabaseConfig {
+public class HibernateConfig {
 
     @Bean
     public DataSource dataSource(Environment environment){
