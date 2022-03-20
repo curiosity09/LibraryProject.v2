@@ -1,6 +1,6 @@
-package by.tms.dto;
+package by.tms.model.dto;
 
-import by.tms.dto.user.AccountDto;
+import by.tms.model.dto.user.AccountDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;

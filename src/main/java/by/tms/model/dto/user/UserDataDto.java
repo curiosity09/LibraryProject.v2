@@ -1,4 +1,4 @@
-package by.tms.dto.user;
+package by.tms.model.dto.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

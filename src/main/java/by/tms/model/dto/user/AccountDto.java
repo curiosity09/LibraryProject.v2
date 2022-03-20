@@ -1,6 +1,6 @@
-package by.tms.dto.user;
+package by.tms.model.dto.user;
 
-import by.tms.entity.user.Level;
+import by.tms.model.entity.user.Level;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -23,6 +23,7 @@ public class AccountDto implements Serializable {
     private Long id;
     private String username;
     private String password;
+    private String role;
     private UserDataDto userData;
     private boolean isBanned;
     private Level level;

@@ -1,4 +1,4 @@
-package by.tms.dto;
+package by.tms.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
