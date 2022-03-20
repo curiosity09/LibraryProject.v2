@@ -1,10 +1,10 @@
-package by.tms.service.impl;
+package by.tms.model.service.impl;
 
-import by.tms.dao.GenreDao;
-import by.tms.dto.GenreDto;
-import by.tms.entity.Genre;
-import by.tms.mapper.impl.GenreMapper;
-import by.tms.service.GenreService;
+import by.tms.model.dao.GenreDao;
+import by.tms.model.dto.GenreDto;
+import by.tms.model.entity.Genre;
+import by.tms.model.mapper.impl.GenreMapper;
+import by.tms.model.service.GenreService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

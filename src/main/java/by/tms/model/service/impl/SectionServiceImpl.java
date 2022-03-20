@@ -1,10 +1,10 @@
-package by.tms.service.impl;
+package by.tms.model.service.impl;
 
-import by.tms.dao.SectionDao;
-import by.tms.dto.SectionDto;
-import by.tms.entity.Section;
-import by.tms.mapper.impl.SectionMapper;
-import by.tms.service.SectionService;
+import by.tms.model.dao.SectionDao;
+import by.tms.model.dto.SectionDto;
+import by.tms.model.entity.Section;
+import by.tms.model.mapper.impl.SectionMapper;
+import by.tms.model.service.SectionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

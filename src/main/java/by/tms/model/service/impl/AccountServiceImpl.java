@@ -1,13 +1,13 @@
-package by.tms.service.impl;
+package by.tms.model.service.impl;
 
-import by.tms.dao.AccountDao;
-import by.tms.dto.user.AccountDto;
-import by.tms.entity.user.Account;
-import by.tms.entity.user.Admin;
-import by.tms.entity.user.Librarian;
-import by.tms.entity.user.User;
-import by.tms.mapper.impl.AccountMapper;
-import by.tms.service.AccountService;
+import by.tms.model.dao.AccountDao;
+import by.tms.model.dto.user.AccountDto;
+import by.tms.model.entity.user.Account;
+import by.tms.model.entity.user.Admin;
+import by.tms.model.entity.user.Librarian;
+import by.tms.model.entity.user.User;
+import by.tms.model.mapper.impl.AccountMapper;
+import by.tms.model.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

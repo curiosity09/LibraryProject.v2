@@ -1,10 +1,10 @@
-package by.tms.service.impl;
+package by.tms.model.service.impl;
 
-import by.tms.dao.BookDao;
-import by.tms.dto.BookDto;
-import by.tms.entity.Book;
-import by.tms.mapper.impl.BookMapper;
-import by.tms.service.BookService;
+import by.tms.model.dao.BookDao;
+import by.tms.model.dto.BookDto;
+import by.tms.model.entity.Book;
+import by.tms.model.mapper.impl.BookMapper;
+import by.tms.model.service.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,16 +40,19 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    @Transactional
     public Long addNewBook(BookDto bookDto) {
         return bookDao.save(bookMapper.mapToEntity(bookDto));
     }
 
     @Override
+    @Transactional
     public void updateBook(BookDto bookDto) {
         bookDao.update(bookMapper.mapToEntity(bookDto));
     }
 
     @Override
+    @Transactional
     public void deleteBook(BookDto bookDto) {
         bookDao.delete(bookMapper.mapToEntity(bookDto));
     }

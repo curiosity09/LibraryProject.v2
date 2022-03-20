@@ -1,6 +1,6 @@
-package by.tms.service;
+package by.tms.model.service;
 
-import by.tms.dto.SectionDto;
+import by.tms.model.dto.SectionDto;
 
 import java.util.List;
 import java.util.Optional;

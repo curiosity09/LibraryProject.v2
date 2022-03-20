@@ -1,10 +1,10 @@
-package by.tms.service.impl;
+package by.tms.model.service.impl;
 
-import by.tms.dao.AuthorDao;
-import by.tms.dto.AuthorDto;
-import by.tms.entity.Author;
-import by.tms.mapper.impl.AuthorMapper;
-import by.tms.service.AuthorService;
+import by.tms.model.dao.AuthorDao;
+import by.tms.model.dto.AuthorDto;
+import by.tms.model.entity.Author;
+import by.tms.model.mapper.impl.AuthorMapper;
+import by.tms.model.service.AuthorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,8 +27,8 @@ public class AuthorServiceImpl implements AuthorService {
         return authorMapper.mapToListDto(authors);
     }
 
-    @Transactional
     @Override
+    @Transactional
     public Long addNewAuthor(AuthorDto authorDto) {
         return authorDao.save(authorMapper.mapToEntity(authorDto));
     }
@@ -39,14 +39,14 @@ public class AuthorServiceImpl implements AuthorService {
         return Optional.ofNullable(authorMapper.mapToDto(optionalAuthor.orElse(null)));
     }
 
-    @Transactional
     @Override
+    @Transactional
     public void updateAuthor(AuthorDto authorDto) {
         authorDao.update(authorMapper.mapToEntity(authorDto));
     }
 
-    @Transactional
     @Override
+    @Transactional
     public void deleteAuthor(AuthorDto authorDto) {
         authorDao.delete(authorMapper.mapToEntity(authorDto));
     }

@@ -1,6 +1,6 @@
-package by.tms.service;
+package by.tms.model.service;
 
-import by.tms.dto.user.AccountDto;
+import by.tms.model.dto.user.AccountDto;
 
 import java.util.List;
 import java.util.Optional;

@@ -1,10 +1,10 @@
-package by.tms.service.impl;
+package by.tms.model.service.impl;
 
-import by.tms.dao.OrderDao;
-import by.tms.dto.OrderDto;
-import by.tms.entity.Order;
-import by.tms.mapper.impl.OrderMapper;
-import by.tms.service.OrderService;
+import by.tms.model.dao.OrderDao;
+import by.tms.model.dto.OrderDto;
+import by.tms.model.entity.Order;
+import by.tms.model.mapper.impl.OrderMapper;
+import by.tms.model.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
