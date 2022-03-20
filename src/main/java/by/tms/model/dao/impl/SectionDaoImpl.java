@@ -1,8 +1,8 @@
-package by.tms.dao.impl;
+package by.tms.model.dao.impl;
 
-import by.tms.dao.SectionDao;
-import by.tms.entity.Section;
-import by.tms.entity.Section_;
+import by.tms.model.dao.SectionDao;
+import by.tms.model.entity.Section;
+import by.tms.model.entity.Section_;
 
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;

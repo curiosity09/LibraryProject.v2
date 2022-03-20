@@ -1,8 +1,8 @@
-package by.tms.dao.impl;
+package by.tms.model.dao.impl;
 
-import by.tms.dao.BookDao;
-import by.tms.entity.Book;
-import by.tms.entity.Book_;
+import by.tms.model.dao.BookDao;
+import by.tms.model.entity.Book;
+import by.tms.model.entity.Book_;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 

@@ -1,6 +1,6 @@
-package by.tms.dao;
+package by.tms.model.dao;
 
-import by.tms.entity.Author;
+import by.tms.model.entity.Author;
 
 import java.util.Optional;
 

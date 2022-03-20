@@ -1,7 +1,7 @@
-package by.tms.dao.impl;
+package by.tms.model.dao.impl;
 
-import by.tms.dao.GenericDao;
-import by.tms.entity.BaseEntity;
+import by.tms.model.dao.GenericDao;
+import by.tms.model.entity.BaseEntity;
 import lombok.Getter;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;

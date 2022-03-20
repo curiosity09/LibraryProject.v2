@@ -1,6 +1,6 @@
-package by.tms.dao;
+package by.tms.model.dao;
 
-import by.tms.entity.BaseEntity;
+import by.tms.model.entity.BaseEntity;
 
 import java.io.Serializable;
 import java.util.List;

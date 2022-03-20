@@ -1,9 +1,9 @@
-package by.tms.dao;
+package by.tms.model.dao;
 
-import by.tms.entity.user.Account;
-import by.tms.entity.user.Admin;
-import by.tms.entity.user.Librarian;
-import by.tms.entity.user.User;
+import by.tms.model.entity.user.Account;
+import by.tms.model.entity.user.Admin;
+import by.tms.model.entity.user.Librarian;
+import by.tms.model.entity.user.User;
 
 import java.util.List;
 import java.util.Optional;

@@ -1,6 +1,6 @@
-package by.tms.dao;
+package by.tms.model.dao;
 
-import by.tms.entity.Section;
+import by.tms.model.entity.Section;
 
 import java.util.Optional;
 

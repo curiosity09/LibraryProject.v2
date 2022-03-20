@@ -1,6 +1,6 @@
-package by.tms.dao;
+package by.tms.model.dao;
 
-import by.tms.entity.Book;
+import by.tms.model.entity.Book;
 
 import java.util.List;
 

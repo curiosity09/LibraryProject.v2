@@ -1,10 +1,10 @@
-package by.tms.dao.impl;
+package by.tms.model.dao.impl;
 
-import by.tms.dao.OrderDao;
-import by.tms.entity.Order;
-import by.tms.entity.Order_;
-import by.tms.entity.user.Account_;
-import by.tms.entity.user.User;
+import by.tms.model.dao.OrderDao;
+import by.tms.model.entity.Order;
+import by.tms.model.entity.Order_;
+import by.tms.model.entity.user.Account_;
+import by.tms.model.entity.user.User;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
