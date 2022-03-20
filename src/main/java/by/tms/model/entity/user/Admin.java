@@ -1,6 +1,6 @@
-package by.tms.entity.user;
+package by.tms.model.entity.user;
 
-import by.tms.entity.Order;
+import by.tms.model.entity.Order;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -33,8 +33,8 @@ public class Admin extends Account {
     private Level adminLevel;
 
     @Builder
-    public Admin(String username, String password, UserData userData, List<Order> orders, Level adminLevel) {
-        super(username, password, userData, orders);
+    public Admin(String username, String password, String role, UserData userData, List<Order> orders, Level adminLevel) {
+        super(username, password, role, userData, orders);
         this.adminLevel = adminLevel;
     }
 }

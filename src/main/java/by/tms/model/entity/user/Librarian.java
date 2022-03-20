@@ -1,6 +1,6 @@
-package by.tms.entity.user;
+package by.tms.model.entity.user;
 
-import by.tms.entity.Order;
+import by.tms.model.entity.Order;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -33,8 +33,8 @@ public class Librarian extends Account {
     private Level libLevel;
 
     @Builder
-    public Librarian(String username, String password, UserData userData, List<Order> orders, Level libLevel) {
-        super(username, password, userData, orders);
+    public Librarian(String username, String password, String role, UserData userData, List<Order> orders, Level libLevel) {
+        super(username, password, role, userData, orders);
         this.libLevel = libLevel;
     }
 }

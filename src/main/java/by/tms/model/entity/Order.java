@@ -1,6 +1,6 @@
-package by.tms.entity;
+package by.tms.model.entity;
 
-import by.tms.entity.user.User;
+import by.tms.model.entity.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

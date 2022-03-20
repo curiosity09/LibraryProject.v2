@@ -1,6 +1,6 @@
-package by.tms.entity.user;
+package by.tms.model.entity.user;
 
-import by.tms.entity.Order;
+import by.tms.model.entity.Order;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -30,8 +30,8 @@ public class User extends Account {
     private boolean isBanned;
 
     @Builder
-    public User(String username, String password, UserData userData, List<Order> orders, boolean isBanned) {
-        super(username, password, userData, orders);
+    public User(String username, String password, String role, UserData userData, List<Order> orders, boolean isBanned) {
+        super(username, password, role, userData, orders);
         this.isBanned = isBanned;
     }
 }

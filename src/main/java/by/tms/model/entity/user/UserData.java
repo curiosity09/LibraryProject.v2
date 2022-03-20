@@ -1,4 +1,4 @@
-package by.tms.entity.user;
+package by.tms.model.entity.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

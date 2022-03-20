@@ -1,4 +1,4 @@
-package by.tms.entity;
+package by.tms.model.entity;
 
 import lombok.Getter;
 import lombok.Setter;
