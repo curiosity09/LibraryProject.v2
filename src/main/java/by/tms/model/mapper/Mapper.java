@@ -1,4 +1,4 @@
-package by.tms.mapper;
+package by.tms.model.mapper;
 
 import java.util.List;
 

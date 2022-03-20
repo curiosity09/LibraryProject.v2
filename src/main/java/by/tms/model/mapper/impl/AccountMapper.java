@@ -1,13 +1,13 @@
-package by.tms.mapper.impl;
+package by.tms.model.mapper.impl;
 
-import by.tms.dto.user.AccountDto;
-import by.tms.dto.user.UserDataDto;
-import by.tms.entity.user.Account;
-import by.tms.entity.user.Admin;
-import by.tms.entity.user.Librarian;
-import by.tms.entity.user.User;
-import by.tms.entity.user.UserData;
-import by.tms.mapper.Mapper;
+import by.tms.model.dto.user.AccountDto;
+import by.tms.model.dto.user.UserDataDto;
+import by.tms.model.entity.user.Account;
+import by.tms.model.entity.user.Admin;
+import by.tms.model.entity.user.Librarian;
+import by.tms.model.entity.user.User;
+import by.tms.model.entity.user.UserData;
+import by.tms.model.mapper.Mapper;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -31,6 +31,7 @@ public class AccountMapper implements Mapper<Account, AccountDto> {
             AccountDto accountDto = AccountDto.builder()
                     .id(account.getId())
                     .username(account.getUsername())
+                    .role(account.getRole())
                     .password(account.getPassword())
                     .build();
             if (Objects.nonNull(account.getUserData())) {
@@ -64,6 +65,7 @@ public class AccountMapper implements Mapper<Account, AccountDto> {
         if (Objects.nonNull(userDto)) {
             User user = User.builder()
                     .username(userDto.getUsername())
+                    .role(userDto.getRole())
                     .password(userDto.getPassword())
                     .isBanned(userDto.isBanned())
                     .build();
@@ -87,6 +89,7 @@ public class AccountMapper implements Mapper<Account, AccountDto> {
             Librarian librarian = Librarian.builder()
                     .username(libDto.getUsername())
                     .password(libDto.getPassword())
+                    .role(libDto.getRole())
                     .userData(UserData.builder()
                             .name(libDto.getUserData().getName())
                             .surname(libDto.getUserData().getSurname())
@@ -106,6 +109,7 @@ public class AccountMapper implements Mapper<Account, AccountDto> {
             Admin admin = Admin.builder()
                     .username(adminDto.getUsername())
                     .password(adminDto.getPassword())
+                    .role(adminDto.getRole())
                     .userData(UserData.builder()
                             .name(adminDto.getUserData().getName())
                             .surname(adminDto.getUserData().getSurname())

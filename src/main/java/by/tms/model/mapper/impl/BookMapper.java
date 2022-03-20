@@ -1,8 +1,8 @@
-package by.tms.mapper.impl;
+package by.tms.model.mapper.impl;
 
-import by.tms.dto.BookDto;
-import by.tms.entity.Book;
-import by.tms.mapper.Mapper;
+import by.tms.model.dto.BookDto;
+import by.tms.model.entity.Book;
+import by.tms.model.mapper.Mapper;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
