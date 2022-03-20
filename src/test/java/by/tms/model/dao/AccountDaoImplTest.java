@@ -1,10 +1,10 @@
-package by.tms.dao;
+package by.tms.model.dao;
 
-import by.tms.config.DatabaseConfigTest;
-import by.tms.entity.user.Account;
-import by.tms.entity.user.Admin;
-import by.tms.entity.user.Librarian;
-import by.tms.entity.user.User;
+import by.tms.model.config.HibernateConfigTest;
+import by.tms.model.entity.user.Account;
+import by.tms.model.entity.user.Admin;
+import by.tms.model.entity.user.Librarian;
+import by.tms.model.entity.user.User;
 import by.tms.util.TestDataImporter;
 import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,11 +22,12 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = DatabaseConfigTest.class)
-@Transactional
+@ContextConfiguration(classes = HibernateConfigTest.class)
+@Transactional(readOnly = true)
 class AccountDaoImplTest {
 
-    AccountDaoImplTest(){}
+    AccountDaoImplTest() {
+    }
 
     @Autowired
     private AccountDao accountDao;
@@ -74,6 +75,7 @@ class AccountDaoImplTest {
     }
 
     @Test
+    @Transactional
     void add() {
         accountDao.save(User.builder().username("cheburek").password("pass").build());
         Optional<User> results = accountDao.findUserByUsername("cheburek");
@@ -81,6 +83,7 @@ class AccountDaoImplTest {
     }
 
     @Test
+    @Transactional
     void update() {
         Optional<Account> byId = accountDao.findById(3L);
         byId.ifPresent(account -> {
@@ -94,7 +97,10 @@ class AccountDaoImplTest {
     @Test
     void findUserById() {
         Optional<User> userById = accountDao.findUserById(1L);
-        userById.ifPresent(user -> assertEquals("user", user.getUsername()));
+        userById.ifPresent(user -> {
+            assertEquals("user", user.getUsername());
+            assertEquals("user", user.getRole());
+        });
     }
 
     @Test

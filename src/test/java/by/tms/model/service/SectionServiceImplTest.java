@@ -1,7 +1,7 @@
-package by.tms.service;
+package by.tms.model.service;
 
-import by.tms.config.DatabaseConfigTest;
-import by.tms.dto.SectionDto;
+import by.tms.model.config.HibernateConfigTest;
+import by.tms.model.dto.SectionDto;
 import by.tms.util.TestDataImporter;
 import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,7 +19,8 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = DatabaseConfigTest.class)
+@ContextConfiguration(classes = HibernateConfigTest.class)
+@Transactional
 class SectionServiceImplTest {
 
     @Autowired
@@ -64,7 +65,7 @@ class SectionServiceImplTest {
     @Test
     void findSectionByName() {
         Optional<SectionDto> sectionByName = sectionService.findSectionByName("Косм1ос");
-        assertTrue(sectionByName.isPresent());
+        assertFalse(sectionByName.isPresent());
     }
 
     @Test

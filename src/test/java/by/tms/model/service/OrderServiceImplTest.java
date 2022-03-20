@@ -1,9 +1,8 @@
-package by.tms.service;
+package by.tms.model.service;
 
-import by.tms.config.DatabaseConfigTest;
-import by.tms.dto.OrderDto;
+import by.tms.model.config.HibernateConfigTest;
+import by.tms.model.dto.OrderDto;
 import by.tms.util.TestDataImporter;
-import lombok.RequiredArgsConstructor;
 import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,8 +20,8 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = DatabaseConfigTest.class)
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@ContextConfiguration(classes = HibernateConfigTest.class)
+@Transactional
 class OrderServiceImplTest {
 
     @Autowired

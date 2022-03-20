@@ -1,15 +1,15 @@
 package by.tms.util;
 
-import by.tms.entity.Author;
-import by.tms.entity.Book;
-import by.tms.entity.Genre;
-import by.tms.entity.Order;
-import by.tms.entity.Section;
-import by.tms.entity.user.Admin;
-import by.tms.entity.user.Level;
-import by.tms.entity.user.Librarian;
-import by.tms.entity.user.User;
-import by.tms.entity.user.UserData;
+import by.tms.model.entity.Author;
+import by.tms.model.entity.Book;
+import by.tms.model.entity.Genre;
+import by.tms.model.entity.Order;
+import by.tms.model.entity.Section;
+import by.tms.model.entity.user.Admin;
+import by.tms.model.entity.user.Level;
+import by.tms.model.entity.user.Librarian;
+import by.tms.model.entity.user.User;
+import by.tms.model.entity.user.UserData;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
@@ -86,7 +86,7 @@ public final class TestDataImporter {
 
     private static User saveUser(Session session, String username, String password,
                                     String name, String surname, String email, String phone) {
-        User user = User.builder().username(username).password(password)
+        User user = User.builder().username(username).password(password).role("user")
                 .userData(UserData.builder().name(name).surname(surname)
                         .emailAddress(email).phoneNumber(phone).build()).isBanned(false).build();
         session.save(user);

@@ -1,7 +1,7 @@
-package by.tms.dao;
+package by.tms.model.dao;
 
-import by.tms.config.DatabaseConfigTest;
-import by.tms.entity.Section;
+import by.tms.model.config.HibernateConfigTest;
+import by.tms.model.entity.Section;
 import by.tms.util.TestDataImporter;
 import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,8 +19,8 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = DatabaseConfigTest.class)
-@Transactional
+@ContextConfiguration(classes = HibernateConfigTest.class)
+@Transactional(readOnly = true)
 class SectionDaoImplTest {
 
     @Autowired
@@ -51,6 +51,7 @@ class SectionDaoImplTest {
     }
 
     @Test
+    @Transactional
     void add() {
         sectionDao.save(Section.builder().name("Plants").build());
         Optional<Section> plants = sectionDao.findByName("Plants");
@@ -58,6 +59,7 @@ class SectionDaoImplTest {
     }
 
     @Test
+    @Transactional
     void update() {
         Optional<Section> byId = sectionDao.findById(2L);
         byId.ifPresent(section -> {
@@ -69,6 +71,7 @@ class SectionDaoImplTest {
     }
 
     @Test
+    @Transactional
     void delete() {
         Optional<Section> byId = sectionDao.findById(3L);
         byId.ifPresent(section -> sectionDao.delete(section));

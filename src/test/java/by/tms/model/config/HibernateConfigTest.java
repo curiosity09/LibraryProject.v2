@@ -5,5 +5,5 @@ import org.springframework.context.annotation.Import;
 
 @Configuration
 @Import(HibernateConfig.class)
-public class DatabaseConfigTest {
+public class HibernateConfigTest {
 }

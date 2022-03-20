@@ -1,8 +1,8 @@
-package by.tms.dao;
+package by.tms.model.dao;
 
-import by.tms.config.DatabaseConfigTest;
-import by.tms.entity.Book;
-import by.tms.entity.Order;
+import by.tms.model.config.HibernateConfigTest;
+import by.tms.model.entity.Book;
+import by.tms.model.entity.Order;
 import by.tms.util.TestDataImporter;
 import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,8 +22,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 //@RunWith(SpringRunner.class)
-@ContextConfiguration(classes = DatabaseConfigTest.class)
-@Transactional
+@ContextConfiguration(classes = HibernateConfigTest.class)
+@Transactional(readOnly = true)
 class OrderDaoImplTest {
 
     @Autowired
@@ -54,6 +54,7 @@ class OrderDaoImplTest {
     }
 
     @Test
+    @Transactional
     void testAdd() {
         Order order = Order.builder().book(null)
                 .account(null).rentalTime(LocalDateTime.now()).rentalPeriod(LocalDateTime.MAX).build();
@@ -64,6 +65,7 @@ class OrderDaoImplTest {
     }
 
     @Test
+    @Transactional
     void testUpdate() {
         Book book = Book.builder().build();
         book.setId(1L);
@@ -77,6 +79,7 @@ class OrderDaoImplTest {
     }
 
     @Test
+    @Transactional
     void testDelete() {
         List<Order> allOrder = orderDao.findAll();
         orderDao.delete(allOrder.get(1));

@@ -1,7 +1,7 @@
-package by.tms.service;
+package by.tms.model.service;
 
-import by.tms.config.DatabaseConfigTest;
-import by.tms.dto.AuthorDto;
+import by.tms.model.config.HibernateConfigTest;
+import by.tms.model.dto.AuthorDto;
 import by.tms.util.TestDataImporter;
 import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,7 +19,8 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = DatabaseConfigTest.class)
+@ContextConfiguration(classes = HibernateConfigTest.class)
+@Transactional
 class AuthorServiceImplTest {
 
     @Autowired

@@ -1,7 +1,7 @@
-package by.tms.dao;
+package by.tms.model.dao;
 
-import by.tms.config.DatabaseConfigTest;
-import by.tms.entity.Genre;
+import by.tms.model.config.HibernateConfigTest;
+import by.tms.model.entity.Genre;
 import by.tms.util.TestDataImporter;
 import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,8 +19,8 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = DatabaseConfigTest.class)
-@Transactional
+@ContextConfiguration(classes = HibernateConfigTest.class)
+@Transactional(readOnly = true)
 class GenreDaoImplTest {
 
     @Autowired
@@ -56,6 +56,7 @@ class GenreDaoImplTest {
     }*/
 
     @Test
+    @Transactional
     void add() {
         genreDao.save(Genre.builder().name("Комедия").build());
         Optional<Genre> genre = genreDao.findByName("Комедия");
@@ -63,6 +64,7 @@ class GenreDaoImplTest {
     }
 
     @Test
+    @Transactional
     void update() {
         Optional<Genre> byId = genreDao.findById(2L);
         byId.ifPresent(genre -> {

@@ -1,7 +1,7 @@
-package by.tms.dao;
+package by.tms.model.dao;
 
-import by.tms.config.DatabaseConfigTest;
-import by.tms.entity.Book;
+import by.tms.model.config.HibernateConfigTest;
+import by.tms.model.entity.Book;
 import by.tms.util.TestDataImporter;
 import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,8 +19,8 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = DatabaseConfigTest.class)
-@Transactional
+@ContextConfiguration(classes = HibernateConfigTest.class)
+@Transactional(readOnly = true)
 class BookDaoImplTest {
 
     @Autowired
@@ -54,6 +54,7 @@ class BookDaoImplTest {
     }
 
     @Test
+    @Transactional
     void add() {
         Book book = Book.builder().name("Владычица озера").quantity(1).publicationYear(1999).build();
         Long id = bookDao.save(book);
@@ -62,6 +63,7 @@ class BookDaoImplTest {
     }
 
     @Test
+    @Transactional
     void update() {
         Optional<Book> byId = bookDao.findById(1L);
         byId.ifPresent(book -> {
