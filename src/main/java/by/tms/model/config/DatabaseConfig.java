@@ -11,7 +11,6 @@ import org.springframework.core.io.Resource;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
-import org.springframework.transaction.TransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
@@ -23,7 +22,7 @@ import java.util.Properties;
 @ComponentScan("by.tms.model")
 @PropertySource("classpath:db.properties")
 @EnableTransactionManagement
-public class HibernateConfig {
+public class DatabaseConfig {
 
     @Bean
     public DataSource dataSource(Environment environment){
@@ -52,7 +51,7 @@ public class HibernateConfig {
     }
 
     @Bean
-    public TransactionManager transactionManager(SessionFactory sessionFactory){
+    public HibernateTransactionManager transactionManager(SessionFactory sessionFactory){
         return new HibernateTransactionManager(sessionFactory);
     }
 }
