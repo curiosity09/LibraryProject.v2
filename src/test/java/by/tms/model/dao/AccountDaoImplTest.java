@@ -1,28 +1,30 @@
 package by.tms.model.dao;
 
-import by.tms.model.config.HibernateConfigTest;
+import by.tms.model.config.DatabaseConfigTest;
 import by.tms.model.entity.user.Account;
 import by.tms.model.entity.user.Admin;
 import by.tms.model.entity.user.Librarian;
 import by.tms.model.entity.user.User;
 import by.tms.util.TestDataImporter;
 import org.hibernate.SessionFactory;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.event.annotation.AfterTestMethod;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
+import static by.tms.util.TestDataImporter.LIMIT_10;
+import static by.tms.util.TestDataImporter.OFFSET_0;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = HibernateConfigTest.class)
+@ContextConfiguration(classes = DatabaseConfigTest.class)
 @Transactional(readOnly = true)
 class AccountDaoImplTest {
 
@@ -39,32 +41,32 @@ class AccountDaoImplTest {
         TestDataImporter.importTestData(sessionFactory);
     }
 
-    @AfterTestMethod
+    @AfterEach
     public void flush() {
         sessionFactory.close();
     }
 
     @Test
     void findAll() {
-        List<Account> results = accountDao.findAll();
+        List<Account> results = accountDao.findAll(LIMIT_10,OFFSET_0);
         assertEquals(6, results.size());
     }
 
     @Test
     void findAllUsers() {
-        List<User> results = accountDao.findAllUsers();
+        List<User> results = accountDao.findAllUsers(LIMIT_10,OFFSET_0);
         assertEquals("user", results.get(0).getUsername());
     }
 
     @Test
     void findAllAdmins() {
-        List<Admin> results = accountDao.findAllAdmins();
+        List<Admin> results = accountDao.findAllAdmins(LIMIT_10,OFFSET_0);
         assertEquals("admin", results.get(0).getUsername());
     }
 
     @Test
     void findAllLibrarians() {
-        List<Librarian> results = accountDao.findAllLibrarians();
+        List<Librarian> results = accountDao.findAllLibrarians(LIMIT_10,OFFSET_0);
         assertEquals("lib", results.get(1).getUsername());
     }
 
@@ -105,7 +107,12 @@ class AccountDaoImplTest {
 
     @Test
     void findAllDebtors() {
-        List<User> allDebtors = accountDao.findAllDebtors();
+        List<User> allDebtors = accountDao.findAllDebtors(LIMIT_10,OFFSET_0);
         assertEquals(0, allDebtors.size());
+    }
+
+    @Test
+    void blockUser(){
+
     }
 }

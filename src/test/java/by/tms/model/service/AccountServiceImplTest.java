@@ -1,26 +1,28 @@
 package by.tms.model.service;
 
-import by.tms.model.config.HibernateConfigTest;
+import by.tms.model.config.DatabaseConfigTest;
 import by.tms.model.dto.user.AccountDto;
 import by.tms.model.dto.user.UserDataDto;
 import by.tms.util.TestDataImporter;
 import org.hibernate.SessionFactory;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.event.annotation.AfterTestMethod;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
+import static by.tms.util.TestDataImporter.LIMIT_10;
+import static by.tms.util.TestDataImporter.OFFSET_0;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = HibernateConfigTest.class)
+@ContextConfiguration(classes = DatabaseConfigTest.class)
 @Transactional
 class AccountServiceImplTest {
 
@@ -34,32 +36,32 @@ class AccountServiceImplTest {
         TestDataImporter.importTestData(sessionFactory);
     }
 
-    @AfterTestMethod
+    @AfterEach
     public void flush() {
         sessionFactory.close();
     }
 
     @Test
     void findAllUsers() {
-        List<AccountDto> allUsers = accountService.findAllUsers();
+        List<AccountDto> allUsers = accountService.findAllUsers(LIMIT_10,OFFSET_0);
         assertEquals(2, allUsers.size());
     }
 
     @Test
     void findAllDebtors() {
-        List<AccountDto> allDebtors = accountService.findAllDebtors();
+        List<AccountDto> allDebtors = accountService.findAllDebtors(LIMIT_10,OFFSET_0);
         assertEquals(0, allDebtors.size());
     }
 
     @Test
     void findAllAdmins() {
-        List<AccountDto> allAdmins = accountService.findAllAdmins();
+        List<AccountDto> allAdmins = accountService.findAllAdmins(LIMIT_10,OFFSET_0);
         assertEquals(2, allAdmins.size());
     }
 
     @Test
     void findAllLibrarians() {
-        List<AccountDto> allLibrarians = accountService.findAllLibrarians();
+        List<AccountDto> allLibrarians = accountService.findAllLibrarians(LIMIT_10,OFFSET_0);
         assertEquals(2, allLibrarians.size());
         assertEquals("Kirill", allLibrarians.get(0).getUserData().getName());
     }

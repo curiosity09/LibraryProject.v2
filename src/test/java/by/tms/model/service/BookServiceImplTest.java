@@ -1,15 +1,15 @@
 package by.tms.model.service;
 
-import by.tms.model.config.HibernateConfigTest;
+import by.tms.model.config.DatabaseConfigTest;
 import by.tms.model.dto.BookDto;
 import by.tms.util.TestDataImporter;
 import org.hibernate.SessionFactory;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.event.annotation.AfterTestMethod;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,7 +19,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = HibernateConfigTest.class)
+@ContextConfiguration(classes = DatabaseConfigTest.class)
 @Transactional
 class BookServiceImplTest {
 
@@ -33,7 +33,7 @@ class BookServiceImplTest {
         TestDataImporter.importTestData(sessionFactory);
     }
 
-    @AfterTestMethod
+    @AfterEach
     public void flush() {
         sessionFactory.close();
     }
@@ -52,7 +52,7 @@ class BookServiceImplTest {
 
     @Test
     void findAllBook() {
-        List<BookDto> allBook = bookService.findAllBook();
+        List<BookDto> allBook = bookService.findAllBook(10,0);
         assertEquals(3, allBook.size());
     }
 
@@ -82,9 +82,4 @@ class BookServiceImplTest {
         Optional<BookDto> bookById = bookService.findBookById(3L);
         assertFalse(bookById.isPresent());
     }
-
-/*    @Test
-    void isBookExist() {
-        assertTrue(bookService.isBookExist(2L));
-    }*/
 }

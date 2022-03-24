@@ -1,16 +1,16 @@
 package by.tms.model.dao;
 
-import by.tms.model.config.HibernateConfigTest;
+import by.tms.model.config.DatabaseConfigTest;
 import by.tms.model.entity.Book;
 import by.tms.model.entity.Order;
 import by.tms.util.TestDataImporter;
 import org.hibernate.SessionFactory;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.event.annotation.AfterTestMethod;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,11 +18,12 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import static by.tms.util.TestDataImporter.LIMIT_10;
+import static by.tms.util.TestDataImporter.OFFSET_0;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
-//@RunWith(SpringRunner.class)
-@ContextConfiguration(classes = HibernateConfigTest.class)
+@ContextConfiguration(classes = DatabaseConfigTest.class)
 @Transactional(readOnly = true)
 class OrderDaoImplTest {
 
@@ -36,14 +37,14 @@ class OrderDaoImplTest {
         TestDataImporter.importTestData(sessionFactory);
     }
 
-    @AfterTestMethod
+    @AfterEach
     public void flush() {
         sessionFactory.close();
     }
 
     @Test
     void testFindAll() {
-        List<Order> results = orderDao.findAll();
+        List<Order> results = orderDao.findAll(LIMIT_10, OFFSET_0);
         assertEquals(3, results.size());
     }
 
@@ -81,15 +82,15 @@ class OrderDaoImplTest {
     @Test
     @Transactional
     void testDelete() {
-        List<Order> allOrder = orderDao.findAll();
+        List<Order> allOrder = orderDao.findAll(LIMIT_10, OFFSET_0);
         orderDao.delete(allOrder.get(1));
-        List<Order> orders = orderDao.findAll();
+        List<Order> orders = orderDao.findAll(LIMIT_10, OFFSET_0);
         assertEquals(2, orders.size());
     }
 
     @Test
     void findAllByUsername() {
-        List<Order> byUsername = orderDao.findAllByUsername("user");
+        List<Order> byUsername = orderDao.findAllByUsername("user", LIMIT_10, OFFSET_0);
         assertEquals(1, byUsername.size());
     }
 }

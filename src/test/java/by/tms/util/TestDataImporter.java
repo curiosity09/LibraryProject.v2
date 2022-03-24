@@ -18,6 +18,9 @@ import java.util.List;
 
 public final class TestDataImporter {
 
+    public static final int LIMIT_10 = 10;
+    public static final int OFFSET_0 = 0;
+
     public static void importTestData(SessionFactory sessionFactory) {
         Session session = sessionFactory.getCurrentSession();
 

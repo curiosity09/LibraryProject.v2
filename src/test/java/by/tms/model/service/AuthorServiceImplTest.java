@@ -1,25 +1,27 @@
 package by.tms.model.service;
 
-import by.tms.model.config.HibernateConfigTest;
+import by.tms.model.config.DatabaseConfigTest;
 import by.tms.model.dto.AuthorDto;
 import by.tms.util.TestDataImporter;
 import org.hibernate.SessionFactory;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.event.annotation.AfterTestMethod;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
+import static by.tms.util.TestDataImporter.LIMIT_10;
+import static by.tms.util.TestDataImporter.OFFSET_0;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = HibernateConfigTest.class)
+@ContextConfiguration(classes = DatabaseConfigTest.class)
 @Transactional
 class AuthorServiceImplTest {
 
@@ -33,14 +35,14 @@ class AuthorServiceImplTest {
         TestDataImporter.importTestData(sessionFactory);
     }
 
-    @AfterTestMethod
+    @AfterEach
     public void flush() {
         sessionFactory.close();
     }
 
     @Test
     void findAllAuthor() {
-        List<AuthorDto> allAuthor = authorService.findAllAuthor();
+        List<AuthorDto> allAuthor = authorService.findAllAuthor(LIMIT_10,OFFSET_0);
         assertEquals(3, allAuthor.size());
     }
 
@@ -75,11 +77,6 @@ class AuthorServiceImplTest {
         Optional<AuthorDto> authorById = authorService.findAuthorById(1L);
         assertFalse(authorById.isPresent());
     }
-
-/*    @Test
-    void isAuthorExist() {
-        assertTrue(authorService.isAuthorExist(1L));
-    }*/
 
     @Test
     void findAuthorById() {
