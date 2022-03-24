@@ -10,13 +10,13 @@ import java.util.Optional;
 
 public interface AccountDao extends GenericDao<Long, Account> {
 
-    List<User> findAllUsers();
+    List<User> findAllUsers(int limit, int offset);
 
-    List<User> findAllDebtors();
+    List<User> findAllDebtors(int limit, int offset);
 
-    List<Admin> findAllAdmins();
+    List<Admin> findAllAdmins(int limit, int offset);
 
-    List<Librarian> findAllLibrarians();
+    List<Librarian> findAllLibrarians(int limit, int offset);
 
     Optional<Account> findByUsername(String username);
 

@@ -62,12 +62,16 @@ public abstract class GenericDaoImpl<P extends Serializable, E extends BaseEntit
     }
 
     @Override
-    public List<E> findAll() {
+    public List<E> findAll(int limit, int offset) {
         Session session = sessionFactory.getCurrentSession();
         CriteriaBuilder cb = session.getCriteriaBuilder();
         CriteriaQuery<E> criteria = cb.createQuery(clazz);
         Root<E> root = criteria.from(clazz);
-        return session.createQuery(criteria.select(root)).getResultList();
+        return session
+                .createQuery(criteria.select(root))
+                .setMaxResults(limit)
+                .setFirstResult(offset)
+                .getResultList();
     }
 
     @Override

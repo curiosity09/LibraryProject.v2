@@ -15,16 +15,20 @@ import javax.persistence.criteria.Root;
 import java.util.List;
 
 @Repository
-public  class OrderDaoImpl extends GenericDaoImpl<Long, Order> implements OrderDao {
+public class OrderDaoImpl extends GenericDaoImpl<Long, Order> implements OrderDao {
 
     @Override
-    public List<Order> findAllByUsername(String username) {
+    public List<Order> findAllByUsername(String username, int limit, int offset) {
         Session session = getSessionFactory().getCurrentSession();
         CriteriaBuilder cb = session.getCriteriaBuilder();
         CriteriaQuery<Order> criteria = cb.createQuery(Order.class);
         Root<Order> from = criteria.from(Order.class);
         Join<Order, User> accountJoin = from.join(Order_.account);
         criteria.select(from).where(cb.equal(accountJoin.get(Account_.username), username));
-        return session.createQuery(criteria).getResultList();
+        return session
+                .createQuery(criteria)
+                .setMaxResults(limit)
+                .setFirstResult(offset)
+                .getResultList();
     }
 }

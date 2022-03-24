@@ -25,17 +25,21 @@ import java.util.Optional;
 public class AccountDaoImpl extends GenericDaoImpl<Long, Account> implements AccountDao {
 
     @Override
-    public List<User> findAllUsers() {
+    public List<User> findAllUsers(int limit, int offset) {
         Session session = getSessionFactory().getCurrentSession();
         CriteriaBuilder cb = session.getCriteriaBuilder();
         CriteriaQuery<User> criteria = cb.createQuery(User.class);
         Root<User> root = criteria.from(User.class);
         criteria.select(root);
-        return session.createQuery(criteria).getResultList();
+        return session
+                .createQuery(criteria)
+                .setMaxResults(limit)
+                .setFirstResult(offset)
+                .getResultList();
     }
 
     @Override
-    public List<User> findAllDebtors() {
+    public List<User> findAllDebtors(int limit, int offset) {
         Session session = getSessionFactory().getCurrentSession();
         CriteriaBuilder cb = session.getCriteriaBuilder();
         CriteriaQuery<User> criteria = cb.createQuery(User.class);
@@ -48,27 +52,39 @@ public class AccountDaoImpl extends GenericDaoImpl<Long, Account> implements Acc
                                 cb.lessThan(orderJoin.get(Order_.rentalPeriod), LocalDateTime.now()),
                                 cb.equal(from.get(User_.isBanned), false))
                 ).distinct(true);
-        return session.createQuery(criteria).getResultList();
+        return session
+                .createQuery(criteria)
+                .setMaxResults(limit)
+                .setFirstResult(offset)
+                .getResultList();
     }
 
     @Override
-    public List<Admin> findAllAdmins() {
+    public List<Admin> findAllAdmins(int limit, int offset) {
         Session session = getSessionFactory().getCurrentSession();
         CriteriaBuilder cb = session.getCriteriaBuilder();
         CriteriaQuery<Admin> criteria = cb.createQuery(Admin.class);
         Root<Admin> root = criteria.from(Admin.class);
         criteria.select(root);
-        return session.createQuery(criteria).getResultList();
+        return session
+                .createQuery(criteria)
+                .setMaxResults(limit)
+                .setFirstResult(offset)
+                .getResultList();
     }
 
     @Override
-    public List<Librarian> findAllLibrarians() {
+    public List<Librarian> findAllLibrarians(int limit, int offset) {
         Session session = getSessionFactory().getCurrentSession();
         CriteriaBuilder cb = session.getCriteriaBuilder();
         CriteriaQuery<Librarian> criteria = cb.createQuery(Librarian.class);
         Root<Librarian> root = criteria.from(Librarian.class);
         criteria.select(root);
-        return session.createQuery(criteria).getResultList();
+        return session
+                .createQuery(criteria)
+                .setMaxResults(limit)
+                .setFirstResult(offset)
+                .getResultList();
     }
 
     @Override

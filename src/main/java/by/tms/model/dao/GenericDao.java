@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface GenericDao<P extends Serializable, E extends BaseEntity<P>> {
 
-    List<E> findAll();
+    List<E> findAll(int limit, int offset);
 
     P save(E entity);
 
