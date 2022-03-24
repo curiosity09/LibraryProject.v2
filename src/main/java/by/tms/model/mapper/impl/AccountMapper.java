@@ -32,6 +32,7 @@ public class AccountMapper implements Mapper<Account, AccountDto> {
                     .id(account.getId())
                     .username(account.getUsername())
                     .role(account.getRole())
+                    .userData(UserDataDto.builder().build())
                     .password(account.getPassword())
                     .build();
             if (Objects.nonNull(account.getUserData())) {
@@ -66,6 +67,7 @@ public class AccountMapper implements Mapper<Account, AccountDto> {
             User user = User.builder()
                     .username(userDto.getUsername())
                     .role(userDto.getRole())
+                    .userData(UserData.builder().build())
                     .password(userDto.getPassword())
                     .isBanned(userDto.isBanned())
                     .build();
