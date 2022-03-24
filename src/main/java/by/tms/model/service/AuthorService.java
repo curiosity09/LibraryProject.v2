@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface AuthorService {
 
-    List<AuthorDto> findAllAuthor();
+    List<AuthorDto> findAllAuthor(int limit, int offset);
 
     Long addNewAuthor(AuthorDto authorDto);
 

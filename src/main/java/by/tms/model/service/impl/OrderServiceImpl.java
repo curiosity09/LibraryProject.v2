@@ -22,8 +22,8 @@ public class OrderServiceImpl implements OrderService {
     private final OrderMapper orderMapper = OrderMapper.getInstance();
 
     @Override
-    public List<OrderDto> findAllOrder() {
-        List<Order> orders = orderDao.findAll();
+    public List<OrderDto> findAllOrder(int limit, int offset) {
+        List<Order> orders = orderDao.findAll(limit, offset);
         return orderMapper.mapToListDto(orders);
     }
 
@@ -51,8 +51,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<OrderDto> findOrderByUsername(String username) {
-        List<Order> orders = orderDao.findAllByUsername(username);
+    public List<OrderDto> findOrderByUsername(String username, int limit, int offset) {
+        List<Order> orders = orderDao.findAllByUsername(username, limit, offset);
         return orderMapper.mapToListDto(orders);
     }
 

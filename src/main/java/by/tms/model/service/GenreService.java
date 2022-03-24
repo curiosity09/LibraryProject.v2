@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface GenreService {
 
-    List<GenreDto> findAllGenre();
+    List<GenreDto> findAllGenre(int limit, int offset);
 
     Long addNewGenre(GenreDto genreDto);
 

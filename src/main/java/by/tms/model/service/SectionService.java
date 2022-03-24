@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface SectionService {
 
-    List<SectionDto> findAllSection();
+    List<SectionDto> findAllSection(int limit, int offset);
 
     Long addNewSection(SectionDto sectionDto);
 

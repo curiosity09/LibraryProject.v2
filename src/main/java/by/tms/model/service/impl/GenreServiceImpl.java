@@ -22,8 +22,8 @@ public class GenreServiceImpl implements GenreService {
     private final GenreMapper genreMapper = GenreMapper.getInstance();
 
     @Override
-    public List<GenreDto> findAllGenre() {
-        List<Genre> genres = genreDao.findAll();
+    public List<GenreDto> findAllGenre(int limit, int offset) {
+        List<Genre> genres = genreDao.findAll(limit, offset);
         return genreMapper.mapToListDto(genres);
     }
 

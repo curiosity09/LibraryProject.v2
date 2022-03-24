@@ -1,19 +1,20 @@
 package by.tms.model.service;
 
 import by.tms.model.dto.user.AccountDto;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface AccountService {
+public interface AccountService extends UserDetailsService {
 
-    List<AccountDto> findAllUsers();
+    List<AccountDto> findAllUsers(int limit, int offset);
 
-    List<AccountDto> findAllDebtors();
+    List<AccountDto> findAllDebtors(int limit, int offset);
 
-    List<AccountDto> findAllAdmins();
+    List<AccountDto> findAllAdmins(int limit, int offset);
 
-    List<AccountDto> findAllLibrarians();
+    List<AccountDto> findAllLibrarians(int limit, int offset);
 
     Optional<AccountDto> findAccountByUsername(String username);
 

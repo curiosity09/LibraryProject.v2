@@ -11,7 +11,9 @@ public interface BookService {
 
     List<BookDto> findBookByName(String bookName);
 
-    List<BookDto> findAllBook();
+    List<BookDto> findByAuthor(Long authorId, int limit, int offset);
+
+    List<BookDto> findAllBook(int limit, int offset);
 
     Long addNewBook(BookDto bookDto);
 

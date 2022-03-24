@@ -34,8 +34,14 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<BookDto> findAllBook() {
-        List<Book> books = bookDao.findAll();
+    public List<BookDto> findByAuthor(Long authorId, int limit, int offset) {
+        List<Book> byAuthor = bookDao.findByAuthor(authorId, limit, offset);
+        return bookMapper.mapToListDto(byAuthor);
+    }
+
+    @Override
+    public List<BookDto> findAllBook(int limit, int offset) {
+        List<Book> books = bookDao.findAll(limit, offset);
         return bookMapper.mapToListDto(books);
     }
 

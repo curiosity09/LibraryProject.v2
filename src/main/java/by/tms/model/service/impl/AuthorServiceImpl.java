@@ -22,8 +22,8 @@ public class AuthorServiceImpl implements AuthorService {
     private final AuthorMapper authorMapper = AuthorMapper.getInstance();
 
     @Override
-    public List<AuthorDto> findAllAuthor() {
-        List<Author> authors = authorDao.findAll();
+    public List<AuthorDto> findAllAuthor(int limit, int offset) {
+        List<Author> authors = authorDao.findAll(limit, offset);
         return authorMapper.mapToListDto(authors);
     }
 

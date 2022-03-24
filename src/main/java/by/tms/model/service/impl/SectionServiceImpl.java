@@ -22,8 +22,8 @@ public class SectionServiceImpl implements SectionService {
     private final SectionMapper sectionMapper = SectionMapper.getInstance();
 
     @Override
-    public List<SectionDto> findAllSection() {
-        List<Section> sections = sectionDao.findAll();
+    public List<SectionDto> findAllSection(int limit, int offset) {
+        List<Section> sections = sectionDao.findAll(limit, offset);
         return sectionMapper.mapToListDto(sections);
     }
 

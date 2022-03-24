@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface OrderService {
 
-    List<OrderDto> findAllOrder();
+    List<OrderDto> findAllOrder(int limit, int offset);
 
     Long addOrder(OrderDto orderDto);
 
@@ -17,7 +17,7 @@ public interface OrderService {
 
     boolean isOrderExist(Long id);
 
-    List<OrderDto> findOrderByUsername(String username);
+    List<OrderDto> findOrderByUsername(String username, int limit, int offset);
 
     Optional<OrderDto> findOrderById(Long id);
 }
