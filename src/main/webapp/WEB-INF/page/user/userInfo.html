@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>User info</title>
+    <link rel="stylesheet" th:href="@{/resources/css/bootstrap.css}">
+</head>
+<body>
+<div th:replace="page/user/userHeader.html :: header"></div>
+
+<table class="table table-bordered table-striped">
+
+    <caption th:text="#{caption.userInf}">Caption</caption>
+    <thead class="table-dark">
+
+    <tr>
+        <th scope="row" th:text="#{th.username}">Username</th>
+        <th scope="row" th:text="#{label.name}">Name</th>
+        <th scope="row" th:text="#{label.surname}">Surname</th>
+        <th scope="row" th:text="#{label.phone}">Phone</th>
+        <th scope="row" th:text="#{label.email}">Email</th>
+    </tr>
+
+    </thead>
+    <tbody>
+        <tr>
+            <td th:text="${account.username}">Username</td>
+            <td th:text="${account.userData.name}">Name</td>
+            <td th:text="${account.userData.surname}">Surname</td>
+            <td th:text="${account.userData.phoneNumber}">Phone</td>
+            <td th:text="${account.userData.emailAddress}">Email</td>
+        </tr>
+    </tbody>
+</table>
+<div th:replace="page/user/userFooter.html :: footer"></div>
+<script th:src="@{/resources/js/bootstrap.js}"></script>
+</body>
+</html>

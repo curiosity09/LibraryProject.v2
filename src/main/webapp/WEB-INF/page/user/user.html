@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>User page</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/resources/css/bootstrap.css}">
+</head>
+<body>
+<div th:replace="page/user/userHeader.html :: header"></div>
+<h2 th:text="#{page.text}"></h2>
+<div th:replace="page/user/userFooter.html :: footer"></div>
+<script th:src="@{/resources/js/bootstrap.js}"></script>
+</body>
+</html>

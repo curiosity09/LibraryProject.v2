@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Add book page</title>
+    <link rel="stylesheet" th:href="@{/resources/css/bootstrap.css}">
+</head>
+<body>
+
+<div th:replace="page/librarian/librarianHeader.html :: header"></div>
+
+<div class="container">
+    <div class="row justify-content-center mt-2">
+        <div class="col-5 mt-2 p-3">
+            <form th:method="post" th:action="@{/addBook}" th:object="${book}"
+                  enctype="application/x-www-form-urlencoded">
+
+                <div class="mb-3">
+                    <label for="inputNameBook" class="form-label" th:text="#{th.nameBook}">Book</label>
+                    <input th:field="*{name}" type="text"
+                           pattern="^[A-ZА-Яа-яa-z0-9\s\-]+$" class="form-control" id="inputNameBook"
+                           th:placeholder="#{placeholder.bookName}" required>
+                </div>
+
+                <div class="mb-3">
+                    <label>
+                        <span th:text="#{th.authName}"></span>
+                        <select name="author" th:field="*{author.id}" class="form-select">
+                            <option th:each="author:${allAuthors}" th:value="${author.id}" th:text="${author.fullName}"></option>
+                        </select>
+                    </label>
+                </div>
+
+                <div class="mb-3">
+                    <label>
+                        <span th:text="#{th.genre}"></span>
+                        <select name="genre" th:field="*{genre.id}" class="form-select">
+                            <option th:each="genre:${allGenres}" th:value="${genre.id}" th:text="${genre.name}"></option>
+                        </select>
+                    </label>
+                </div>
+
+                <div class="mb-3">
+                    <label>
+                        <span th:text="#{th.section}"></span>
+                        <select name="section" th:field="*{section.id}" class="form-select">
+                            <option th:each="section:${allSections}" th:value="${section.id}"
+                                    th:text="${section.name}"></option>
+                        </select>
+                    </label>
+                </div>
+
+                <div class="mb-3">
+                    <label for="inputQuantity" class="form-label" th:text="#{th.quantity}">Quantity</label>
+                    <input th:field="*{quantity}" type="number" min="1" step="1" max="10" class="form-control"
+                           id="inputQuantity"
+                           th:placeholder="#{placeholder.quantity}" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="inputYear" class="form-label" th:text="#{th.year}">Year</label>
+                    <input th:field="*{publicationYear}" type="number" min="1800" max="2030" class="form-control"
+                           id="inputYear" th:placeholder="#{placeholder.year}" required>
+                </div>
+
+                <button type="submit" class="btn btn-dark" th:text="#{button.submit}">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>
+<script th:src="@{/resources/js/bootstrap.js}"></script>
+</body>
+</html>

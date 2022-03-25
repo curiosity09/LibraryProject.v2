@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Order Page</title>
+    <link rel="stylesheet" th:href="@{/resources/css/bootstrap.css}">
+</head>
+<body>
+
+<div th:replace="page/librarian/librarianHeader.html :: header"></div>
+
+<table class="table table-striped table-bordered">
+    <caption>Here you can find all orders</caption>
+    <thead class="table-dark">
+    <tr>
+        <th scope="col" th:text="#{th.number}">Number</th>
+        <th scope="col" th:text="#{th.nameBook}">Book</th>
+        <th scope="col" th:text="#{th.user}">User</th>
+        <th scope="col" th:text="#{th.rentTime}">Rental Time</th>
+        <th scope="col" th:text="#{th.rentPer}">Rental Period</th>
+        <th scope="col" th:text="#{th.status}">Status</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+    <tr th:each="order, iterStat: ${allOrders}">
+        <td th:text="${iterStat.count}">
+        <td>
+            <ul th:each="book: ${order.bookList}">
+                <li>
+                    <p th:text="${book.name}"></p>
+                    <p th:text="${book.author.fullName}"></p>
+                    <p th:text="${book.publicationYear}"></p>
+                </li>
+            </ul>
+        </td>
+        <td>
+            <ul>
+                <li>
+                    <p th:text="${order.user.username}"></p>
+                    <p th:text="${order.user.userData.name}"></p>
+                    <p th:text="${order.user.userData.surname}"></p>
+                </li>
+            </ul>
+
+        </td>
+
+        <td th:text="${#temporals.format(order.rentalTime, 'dd-MM-yyyy HH:mm')}"></td>
+        <td th:text="${#temporals.format(order.rentalPeriod, 'dd-MM-yyyy HH:mm')}"></td>
+
+        <td>
+            <span th:if="${order.rentalPeriod<=#temporals.createNow()}" th:text="#{status.exp}">EXP</span>
+            <span th:unless="${order.rentalPeriod<=#temporals.createNow()}" th:text="#{status.act}">ACT</span>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<nav aria-label="Page navigation example">
+    <ul class="pagination">
+        <c:forEach var="integer" varStatus="status" items="${requestScope.offsetList}">
+            <li class="page-item"><a
+                    class="page-link"
+                    href="${pageContext.request.contextPath}/controller?command=showAllOrders&offset=${integer.intValue()}">${status.count}</a>
+            </li>
+        </c:forEach>
+    </ul>
+</nav>
+<%--<%@include file="librarianFooter.html" %>--%>
+<script th:src="@{/resources/js/bootstrap.js}"></script>
+</body>
+</html>

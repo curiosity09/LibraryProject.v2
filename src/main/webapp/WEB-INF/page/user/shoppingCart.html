@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Shopping cart</title>
+    <link rel="stylesheet" th:href="@{/resources/css/bootstrap.css}">
+</head>
+
+<body>
+<div th:replace="page/user/userHeader.html :: header"></div>
+<table class="table table-bordered table-striped">
+    <caption th:text="#{caption.order}">Caption</caption>
+    <thead class="table-dark">
+
+    <tr>
+        <th scope="col" th:text="#{th.number}">Number</th>
+        <th scope="col" th:text="#{th.nameBook}">Book</th>
+        <th scope="col" th:text="#{th.authName}">Author</th>
+        <th scope="col" th:text="#{th.year}">Year</th>
+        <th scope="col" th:text="#{th.delete}">Delete</th>
+    </tr>
+
+    </thead>
+    <tbody>
+    <tr th:each="book,iterStat : ${session.shoppingCart.shoppingList}">
+        <td th:text="${iterStat.count}"><input type="hidden" th:name="bookId" th:value="${book.id}"></td>
+        <td th:text="${book.name}"></td>
+        <td th:text="${book.author.fullName}"></td>
+        <td th:text="${book.publicationYear}"></td>
+        <td>
+            <div>
+                <a th:href="@{/delBookFromOrder/{id}(id=${book.id})}">
+                    <input class="btn-dark" type="submit" th:value="#{button.delete}">
+                </a>
+            </div>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<form th:method="post" th:action="@{/addOrder}">
+
+    <input type="hidden" name="bookId" th:value="${book.id}" th:each="book:${session.shoppingCart.shoppingList}">
+
+    <div class="form-check flex-grow-1 justify-content-center">
+        <label class="form-check-label">
+            <input class="form-check-input" th:type="radio" name="rentalPeriod" th:value="1"
+                   th:text="#{check.lib}" checked></label><br>
+        <label class="form-check-label">
+            <input class="form-check-input" th:type="radio" name="rentalPeriod" th:value="14"
+                   th:text="#{check.sub14}" checked></label><br>
+        <label class="form-check-label">
+            <input class="form-check-input" th:type="radio" name="rentalPeriod" th:value="30"
+                   th:text="#{check.sub30}" checked></label><br>
+    </div>
+
+    <p></p>
+
+    <button type="submit" class="btn btn-dark" th:text="#{button.addOrd}">Add</button>
+</form>
+
+<script th:src="@{/resources/js/bootstrap.js}"></script>
+</body>
+</html>

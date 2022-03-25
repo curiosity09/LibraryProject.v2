@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Add genre page</title>
+    <link rel="stylesheet" th:href="@{/resources/css/bootstrap.css}">
+</head>
+<body>
+
+<div th:replace="page/librarian/librarianHeader.html :: header"></div>
+
+<div class="container">
+    <div class="row justify-content-center mt-5">
+        <div class="col-5 mt-5 p-3">
+            <form th:method="post" th:action="@{/addGenre}" th:object="${genre}"
+                  enctype="application/x-www-form-urlencoded">
+
+                <div class="mb-3">
+                    <label for="inputNameGenre" class="form-label" th:text="#{th.genre}">Genre</label>
+                    <input th:field="*{name}" type="text"
+                           pattern="^[A-ZА-Яа-яa-z\s]+$" class="form-control" id="inputNameGenre"
+                           th:placeholder="#{placeholder.genre}" required>
+                </div>
+                <button type="submit" class="btn btn-dark" th:text="#{button.submit}">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>
+<script th:src="@{/resources/js/bootstrap.js}"></script>
+</body>
+</html>

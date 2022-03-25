@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Edit user page</title>
+    <link rel="stylesheet" th:href="@{/resources/css/bootstrap.css}">
+</head>
+<body>
+<div th:replace="page/user/userHeader.html :: header"></div>
+
+<div class="container">
+    <div class="row justify-content-center mt-5">
+        <div class="col-5 mt-5 p-3">
+            <form th:method="post" th:action="@{/editUser}"
+                  enctype="application/x-www-form-urlencoded" th:object="${account}">
+
+                <input th:field="*{username}" type="hidden" class="form-control" th:value="${account.username}">
+
+                <input th:field="*{id}" type="hidden" class="form-control" th:value="${account.id}">
+
+                <div class="mb-3">
+                    <label for="inputPassword" class="form-label" th:text="#{label.pass}">Pass</label>
+                    <input th:field="*{password}" type="password"
+                           pattern="^[A-za-z0-9\._]{4,16}$" class="form-control" id="inputPassword"
+                           th:placeholder="#{placeholder.pass}" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="inputName" class="form-label" th:text="#{label.name}">Name</label>
+                    <input th:field="*{userData.name}" type="text" class="form-control"
+                           pattern="^([A-Z]{1}[a-z]+|[А-Я]{1}[а-я]+)$" id="inputName"
+                           th:placeholder="#{placeholder.name}" th:value="${account.userData.name}">
+                </div>
+
+                <div class="mb-3">
+                    <label for="inputSurName" class="form-label" th:text="#{label.surname}">Surname</label>
+                    <input th:field="*{userData.surname}" type="text" class="form-control"
+                           pattern="^([A-Z]{1}[a-z]+|[А-Я]{1}[а-я]+)$" id="inputSurName"
+                           th:placeholder="#{placeholder.surname}" th:value="${account.userData.surname}">
+                </div>
+
+                <div class="mb-3">
+                    <label for="inputPhone" class="form-label" th:text="#{label.phone}">Phone</label>
+                    <input th:field="*{userData.phoneNumber}" type="text" class="form-control"
+                           pattern="^(\+?375|80)(29|25|44|33)(\d{3})(\d{2})(\d{2})$" id="inputPhone"
+                           th:placeholder="#{placeholder.phone}" th:value="${account.userData.phoneNumber}">
+                </div>
+
+                <div class="mb-3">
+                    <label for="inputEmail" class="form-label" th:text="#{label.email}">Email</label>
+                    <input th:field="*{userData.emailAddress}" type="email" class="form-control"
+                           pattern="[A-za-z0-9\._]+@[a-z]+\.[a-z]{2,4}" id="inputEmail"
+                           th:placeholder="#{placeholder.email}" th:value="${account.userData.emailAddress}">
+                </div>
+
+                <button type="submit" class="btn btn-dark" th:text="#{button.submit}">Submit</button>
+
+            </form>
+        </div>
+    </div>
+</div>
+<script th:src="@{/resources/js/bootstrap.js}"></script>
+</body>
+</html>

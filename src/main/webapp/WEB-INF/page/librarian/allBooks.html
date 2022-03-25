@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Books Page</title>
+    <link rel="stylesheet" th:href="@{/resources/css/bootstrap.css}">
+</head>
+<body>
+<div th:replace="page/librarian/librarianHeader.html :: header"></div>
+
+<table class="table table-bordered table-striped">
+
+    <caption th:text="#{caption.book}">Caption</caption>
+    <thead class="table-dark">
+    <tr>
+        <th scope="col" th:text="#{th.number}">Number</th>
+        <th scope="col" th:text="#{th.nameBook}">Book</th>
+        <th scope="col" th:text="#{th.authName}">Author</th>
+        <th scope="col" th:text="#{th.genre}">Genre</th>
+        <th scope="col" th:text="#{th.section}">Section</th>
+        <th scope="col" th:text="#{th.quantity}">Section</th>
+        <th scope="col" th:text="#{th.year}">Year</th>
+        <th scope="col" th:text="#{th.editBook}">Edit Book</th>
+    </tr>
+    </thead>
+    <tbody>
+
+    <tr th:each="book,iterStat : ${allBooks}">
+        <td th:text="${iterStat.count}"></td>
+        <td th:text="${book.name}">Book name</td>
+        <td th:text="${book.author.fullName}">Author</td>
+        <td th:text="${book.genre.name}">Genre</td>
+        <td th:text="${book.section.name}">Section</td>
+        <td th:text="${book.quantity}">Quantity</td>
+        <td th:text="${book.publicationYear}">Year</td>
+            <td>
+                <div>
+                    <a th:href="@{/editBookPage/{id}(id=${book.id})}">
+                        <input class="btn-dark" type="submit" th:value="Edit">
+                    </a>
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<nav aria-label="Page navigation example">
+    <ul class="pagination">
+        <c:forEach var="integer" varStatus="status" items="${requestScope.offsetList}">
+            <li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/controller?command=showAllBooks&offset=${integer.intValue()}">${status.count}</a></li>
+        </c:forEach>
+    </ul>
+</nav>
+<%@include file="librarianFooter.jsp" %>
+<script th:src="@{/resources/js/bootstrap.js}"></script>
+</body>
+</html>

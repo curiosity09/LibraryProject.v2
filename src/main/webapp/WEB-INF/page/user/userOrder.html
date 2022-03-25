@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>My orders</title>
+    <link rel="stylesheet" th:href="@{/resources/css/bootstrap.css}">
+</head>
+<body>
+<div th:replace="page/user/userHeader.html :: header"></div>
+
+<table class="table table-striped table-bordered">
+
+    <caption th:text="#{caption.myOrd}">Caption</caption>
+
+    <thead class="table-dark">
+    <tr>
+        <th scope="col" th:text="#{th.number}">Number</th>
+        <th scope="col" th:text="#{th.nameBook}">Book</th>
+        <th scope="col" th:text="#{th.rentTime}">Rental Time</th>
+        <th scope="col" th:text="#{th.rentPer}">Rental Period</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr th:each="order,iterStat :${userOrder}">
+        <td th:text="${iterStat.count}">Count</td>
+        <td>
+            <ul th:each="book:${order.bookList}">
+                <li>
+                    <p th:text="${book.name}"></p>
+                    <p th:text="${book.author.fullName}"></p>
+                    <p th:text="${book.publicationYear}"></p>
+                </li>
+            </ul>
+        </td>
+        <td th:text="${#temporals.format(order.rentalTime, 'dd-MM-yyyy HH:mm')}"></td>
+        <td th:text="${#temporals.format(order.rentalPeriod, 'dd-MM-yyyy HH:mm')}"></td>
+    </tr>
+    </tbody>
+</table>
+
+<nav aria-label="Page navigation example">
+    <ul class="pagination">
+        <c:forEach var="integer" varStatus="status" items="${requestScope.offsetList}">
+            <li class="page-item"><a class="page-link"
+                                     href="${pageContext.request.contextPath}/controller?command=showUserOrder&offset=${integer.intValue()}">${status.count}</a>
+            </li>
+        </c:forEach>
+    </ul>
+</nav>
+<%--<%@include file="userFooter.html" %>--%>
+<script th:src="@{/resources/js/bootstrap.js}"></script>
+</body>
+</html>

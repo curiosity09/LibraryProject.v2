@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login page</title>
+    <link rel="stylesheet" th:href="@{/resources/css/bootstrap.css}">
+</head>
+<body>
+<header class="p-3 bg-dark text-white">
+    <div class="container">
+        <div class="d-flex justify-content-lg-start">
+            <a th:href="@{/}"
+               class="d-flex">
+                <img th:src="@{/WEB-INF/resources/images/icon.png}" width="50" height="50"
+                     role="img" aria-label="Bootstrap"
+                     alt="Library">
+            </a>
+            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-end mb-md-0">
+                <li class="justify-content-end p-1">
+                    <div th:replace="~{fragments/locale::locale}"></div>
+                </li>
+            </ul>
+            <form th:action="@{/registerPage}" th:method="get">
+                <button type="submit" class="btn btn-warning">Sign Up</button>
+            </form>
+        </div>
+    </div>
+</header>
+<div class="container">
+    <div class="row justify-content-center mt-5">
+        <div class="col-5 mt-5 p-3">
+            <form th:method="post" th:action="@{/login}"
+                  enctype="application/x-www-form-urlencoded">
+
+                <div class="mb-3">
+                    <label for="inputUsername" class="form-label" th:text="#{th.username}">Username</label>
+                    <input name="username" type="text" class="form-control" id="inputUsername"
+                           th:placeholder="#{placeholder.username}" required
+                           pattern="^[A-za-z][A-Za-z0-9\._]{3,10}$">
+                </div>
+
+                <div class="mb-3">
+                    <label for="inputPassword" class="form-label" th:text="#{label.pass}">${pass}</label>
+                    <input name="password" type="password" class="form-control" pattern="^[A-za-z0-9\._]{4,16}$"
+                           id="inputPassword" th:placeholder="#{placeholder.pass}" required>
+                </div>
+
+                <button type="submit" class="btn btn-dark" th:text="#{button.submit}">Submit</button>
+                <p></p>
+                <div class="alert alert-dark" role="alert">
+                    <span th:text="#{alert.loginIf}"></span> <a class="alert-link" th:href="@{/registerPage}" th:text="#{alert.loginReg}"></a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script th:src="@{/resources/js/bootstrap.js}"></script>
+</body>
+</html>

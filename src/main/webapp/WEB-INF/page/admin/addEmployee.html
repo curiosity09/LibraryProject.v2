@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Add employee page</title>
+    <link rel="stylesheet" th:href="@{/resources/css/bootstrap.css}">
+</head>
+<body>
+
+<div th:replace="page/admin/adminHeader.html ::  header"></div>
+
+<div class="container">
+    <div class="row justify-content-center mt-5">
+        <div class="col-5 mt-5 p-3">
+            <form th:method="post" th:action="@{/addEmployee}" th:object="${account}"
+                  enctype="application/x-www-form-urlencoded">
+
+                <div class="mb-3">
+                    <label for="inputUsername" class="form-label" th:text="#{th.username}">Username</label>
+                    <input th:field="*{username}" type="text"
+                           pattern="^[A-za-z][A-Za-z0-9\._]{3,10}$" class="form-control" id="inputUsername"
+                           th:placeholder="#{placeholder.username}" required>
+                </div>
+                <div class="mb-3">
+                    <label for="inputPassword" class="form-label" th:text="#{label.pass}">Password</label>
+                    <input th:field="*{password}" type="password"
+                           pattern="^[A-za-z0-9\._]{4,16}$" class="form-control" id="inputPassword"
+                           th:placeholder="#{placeholder.pass}" required>
+                </div>
+                <div class="mb-3">
+                    <label><input name="role" type="radio" th:field="*{role}" class="form-check-input" th:text="#{ratio.admin}"
+                                   th:value="admin" checked></label>
+                    <label><input name="role" type="radio" th:field="*{role}" class="form-check-input" th:text="#{ratio.lib}"
+                                  th:value="librarian" checked></label>
+                </div>
+
+                <div class="mb-3">
+                    <label><input name="level" type="radio" th:field="*{level}" class="form-check-input"
+                                  th:value="'HEAD'" checked>HEAD</label>
+                    <label><input name="level" type="radio" th:field="*{level}" class="form-check-input"
+                                  th:value="'SECONDARY'" checked>SECONDARY</label>
+                </div>
+
+                <div class="mb-3">
+                    <label for="inputName" class="form-label" th:text="#{label.name}">Name</label>
+                    <input th:field="*{userData.name}" type="text" class="form-control"
+                           pattern="^([A-Z]{1}[a-z]+|[А-Я]{1}[а-я]+)$" id="inputName"
+                           th:placeholder="#{placeholder.name}">
+                </div>
+
+                <div class="mb-3">
+                    <label for="inputSurName" class="form-label" th:text="#{label.surname}">Surname</label>
+                    <input th:field="*{userData.surname}" type="text" class="form-control"
+                           pattern="^([A-Z]{1}[a-z]+|[А-Я]{1}[а-я]+)$" id="inputSurName"
+                           th:placeholder="#{placeholder.surname}">
+                </div>
+
+                <div class="mb-3">
+                    <label for="inputPhone" class="form-label" th:text="#{label.phone}">Phone</label>
+                    <input th:field="*{userData.phoneNumber}" type="text" class="form-control"
+                           pattern="^(\+?375|80)(29|25|44|33)(\d{3})(\d{2})(\d{2})$" id="inputPhone"
+                           th:placeholder="#{placeholder.phone}">
+                </div>
+
+                <div class="mb-3">
+                    <label for="inputEmail" class="form-label" th:text="#{label.email}">Email</label>
+                    <input th:field="*{userData.emailAddress}" type="email" class="form-control"
+                           pattern="[A-za-z0-9\._]+@[a-z]+\.[a-z]{2,4}" id="inputEmail"
+                           th:placeholder="#{placeholder.email}">
+                </div>
+
+                <button type="submit" class="btn btn-dark" th:text="#{button.submit}">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>
+<script th:src="@{/resources/js/bootstrap.js}"></script>
+</body>
+</html>

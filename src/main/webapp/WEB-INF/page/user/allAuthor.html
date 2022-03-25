@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>All Authors</title>
+    <link rel="stylesheet" th:href="@{/resources/css/bootstrap.css}">
+</head>
+<body>
+<div th:replace="page/user/userHeader.html :: header"></div>
+
+<table class="table table-bordered table-striped">
+
+    <caption>${captionText}</caption>
+    <thead class="table-dark">
+    <tr>
+        <th scope="col" th:text="#{th.number}">Number</th>
+        <th scope="col" th:text="#{th.authName}">Author</th>
+        <th scope="col" th:text="#{button.allBooks}">Books</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="author,iterStat : ${allAuthors}">
+        <td th:text="${iterStat.count}">Count</td>
+        <td th:text="${author.fullName}">Author name</td>
+        <td>
+            <div>
+                <a th:href="@{/allAuthorBook/{id}(id=${author.id})}">
+                    <input class="btn-dark" type="submit" th:value="#{button.show}">
+                </a>
+            </div>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<script th:src="@{/resources/js/bootstrap.js}"></script>
+</body>
+</html>
