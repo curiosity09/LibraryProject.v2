@@ -46,11 +46,9 @@
 </form>
 <nav aria-label="Page navigation example">
     <ul class="pagination">
-        <c:forEach var="integer" varStatus="status" items="${requestScope.offsetList}">
-            <li class="page-item"><a class="page-link"
-                                     href="${pageContext.request.contextPath}/controller?command=showAllBooks&offset=${integer.intValue()}">${status.count}</a>
-            </li>
-        </c:forEach>
+        <li class="page-item" th:each="page,iterStat:${countPages}">
+            <a class="page-link" th:href="@{'?offset='+${page}}" th:text="${iterStat.count}"></a>
+        </li>
     </ul>
 </nav>
 <script th:src="@{/resources/js/bootstrap.js}"></script>

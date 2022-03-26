@@ -32,6 +32,13 @@
     </tr>
     </tbody>
 </table>
+<nav aria-label="Page navigation example">
+    <ul class="pagination">
+        <li class="page-item" th:each="page,iterStat:${countPages}">
+            <a class="page-link" th:href="@{'?offset='+${page}}" th:text="${iterStat.count}"></a>
+        </li>
+    </ul>
+</nav>
 <script th:src="@{/resources/js/bootstrap.js}"></script>
 </body>
 </html>

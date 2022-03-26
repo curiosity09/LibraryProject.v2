@@ -11,21 +11,17 @@
 <div class="container">
     <div class="row justify-content-center mt-5">
         <div class="col-3 mt-5 p-3">
-            <form th:method="post" th:action="@{/findUserOrder}"
+            <form th:method="get" th:action="@{/findUserOrder/{username}(username=${username})}"
                   enctype="application/x-www-form-urlencoded">
-
-                <div class="mb-3">
-                    <label class="form-label" th:text="#{th.username}">Username</label>
-                    <label>
-                        <select name="username" class="form-select">
-                            <option th:each="user:${allUsers}" th:value="${user.username}" th:text="${user.username}"></option>
-                        </select>
-                    </label>
-                </div>
-
-                <!--                <input type="hidden" name="offset" value="${param.get("offset")}">-->
-
-                <button type="submit" class="btn btn-dark" th:text="#{button.submit}">Submit</button>
+            <div class="mb-3">
+                <label class="form-label" th:text="#{th.username}">Username</label>
+                <label>
+                    <select th:name="username" class="form-select">
+                        <option th:each="user:${allUsers}" th:text="${user.username}" th:value="${user.username}"></option>
+                    </select>
+                </label>
+            </div>
+            <button type="submit" class="btn btn-dark" th:text="#{button.submit}">Submit</button>
             </form>
         </div>
     </div>
