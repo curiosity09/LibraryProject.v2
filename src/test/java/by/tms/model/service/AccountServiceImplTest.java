@@ -49,7 +49,7 @@ class AccountServiceImplTest {
 
     @Test
     void findAllDebtors() {
-        List<AccountDto> allDebtors = accountService.findAllDebtors(LIMIT_10,OFFSET_0);
+        List<AccountDto> allDebtors = accountService.findAllDebtors();
         assertEquals(0, allDebtors.size());
     }
 
@@ -68,47 +68,47 @@ class AccountServiceImplTest {
 
     @Test
     void findUserByUsername() {
-        Optional<AccountDto> user = accountService.findUserByUsername("user");
+        Optional<AccountDto> user = accountService.findAccountByUsername("user");
         assertTrue(user.isPresent());
     }
 
     @Test
     void findUserById() {
-        Optional<AccountDto> userById = accountService.findUserById(2L);
+        Optional<AccountDto> userById = accountService.findAccountById(2L);
         userById.ifPresent(user -> assertEquals("newUser", user.getUsername()));
     }
 
     @Test
     void blockUser() {
-        Optional<AccountDto> optionalUser = accountService.findUserByUsername("user");
+        Optional<AccountDto> optionalUser = accountService.findAccountByUsername("user");
         optionalUser.ifPresent(user -> accountService.blockUser(user));
-        Optional<AccountDto> userById = accountService.findUserByUsername("user");
+        Optional<AccountDto> userById = accountService.findAccountByUsername("user");
         userById.ifPresent(user -> assertTrue(user.isBanned()));
     }
 
     @Test
     void saveUser() {
         accountService.saveUser(AccountDto.builder().username("cheburek").password("pass").userData(UserDataDto.builder().build()).build());
-        Optional<AccountDto> results = accountService.findUserByUsername("cheburek");
+        Optional<AccountDto> results = accountService.findAccountByUsername("cheburek");
         assertTrue(results.isPresent());
     }
 
     @Test
     void updateAccount() {
-        Optional<AccountDto> optionalLibrarian = accountService.findLibrarianById(6L);
+        Optional<AccountDto> optionalLibrarian = accountService.findAccountById(6L);
         optionalLibrarian.ifPresent(librarian -> {
             librarian.setUsername("librarian");
             accountService.updateLibrarian(librarian);
         });
-        Optional<AccountDto> librarianById = accountService.findLibrarianById(6L);
+        Optional<AccountDto> librarianById = accountService.findAccountById(6L);
         librarianById.ifPresent(lib -> assertEquals("librarian", lib.getUsername()));
     }
 
     @Test
     void deleteAccount() {
-        Optional<AccountDto> optionalLibrarian = accountService.findLibrarianById(5L);
+        Optional<AccountDto> optionalLibrarian = accountService.findAccountById(5L);
         optionalLibrarian.ifPresent(librarian -> accountService.deleteAccount(librarian));
-        Optional<AccountDto> librarianById = accountService.findLibrarianById(5L);
+        Optional<AccountDto> librarianById = accountService.findAccountById(5L);
         assertFalse(librarianById.isPresent());
     }
 

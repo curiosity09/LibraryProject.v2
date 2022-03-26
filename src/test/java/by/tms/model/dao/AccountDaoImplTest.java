@@ -28,9 +28,6 @@ import static org.junit.jupiter.api.Assertions.*;
 @Transactional(readOnly = true)
 class AccountDaoImplTest {
 
-    AccountDaoImplTest() {
-    }
-
     @Autowired
     private AccountDao accountDao;
     @Autowired
@@ -48,31 +45,31 @@ class AccountDaoImplTest {
 
     @Test
     void findAll() {
-        List<Account> results = accountDao.findAll(LIMIT_10,OFFSET_0);
+        List<Account> results = accountDao.findAll(LIMIT_10, OFFSET_0);
         assertEquals(6, results.size());
     }
 
     @Test
     void findAllUsers() {
-        List<User> results = accountDao.findAllUsers(LIMIT_10,OFFSET_0);
-        assertEquals("user", results.get(0).getUsername());
+        List<User> results = accountDao.findAllUsers(LIMIT_10, OFFSET_0);
+        assertEquals(2, results.size());
     }
 
     @Test
     void findAllAdmins() {
-        List<Admin> results = accountDao.findAllAdmins(LIMIT_10,OFFSET_0);
+        List<Admin> results = accountDao.findAllAdmins(LIMIT_10, OFFSET_0);
         assertEquals("admin", results.get(0).getUsername());
     }
 
     @Test
     void findAllLibrarians() {
-        List<Librarian> results = accountDao.findAllLibrarians(LIMIT_10,OFFSET_0);
-        assertEquals("lib", results.get(1).getUsername());
+        List<Librarian> all = accountDao.findAllLibrarians(LIMIT_10, OFFSET_0);
+        assertEquals("lib", all.get(1).getUsername());
     }
 
     @Test
     void findByUsername() {
-        Optional<User> results = accountDao.findUserByUsername("user");
+        Optional<Account> results = accountDao.findByUsername("user");
         results.ifPresent(user -> assertEquals("user", user.getUsername()));
     }
 
@@ -80,7 +77,7 @@ class AccountDaoImplTest {
     @Transactional
     void add() {
         accountDao.save(User.builder().username("cheburek").password("pass").build());
-        Optional<User> results = accountDao.findUserByUsername("cheburek");
+        Optional<Account> results = accountDao.findByUsername("cheburek");
         assertTrue(results.isPresent());
     }
 
@@ -98,7 +95,7 @@ class AccountDaoImplTest {
 
     @Test
     void findUserById() {
-        Optional<User> userById = accountDao.findUserById(1L);
+        Optional<Account> userById = accountDao.findById(1L);
         userById.ifPresent(user -> {
             assertEquals("user", user.getUsername());
             assertEquals("user", user.getRole());
@@ -107,12 +104,7 @@ class AccountDaoImplTest {
 
     @Test
     void findAllDebtors() {
-        List<User> allDebtors = accountDao.findAllDebtors(LIMIT_10,OFFSET_0);
+        List<User> allDebtors = accountDao.findAllDebtors();
         assertEquals(0, allDebtors.size());
-    }
-
-    @Test
-    void blockUser(){
-
     }
 }
