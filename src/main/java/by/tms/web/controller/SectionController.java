@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
 
+import static by.tms.web.util.PageUtil.*;
+
 @Controller
 public class SectionController {
 
@@ -23,18 +25,18 @@ public class SectionController {
 
     @ModelAttribute("allSections")
     public List<SectionDto> allSections() {
-        return sectionService.findAllSection(10,0);
+        return sectionService.findAllSection(LIMIT_TEN, OFFSET_ZERO);
     }
 
     @GetMapping("/addSectionPage")
     public String addSectionPage(Model model) {
         model.addAttribute("section", SectionDto.builder().build());
-        return "page/librarian/addSection";
+        return LIBRARIAN_PREFIX + "addSection";
     }
 
     @PostMapping("/addSection")
-    public String addSection(SectionDto section){
+    public String addSection(SectionDto section) {
         sectionService.addNewSection(section);
-        return "redirect:/librarianPage";
+        return REDIRECT + LIBRARIAN_PAGE;
     }
 }

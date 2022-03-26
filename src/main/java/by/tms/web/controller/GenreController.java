@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
 
+import static by.tms.web.util.PageUtil.*;
+
 @Controller
 public class GenreController {
 
@@ -23,18 +25,18 @@ public class GenreController {
 
     @ModelAttribute("allGenres")
     public List<GenreDto> allGenres() {
-        return genreService.findAllGenre(10,0);
+        return genreService.findAllGenre(LIMIT_TEN, OFFSET_ZERO);
     }
 
     @GetMapping("/addGenrePage")
     public String addGenrePage(Model model) {
         model.addAttribute("genre", GenreDto.builder().build());
-        return "page/librarian/addGenre";
+        return LIBRARIAN_PREFIX + "addGenre";
     }
 
     @PostMapping("/addGenre")
-    public String addGenre(GenreDto genre){
+    public String addGenre(GenreDto genre) {
         genreService.addNewGenre(genre);
-        return "redirect:/librarianPage";
+        return REDIRECT + LIBRARIAN_PAGE;
     }
 }
