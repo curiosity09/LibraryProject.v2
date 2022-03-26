@@ -15,7 +15,7 @@ import javax.persistence.criteria.Root;
 import java.util.List;
 
 @Repository
-public  class BookDaoImpl extends GenericDaoImpl<Long, Book> implements BookDao {
+public class BookDaoImpl extends GenericDaoImpl<Long, Book> implements BookDao {
 
     @Override
     public List<Book> findByName(String name) {
@@ -48,5 +48,19 @@ public  class BookDaoImpl extends GenericDaoImpl<Long, Book> implements BookDao 
                 .setMaxResults(limit)
                 .setFirstResult(offset)
                 .getResultList();
+    }
+
+    @Override
+    public Long getCountRow(Long authorId) {
+        Session session = sessionFactory.getCurrentSession();
+        CriteriaBuilder cb = session.getCriteriaBuilder();
+        CriteriaQuery<Long> criteria = cb.createQuery(Long.class);
+        Root<Book> root = criteria.from(Book.class);
+        Join<Book, Author> authorJoin = root.join(Book_.author);
+        return session
+                .createQuery(criteria
+                        .select(cb.count(root))
+                        .where(cb.equal(authorJoin.get(BaseEntity_.id), authorId)))
+                .getSingleResult();
     }
 }

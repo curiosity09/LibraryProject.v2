@@ -79,4 +79,13 @@ public abstract class GenericDaoImpl<P extends Serializable, E extends BaseEntit
         Session session = sessionFactory.getCurrentSession();
         return Objects.nonNull(session.get(clazz, id));
     }
+
+    @Override
+    public Long getCountRow(){
+        Session session = sessionFactory.getCurrentSession();
+        CriteriaBuilder cb = session.getCriteriaBuilder();
+        CriteriaQuery<Long> criteria = cb.createQuery(Long.class);
+        Root<E> root = criteria.from(clazz);
+        return session.createQuery(criteria.select(cb.count(root))).getSingleResult();
+    }
 }

@@ -19,4 +19,6 @@ public interface GenericDao<P extends Serializable, E extends BaseEntity<P>> {
     Optional<E> findById(P id);
 
     boolean isExist(P id);
+
+    Long getCountRow();
 }

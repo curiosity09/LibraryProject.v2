@@ -31,4 +31,18 @@ public class OrderDaoImpl extends GenericDaoImpl<Long, Order> implements OrderDa
                 .setFirstResult(offset)
                 .getResultList();
     }
+
+    @Override
+    public Long getCountRow(String username) {
+        Session session = sessionFactory.getCurrentSession();
+        CriteriaBuilder cb = session.getCriteriaBuilder();
+        CriteriaQuery<Long> criteria = cb.createQuery(Long.class);
+        Root<Order> root = criteria.from(Order.class);
+        Join<Order, User> accountJoin = root.join(Order_.account);
+        return session
+                .createQuery(criteria
+                        .select(cb.count(root))
+                        .where(cb.equal(accountJoin.get(Account_.username), username)))
+                .getSingleResult();
+    }
 }
