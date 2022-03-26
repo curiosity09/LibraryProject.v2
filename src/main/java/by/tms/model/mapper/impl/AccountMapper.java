@@ -25,8 +25,7 @@ public class AccountMapper implements Mapper<Account, AccountDto> {
         return INSTANCE;
     }
 
-    @Override
-    public AccountDto mapToDto(Account account) {
+    private AccountDto toDto(Account account) {
         if (Objects.nonNull(account)) {
             AccountDto accountDto = AccountDto.builder()
                     .id(account.getId())
@@ -47,6 +46,25 @@ public class AccountMapper implements Mapper<Account, AccountDto> {
             return accountDto;
         }
         return null;
+    }
+
+    @Override
+    public AccountDto mapToDto(Account account) {
+        AccountDto accountDto = null;
+        if (account instanceof User) {
+            accountDto = toDto(account);
+            assert accountDto != null;
+            accountDto.setBanned(((User) account).isBanned());
+        } else if (account instanceof Librarian) {
+            accountDto = toDto(account);
+            assert accountDto != null;
+            accountDto.setLevel(((Librarian) account).getLibLevel());
+        } else if (account instanceof Admin) {
+            accountDto = toDto(account);
+            assert accountDto != null;
+            accountDto.setLevel(((Admin) account).getAdminLevel());
+        }
+        return accountDto;
     }
 
     @Override
@@ -130,7 +148,7 @@ public class AccountMapper implements Mapper<Account, AccountDto> {
         if (Objects.nonNull(librarians)) {
             List<AccountDto> accountDtoList = new ArrayList<>();
             for (Librarian librarian : librarians) {
-                accountDtoList.add(mapLibrarianToDto(librarian));
+                accountDtoList.add(mapToDto(librarian));
             }
             return accountDtoList;
         }
@@ -141,7 +159,7 @@ public class AccountMapper implements Mapper<Account, AccountDto> {
         if (Objects.nonNull(admins)) {
             List<AccountDto> accountDtoList = new ArrayList<>();
             for (Admin admin : admins) {
-                accountDtoList.add(mapAdminToDto(admin));
+                accountDtoList.add(mapToDto(admin));
             }
             return accountDtoList;
         }
@@ -152,37 +170,10 @@ public class AccountMapper implements Mapper<Account, AccountDto> {
         if (Objects.nonNull(users)) {
             List<AccountDto> accountDtoList = new ArrayList<>();
             for (User user : users) {
-                accountDtoList.add(mapUserToDto(user));
+                accountDtoList.add(mapToDto(user));
             }
             return accountDtoList;
         }
         return Collections.emptyList();
-    }
-
-    public AccountDto mapUserToDto(User user) {
-        if (Objects.nonNull(user)) {
-            AccountDto accountDto = mapToDto(user);
-            accountDto.setBanned(user.isBanned());
-            return accountDto;
-        }
-        return null;
-    }
-
-    public AccountDto mapLibrarianToDto(Librarian librarian) {
-        if (Objects.nonNull(librarian)) {
-            AccountDto accountDto = mapToDto(librarian);
-            accountDto.setLevel(librarian.getLibLevel());
-            return accountDto;
-        }
-        return null;
-    }
-
-    public AccountDto mapAdminToDto(Admin admin) {
-        if (Objects.nonNull(admin)) {
-            AccountDto accountDto = mapToDto(admin);
-            accountDto.setLevel(admin.getAdminLevel());
-            return accountDto;
-        }
-        return null;
     }
 }

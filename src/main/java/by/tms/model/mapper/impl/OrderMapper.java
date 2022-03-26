@@ -28,7 +28,7 @@ public class OrderMapper implements Mapper<Order, OrderDto> {
         if (Objects.nonNull(order)) {
             return OrderDto.builder()
                     .id(order.getId())
-                    .user(accountMapper.mapUserToDto(order.getAccount()))
+                    .user(accountMapper.mapToDto(order.getAccount()))
                     .rentalTime(order.getRentalTime())
                     .rentalPeriod(order.getRentalPeriod())
                     .bookList(bookMapper.mapToListDto(order.getBook()))
