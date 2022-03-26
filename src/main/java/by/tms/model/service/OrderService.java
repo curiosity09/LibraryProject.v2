@@ -20,4 +20,8 @@ public interface OrderService {
     List<OrderDto> findOrderByUsername(String username, int limit, int offset);
 
     Optional<OrderDto> findOrderById(Long id);
+
+    List<Long> getCountPages();
+
+    List<Long> getCountPages(String username);
 }

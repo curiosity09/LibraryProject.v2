@@ -1,6 +1,7 @@
 package by.tms.model.service;
 
 import by.tms.model.dto.user.AccountDto;
+import by.tms.model.entity.user.Account;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
@@ -10,25 +11,17 @@ public interface AccountService extends UserDetailsService {
 
     List<AccountDto> findAllUsers(int limit, int offset);
 
-    List<AccountDto> findAllDebtors(int limit, int offset);
+    List<Long> getCountPages(Class<? extends Account> clazz);
+
+    List<AccountDto> findAllDebtors();
 
     List<AccountDto> findAllAdmins(int limit, int offset);
 
     List<AccountDto> findAllLibrarians(int limit, int offset);
 
+    Optional<AccountDto> findAccountById(Long id);
+
     Optional<AccountDto> findAccountByUsername(String username);
-
-    Optional<AccountDto> findUserByUsername(String username);
-
-    Optional<AccountDto> findUserById(Long id);
-
-    Optional<AccountDto> findLibrarianByUsername(String username);
-
-    Optional<AccountDto> findLibrarianById(Long id);
-
-    Optional<AccountDto> findAdminById(Long id);
-
-    Optional<AccountDto> findAdminByUsername(String username);
 
     void blockUser(AccountDto userDto);
 

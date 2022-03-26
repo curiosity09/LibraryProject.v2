@@ -5,6 +5,7 @@ import by.tms.model.dto.GenreDto;
 import by.tms.model.entity.Genre;
 import by.tms.model.mapper.impl.GenreMapper;
 import by.tms.model.service.GenreService;
+import by.tms.model.util.ServiceUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -60,5 +61,10 @@ public class GenreServiceImpl implements GenreService {
     public Optional<GenreDto> findGenreById(Long id) {
         Optional<Genre> optionalGenre = genreDao.findById(id);
         return Optional.ofNullable(genreMapper.mapToDto(optionalGenre.orElse(null)));
+    }
+
+    @Override
+    public List<Long> getCountPages() {
+        return ServiceUtil.collectPages(genreDao.getCountRow());
     }
 }

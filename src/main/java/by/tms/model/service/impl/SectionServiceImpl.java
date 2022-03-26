@@ -5,6 +5,7 @@ import by.tms.model.dto.SectionDto;
 import by.tms.model.entity.Section;
 import by.tms.model.mapper.impl.SectionMapper;
 import by.tms.model.service.SectionService;
+import by.tms.model.util.ServiceUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -60,5 +61,10 @@ public class SectionServiceImpl implements SectionService {
     public Optional<SectionDto> findSectionById(Long id) {
         Optional<Section> optionalSection = sectionDao.findById(id);
         return Optional.ofNullable(sectionMapper.mapToDto(optionalSection.orElse(null)));
+    }
+
+    @Override
+    public List<Long> getCountPages() {
+        return ServiceUtil.collectPages(sectionDao.getCountRow());
     }
 }

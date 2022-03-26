@@ -20,4 +20,6 @@ public interface GenreService {
     boolean isGenreExist(Long id);
 
     Optional<GenreDto> findGenreById(Long id);
+
+    List<Long> getCountPages();
 }

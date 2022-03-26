@@ -20,4 +20,6 @@ public interface SectionService {
     boolean isSectionExist(Long id);
 
     Optional<SectionDto> findSectionById(Long id);
+
+    List<Long> getCountPages();
 }

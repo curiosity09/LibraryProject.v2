@@ -8,6 +8,7 @@ import by.tms.model.entity.user.Librarian;
 import by.tms.model.entity.user.User;
 import by.tms.model.mapper.impl.AccountMapper;
 import by.tms.model.service.AccountService;
+import by.tms.model.util.ServiceUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -42,8 +43,13 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public List<AccountDto> findAllDebtors(int limit, int offset) {
-        List<User> allDebtors = accountDao.findAllDebtors(limit, offset);
+    public List<Long> getCountPages(Class<? extends Account> clazz) {
+        return ServiceUtil.collectPages(accountDao.getCountRow(clazz));
+    }
+
+    @Override
+    public List<AccountDto> findAllDebtors() {
+        List<User> allDebtors = accountDao.findAllDebtors();
         return accountMapper.mapUserToListDto(allDebtors);
     }
 
@@ -60,45 +66,15 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    public Optional<AccountDto> findAccountById(Long id) {
+        Optional<Account> optionalAccount = accountDao.findById(id);
+        return Optional.ofNullable(accountMapper.mapToDto(optionalAccount.orElse(null)));
+    }
+
+    @Override
     public Optional<AccountDto> findAccountByUsername(String username) {
         Optional<Account> byUsername = accountDao.findByUsername(username);
         return Optional.ofNullable(accountMapper.mapToDto(byUsername.orElse(null)));
-    }
-
-    @Override
-    public Optional<AccountDto> findUserByUsername(String username) {
-        Optional<User> optionalUser = accountDao.findUserByUsername(username);
-        return Optional.ofNullable(accountMapper.mapUserToDto(optionalUser.orElse(null)));
-    }
-
-    @Override
-    public Optional<AccountDto> findUserById(Long id) {
-        Optional<User> userById = accountDao.findUserById(id);
-        return Optional.ofNullable(accountMapper.mapUserToDto(userById.orElse(null)));
-    }
-
-    @Override
-    public Optional<AccountDto> findLibrarianByUsername(String username) {
-        Optional<Librarian> optionalLibrarian = accountDao.findLibrarianByUsername(username);
-        return Optional.ofNullable(accountMapper.mapLibrarianToDto(optionalLibrarian.orElse(null)));
-    }
-
-    @Override
-    public Optional<AccountDto> findLibrarianById(Long id) {
-        Optional<Librarian> librarianById = accountDao.findLibrarianById(id);
-        return Optional.ofNullable(accountMapper.mapLibrarianToDto(librarianById.orElse(null)));
-    }
-
-    @Override
-    public Optional<AccountDto> findAdminById(Long id) {
-        Optional<Admin> adminById = accountDao.findAdminById(id);
-        return Optional.ofNullable(accountMapper.mapAdminToDto(adminById.orElse(null)));
-    }
-
-    @Override
-    public Optional<AccountDto> findAdminByUsername(String username) {
-        Optional<Admin> optionalAdmin = accountDao.findAdminByUsername(username);
-        return Optional.ofNullable(accountMapper.mapAdminToDto(optionalAdmin.orElse(null)));
     }
 
     @Override
@@ -116,11 +92,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     @Transactional
     public Long saveUser(AccountDto userDto) {
-        Account account = accountMapper.mapToEntity(userDto);
-        if (Objects.nonNull(account)) {
-            return accountDao.save(account);
-        }
-        return 0L;
+        return accountDao.save(accountMapper.mapToEntity(userDto));
     }
 
     @Override

@@ -22,4 +22,8 @@ public interface BookService {
     void deleteBook(BookDto bookDto);
 
     boolean isBookExist(Long id);
+
+    List<Long> getCountPages();
+
+    List<Long> getCountPages(Long authorId);
 }

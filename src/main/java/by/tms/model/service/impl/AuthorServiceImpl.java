@@ -5,6 +5,7 @@ import by.tms.model.dto.AuthorDto;
 import by.tms.model.entity.Author;
 import by.tms.model.mapper.impl.AuthorMapper;
 import by.tms.model.service.AuthorService;
+import by.tms.model.util.ServiceUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -60,5 +61,10 @@ public class AuthorServiceImpl implements AuthorService {
     public Optional<AuthorDto> findAuthorById(Long id) {
         Optional<Author> optionalAuthor = authorDao.findById(id);
         return Optional.ofNullable(authorMapper.mapToDto(optionalAuthor.orElse(null)));
+    }
+
+    @Override
+    public List<Long> getCountPages() {
+        return ServiceUtil.collectPages(authorDao.getCountRow());
     }
 }

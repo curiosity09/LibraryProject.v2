@@ -5,11 +5,13 @@ import by.tms.model.dto.OrderDto;
 import by.tms.model.entity.Order;
 import by.tms.model.mapper.impl.OrderMapper;
 import by.tms.model.service.OrderService;
+import by.tms.model.util.ServiceUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -60,5 +62,15 @@ public class OrderServiceImpl implements OrderService {
     public Optional<OrderDto> findOrderById(Long id) {
         Optional<Order> optionalOrder = orderDao.findById(id);
         return Optional.ofNullable(orderMapper.mapToDto(optionalOrder.orElse(null)));
+    }
+
+    @Override
+    public List<Long> getCountPages() {
+        return ServiceUtil.collectPages(orderDao.getCountRow());
+    }
+
+    @Override
+    public List<Long> getCountPages(String username) {
+        return ServiceUtil.collectPages(orderDao.getCountRow(username));
     }
 }

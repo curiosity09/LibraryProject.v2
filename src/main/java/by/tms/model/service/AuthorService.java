@@ -20,4 +20,6 @@ public interface AuthorService {
     boolean isAuthorExist(Long id);
 
     Optional<AuthorDto> findAuthorById(Long id);
+
+    List<Long> getCountPages();
 }
