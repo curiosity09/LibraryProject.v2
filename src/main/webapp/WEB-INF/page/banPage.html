@@ -1,12 +1,5 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Mikhail
-  Date: 009 09 02 22
-  Time: 15:14
-  To change this template use File | Settings | File Templates.
---%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Ban page</title>
     <style>
@@ -20,14 +13,14 @@
 
         }
         body{
-            background-image: url("/WEB-INF/resources/images/banCat.jpg");
+            background-image: url("/WEB-INF/resources/static/images/banCat.jpg");
         }
     </style>
 </head>
 <body>
 <div class="banPage">
 <h1>
-    You have been blocked on this site, please <a href="${pageContext.request.contextPath}/controller?command=logoutUser"> try changing you account</a>.
+    You have been blocked on this site, please <a th:href="@{/}"> try changing you account</a>.
 </h1>
 </div>
 </body>
