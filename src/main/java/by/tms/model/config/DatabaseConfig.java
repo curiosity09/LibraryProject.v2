@@ -11,6 +11,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.transaction.TransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
@@ -24,13 +25,18 @@ import java.util.Properties;
 @EnableTransactionManagement
 public class DatabaseConfig {
 
+    private static final String DB_URL_PROPERTY = "db.url";
+    private static final String DB_USERNAME_PROPERTY = "db.username";
+    private static final String DB_PASS_PROPERTY = "db.password";
+    private static final String DB_DRIVER_PROPERTY = "db.driver";
+
     @Bean
     public DataSource dataSource(Environment environment){
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setUrl(environment.getProperty("db.url"));
-        dataSource.setDriverClassName(Objects.requireNonNull(environment.getProperty("db.driver")));
-        dataSource.setUsername(environment.getProperty("db.username"));
-        dataSource.setPassword(environment.getProperty("db.password"));
+        dataSource.setUrl(environment.getProperty(DB_URL_PROPERTY));
+        dataSource.setDriverClassName(Objects.requireNonNull(environment.getProperty(DB_DRIVER_PROPERTY)));
+        dataSource.setUsername(environment.getProperty(DB_USERNAME_PROPERTY));
+        dataSource.setPassword(environment.getProperty(DB_PASS_PROPERTY));
         return dataSource;
     }
 
@@ -51,7 +57,7 @@ public class DatabaseConfig {
     }
 
     @Bean
-    public HibernateTransactionManager transactionManager(SessionFactory sessionFactory){
+    public TransactionManager transactionManager(SessionFactory sessionFactory){
         return new HibernateTransactionManager(sessionFactory);
     }
 }
