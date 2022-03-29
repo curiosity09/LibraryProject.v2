@@ -1,10 +1,10 @@
 package by.tms.model.util;
 
-public final class LoggerUtil {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-    private LoggerUtil() {
-        throw new UnsupportedOperationException();
-    }
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class LoggerUtil {
 
     public static final String ENTITY_WAS_SAVED_IN_DAO = "Entity was saved in dao layer :{}";
     public static final String ENTITY_WAS_UPDATED_IN_DAO = "Entity was updated in dao layer :{}";

@@ -1,14 +1,15 @@
 package by.tms.model.util;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 import java.util.ArrayList;
 import java.util.List;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ServiceUtil {
 
     private static final long LIMIT_TEN = 10;
-
-    private ServiceUtil() {
-    }
 
     public static List<Long> collectPages(Long countRow) {
         long countPage;
