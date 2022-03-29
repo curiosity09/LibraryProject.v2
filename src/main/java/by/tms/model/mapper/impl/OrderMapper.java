@@ -4,24 +4,21 @@ import by.tms.model.dto.OrderDto;
 import by.tms.model.entity.Order;
 import by.tms.model.entity.user.User;
 import by.tms.model.mapper.Mapper;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@Component
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class OrderMapper implements Mapper<Order, OrderDto> {
 
-    private static final OrderMapper INSTANCE = new OrderMapper();
-    private final BookMapper bookMapper = BookMapper.getInstance();
-    private final AccountMapper accountMapper = AccountMapper.getInstance();
-
-    public static OrderMapper getInstance() {
-        return INSTANCE;
-    }
+    private final BookMapper bookMapper;
+    private final AccountMapper accountMapper;
 
     @Override
     public OrderDto mapToDto(Order order) {

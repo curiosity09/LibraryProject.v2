@@ -3,22 +3,15 @@ package by.tms.model.mapper.impl;
 import by.tms.model.dto.GenreDto;
 import by.tms.model.entity.Genre;
 import by.tms.model.mapper.Mapper;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@Component
 public class GenreMapper implements Mapper<Genre, GenreDto> {
-
-    private static final GenreMapper INSTANCE = new GenreMapper();
-
-    public static GenreMapper getInstance() {
-        return INSTANCE;
-    }
 
     @Override
     public GenreDto mapToDto(Genre genre) {

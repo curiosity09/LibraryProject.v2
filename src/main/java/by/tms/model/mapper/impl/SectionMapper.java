@@ -5,20 +5,15 @@ import by.tms.model.entity.Section;
 import by.tms.model.mapper.Mapper;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@Component
 public class SectionMapper implements Mapper<Section, SectionDto> {
-
-    private static final SectionMapper INSTANCE = new SectionMapper();
-
-    public static SectionMapper getInstance() {
-        return INSTANCE;
-    }
 
     @Override
     public SectionDto mapToDto(Section section) {

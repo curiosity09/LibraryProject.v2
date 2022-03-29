@@ -3,25 +3,22 @@ package by.tms.model.mapper.impl;
 import by.tms.model.dto.BookDto;
 import by.tms.model.entity.Book;
 import by.tms.model.mapper.Mapper;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@Component
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class BookMapper implements Mapper<Book, BookDto> {
 
-    private static final BookMapper INSTANCE = new BookMapper();
-    private final AuthorMapper authorMapper = AuthorMapper.getInstance();
-    private final GenreMapper genreMapper = GenreMapper.getInstance();
-    private final SectionMapper sectionMapper = SectionMapper.getInstance();
-
-    public static BookMapper getInstance() {
-        return INSTANCE;
-    }
+    private final AuthorMapper authorMapper;
+    private final GenreMapper genreMapper;
+    private final SectionMapper sectionMapper;
 
     @Override
     public BookDto mapToDto(Book book) {

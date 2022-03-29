@@ -8,22 +8,15 @@ import by.tms.model.entity.user.Librarian;
 import by.tms.model.entity.user.User;
 import by.tms.model.entity.user.UserData;
 import by.tms.model.mapper.Mapper;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@Component
 public class AccountMapper implements Mapper<Account, AccountDto> {
-
-    private static final AccountMapper INSTANCE = new AccountMapper();
-
-    public static AccountMapper getInstance() {
-        return INSTANCE;
-    }
 
     private AccountDto toDto(Account account) {
         if (Objects.nonNull(account)) {

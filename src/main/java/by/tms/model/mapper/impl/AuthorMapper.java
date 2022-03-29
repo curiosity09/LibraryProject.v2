@@ -3,22 +3,15 @@ package by.tms.model.mapper.impl;
 import by.tms.model.dto.AuthorDto;
 import by.tms.model.entity.Author;
 import by.tms.model.mapper.Mapper;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@Component
 public class AuthorMapper implements Mapper<Author, AuthorDto> {
-
-    private static final AuthorMapper INSTANCE = new AuthorMapper();
-
-    public static AuthorMapper getInstance() {
-        return INSTANCE;
-    }
 
     @Override
     public AuthorDto mapToDto(Author author) {

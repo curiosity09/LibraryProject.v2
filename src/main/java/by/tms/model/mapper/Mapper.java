@@ -1,7 +1,10 @@
 package by.tms.model.mapper;
 
+import org.springframework.stereotype.Component;
+
 import java.util.List;
 
+@Component
 public interface Mapper<E, D> {
 
     D mapToDto(E entity);
