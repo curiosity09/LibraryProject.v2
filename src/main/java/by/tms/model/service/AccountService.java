@@ -2,12 +2,11 @@ package by.tms.model.service;
 
 import by.tms.model.dto.user.AccountDto;
 import by.tms.model.entity.user.Account;
-import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface AccountService extends UserDetailsService {
+public interface AccountService extends GenericService<AccountDto, Long, Account> {
 
     List<AccountDto> findAllUsers(int limit, int offset);
 
@@ -18,8 +17,6 @@ public interface AccountService extends UserDetailsService {
     List<AccountDto> findAllAdmins(int limit, int offset);
 
     List<AccountDto> findAllLibrarians(int limit, int offset);
-
-    Optional<AccountDto> findAccountById(Long id);
 
     Optional<AccountDto> findAccountByUsername(String username);
 
@@ -38,8 +35,4 @@ public interface AccountService extends UserDetailsService {
     void updateLibrarian(AccountDto libDto);
 
     void updateAdmin(AccountDto adminDto);
-
-    void deleteAccount(AccountDto accountDto);
-
-    boolean isAccountExist(Long id);
 }

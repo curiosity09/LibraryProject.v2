@@ -10,10 +10,10 @@ import by.tms.model.mapper.impl.AccountMapper;
 import by.tms.model.service.AccountService;
 import by.tms.model.util.LoggerUtil;
 import by.tms.model.util.ServiceUtil;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,13 +23,12 @@ import java.util.Optional;
 import java.util.function.Function;
 
 @Service
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @Transactional(readOnly = true)
 @Slf4j
-public class AccountServiceImpl implements AccountService {
+public class AccountServiceImpl extends GenericServiceImpl<AccountDto, Long, Account> implements AccountService,UserDetailsService {
 
     private final AccountDao accountDao;
-    private final AccountMapper accountMapper = AccountMapper.getInstance();
+    private final AccountMapper accountMapper;
     private final Function<Account, UserDetails> userToUserDetails = user ->
             org.springframework.security.core.userdetails.User
                     .builder()
@@ -37,6 +36,11 @@ public class AccountServiceImpl implements AccountService {
                     .password(user.getPassword())
                     .roles(user.getRole())
                     .build();
+    @Autowired
+    public AccountServiceImpl(AccountDao accountDao) {
+        this.accountDao = accountDao;
+        accountMapper = new AccountMapper();
+    }
 
     @Override
     public List<AccountDto> findAllUsers(int limit, int offset) {
@@ -74,37 +78,30 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Optional<AccountDto> findAccountById(Long id) {
-        Optional<Account> optionalAccount = accountDao.findById(id);
-        log.debug(LoggerUtil.ENTITY_WAS_FOUND_IN_SERVICE_BY, optionalAccount, id);
-        return Optional.ofNullable(accountMapper.mapToDto(optionalAccount.orElse(null)));
-    }
-
-    @Override
     public Optional<AccountDto> findAccountByUsername(String username) {
         Optional<Account> byUsername = accountDao.findByUsername(username);
         log.debug(LoggerUtil.ENTITY_WAS_FOUND_IN_SERVICE_BY, byUsername, username);
-        return Optional.ofNullable(accountMapper.mapToDto(byUsername.orElse(null)));
+        return Optional.ofNullable(mapper.mapToDto(byUsername.orElse(null)));
     }
 
     @Override
     @Transactional
     public void blockUser(AccountDto userDto) {
-        accountDao.blockUser((User) accountMapper.mapToEntity(userDto));
-        log.debug(LoggerUtil.USER_WAS_BLOCKED_IN_SERVICE,userDto);
+        accountDao.blockUser((User) mapper.mapToEntity(userDto));
+        log.debug(LoggerUtil.USER_WAS_BLOCKED_IN_SERVICE, userDto);
     }
 
     @Override
     @Transactional
     public void unblockUser(AccountDto userDto) {
-        accountDao.unblockUser((User) accountMapper.mapToEntity(userDto));
-        log.debug(LoggerUtil.USER_WAS_UNBLOCKED_IN_SERVICE,userDto);
+        accountDao.unblockUser((User) mapper.mapToEntity(userDto));
+        log.debug(LoggerUtil.USER_WAS_UNBLOCKED_IN_SERVICE, userDto);
     }
 
     @Override
     @Transactional
     public Long saveUser(AccountDto userDto) {
-        Long saveUser = accountDao.save(accountMapper.mapToEntity(userDto));
+        Long saveUser = accountDao.save(mapper.mapToEntity(userDto));
         log.debug(LoggerUtil.ENTITY_WAS_SAVED_IN_SERVICE, saveUser);
         return saveUser;
     }
@@ -128,7 +125,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     @Transactional
     public void updateUser(AccountDto userDto) {
-        accountDao.update(accountMapper.mapToEntity(userDto));
+        accountDao.update(mapper.mapToEntity(userDto));
         log.debug(LoggerUtil.ENTITY_WAS_UPDATED_IN_SERVICE, userDto);
     }
 
@@ -144,20 +141,6 @@ public class AccountServiceImpl implements AccountService {
     public void updateAdmin(AccountDto adminDto) {
         accountDao.update(accountMapper.mapAdminToEntity(adminDto));
         log.debug(LoggerUtil.ENTITY_WAS_UPDATED_IN_SERVICE, adminDto);
-    }
-
-    @Override
-    @Transactional
-    public void deleteAccount(AccountDto accountDto) {
-        accountDao.delete(accountMapper.mapToEntity(accountDto));
-        log.debug(LoggerUtil.ENTITY_WAS_DELETED_IN_SERVICE, accountDto);
-    }
-
-    @Override
-    public boolean isAccountExist(Long id) {
-        boolean exist = accountDao.isExist(id);
-        log.debug(LoggerUtil.ENTITY_IS_EXIST_IN_SERVICE_BY, exist, id);
-        return exist;
     }
 
     @Override
