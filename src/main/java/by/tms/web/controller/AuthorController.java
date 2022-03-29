@@ -29,7 +29,7 @@ public class AuthorController {
 
     @PostMapping("/addAuthor")
     public String addAuthor(AuthorDto author) {
-        authorService.addNewAuthor(author);
+        authorService.save(author);
         return REDIRECT + LIBRARIAN_PAGE;
     }
 
@@ -37,7 +37,7 @@ public class AuthorController {
     public String allAuthorPage(Model model,
                                 @RequestParam(name = OFFSET_PARAMETER, defaultValue = "0") String offset) {
         model.addAttribute(COUNT_PAGES_ATTRIBUTE, authorService.getCountPages());
-        model.addAttribute("allAuthors", authorService.findAllAuthor(LIMIT_TEN, Integer.parseInt(offset)));
+        model.addAttribute("allAuthors", authorService.findAll(LIMIT_TEN, Integer.parseInt(offset)));
         return USER_PREFIX + "allAuthor";
     }
 }

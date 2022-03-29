@@ -25,7 +25,7 @@ public class SectionController {
 
     @ModelAttribute("allSections")
     public List<SectionDto> allSections() {
-        return sectionService.findAllSection(LIMIT_TEN, OFFSET_ZERO);
+        return sectionService.findAll(LIMIT_TEN, OFFSET_ZERO);
     }
 
     @GetMapping("/addSectionPage")
@@ -36,7 +36,7 @@ public class SectionController {
 
     @PostMapping("/addSection")
     public String addSection(SectionDto section) {
-        sectionService.addNewSection(section);
+        sectionService.save(section);
         return REDIRECT + LIBRARIAN_PAGE;
     }
 }

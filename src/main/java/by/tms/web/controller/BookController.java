@@ -44,17 +44,17 @@ public class BookController {
 
     @ModelAttribute("allAuthors")
     public List<AuthorDto> allAuthors() {
-        return authorService.findAllAuthor(Integer.MAX_VALUE, OFFSET_ZERO);
+        return authorService.findAll(Integer.MAX_VALUE, OFFSET_ZERO);
     }
 
     @ModelAttribute("allGenres")
     public List<GenreDto> allGenres() {
-        return genreService.findAllGenre(Integer.MAX_VALUE, OFFSET_ZERO);
+        return genreService.findAll(Integer.MAX_VALUE, OFFSET_ZERO);
     }
 
     @ModelAttribute("allSections")
     public List<SectionDto> allSections() {
-        return sectionService.findAllSection(Integer.MAX_VALUE, OFFSET_ZERO);
+        return sectionService.findAll(Integer.MAX_VALUE, OFFSET_ZERO);
     }
 
     @GetMapping("/showAllBooks")
@@ -62,7 +62,7 @@ public class BookController {
                                Model model,
                                @RequestParam(name = OFFSET_PARAMETER, defaultValue = "0") String offset) {
         model.addAttribute(COUNT_PAGES_ATTRIBUTE, bookService.getCountPages());
-        model.addAttribute("allBooks", bookService.findAllBook(LIMIT_TEN, Integer.parseInt(offset)));
+        model.addAttribute("allBooks", bookService.findAll(LIMIT_TEN, Integer.parseInt(offset)));
         if (Objects.equals("user", account.getRole())) {
             return USER_PREFIX + "allBooks";
         } else if (Objects.equals("librarian", account.getRole())) {
@@ -76,7 +76,7 @@ public class BookController {
                             @RequestParam("bookId") String[] bookIds,
                             Model model) {
         for (String bookId : bookIds) {
-            Optional<BookDto> bookById = bookService.findBookById(Long.parseLong(bookId));
+            Optional<BookDto> bookById = bookService.findById(Long.parseLong(bookId));
             if (bookById.isPresent() && bookById.get().getQuantity() != 0) {
                 shoppingCart.getShoppingList().add(bookById.get());
             }
@@ -87,7 +87,7 @@ public class BookController {
 
     @GetMapping("/editBookPage/{id}")
     public String editBookPage(@PathVariable("id") String id, Model model) {
-        Optional<BookDto> bookById = bookService.findBookById(Long.parseLong(id));
+        Optional<BookDto> bookById = bookService.findById(Long.parseLong(id));
         bookById.ifPresent(bookDto -> model.addAttribute("book", bookDto));
         return LIBRARIAN_PREFIX + "editBook";
     }
@@ -95,7 +95,7 @@ public class BookController {
     @PostMapping("/editBook")
     public String editBook(BookDto book) {
         if (Objects.nonNull(book)) {
-            bookService.updateBook(book);
+            bookService.update(book);
             return REDIRECT + "/showAllBooks";
         }
         return REDIRECT + ERROR_PAGE;
@@ -114,7 +114,7 @@ public class BookController {
     @PostMapping("/addBook")
     public String addBook(BookDto book) {
         if (Objects.nonNull(book)) {
-            bookService.addNewBook(book);
+            bookService.save(book);
             return REDIRECT + LIBRARIAN_PAGE;
         }
         return REDIRECT + ERROR_PAGE;

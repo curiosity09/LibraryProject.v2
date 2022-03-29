@@ -44,14 +44,14 @@ public class OrderController {
 
     @ModelAttribute("allOrders")
     public List<OrderDto> allOrders() {
-        return orderService.findAllOrder(LIMIT_TEN, OFFSET_ZERO);
+        return orderService.findAll(LIMIT_TEN, OFFSET_ZERO);
     }
 
     @GetMapping("/allOrderPage")
     public String allOrderPage(Model model,
                                @RequestParam(name = OFFSET_PARAMETER, defaultValue = "0") String offset) {
         model.addAttribute(COUNT_PAGES_ATTRIBUTE, orderService.getCountPages());
-        model.addAttribute("allOrders", orderService.findAllOrder(LIMIT_TEN, Integer.parseInt(offset)));
+        model.addAttribute("allOrders", orderService.findAll(LIMIT_TEN, Integer.parseInt(offset)));
         return LIBRARIAN_PREFIX + "allOrders";
     }
 
@@ -74,10 +74,10 @@ public class OrderController {
                     .rentalTime(LocalDateTime.now())
                     .rentalPeriod(setRentalPeriod(period))
                     .build();
-            if (Objects.nonNull(orderService.addOrder(orderDto))) {
+            if (Objects.nonNull(orderService.save(orderDto))) {
                 for (BookDto book : selectedBook) {
                     book.setQuantity(book.getQuantity() - ONE_BOOK);
-                    bookService.updateBook(book);
+                    bookService.update(book);
                 }
                 shoppingCart.getShoppingList().clear();
                 model.addAttribute(SHOPPING_CART_ATTRIBUTE, shoppingCart);
@@ -114,7 +114,7 @@ public class OrderController {
     public String deleteBookFromOrder(Model model,
                                       @PathVariable String id,
                                       @SessionAttribute(SHOPPING_CART_ATTRIBUTE) ShoppingCart shoppingCart) {
-        Optional<BookDto> bookById = bookService.findBookById(Long.parseLong(id));
+        Optional<BookDto> bookById = bookService.findById(Long.parseLong(id));
         bookById.ifPresent(shoppingCart.getShoppingList()::remove);
         model.addAttribute(SHOPPING_CART_ATTRIBUTE, shoppingCart);
         return REDIRECT + "/shoppingCart";
@@ -136,7 +136,7 @@ public class OrderController {
     @GetMapping("/finishOrder/{id}")
     public String finishOrder(@PathVariable String id,
                               @RequestHeader(value = REFERER_HEADER, required = false) final String referer) {
-        orderService.deleteOrder(OrderDto.builder().id(Long.parseLong(id)).build());
+        orderService.delete(OrderDto.builder().id(Long.parseLong(id)).build());
         return REDIRECT + referer;
     }
 }

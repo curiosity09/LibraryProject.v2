@@ -25,7 +25,7 @@ public class GenreController {
 
     @ModelAttribute("allGenres")
     public List<GenreDto> allGenres() {
-        return genreService.findAllGenre(LIMIT_TEN, OFFSET_ZERO);
+        return genreService.findAll(LIMIT_TEN, OFFSET_ZERO);
     }
 
     @GetMapping("/addGenrePage")
@@ -36,7 +36,7 @@ public class GenreController {
 
     @PostMapping("/addGenre")
     public String addGenre(GenreDto genre) {
-        genreService.addNewGenre(genre);
+        genreService.save(genre);
         return REDIRECT + LIBRARIAN_PAGE;
     }
 }

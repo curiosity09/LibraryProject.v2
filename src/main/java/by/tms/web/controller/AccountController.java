@@ -205,8 +205,8 @@ public class AccountController {
 
     @GetMapping("/deleteUser/{id}")
     public String deleteUser(@PathVariable("id") String id) {
-        Optional<AccountDto> userById = accountService.findAccountById(Long.parseLong(id));
-        userById.ifPresent(accountService::deleteAccount);
+        Optional<AccountDto> userById = accountService.findById(Long.parseLong(id));
+        userById.ifPresent(accountService::delete);
         return REDIRECT + "/allUsersPage";
     }
 }
