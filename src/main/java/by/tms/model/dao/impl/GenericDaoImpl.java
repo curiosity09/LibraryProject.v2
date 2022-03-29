@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -20,16 +21,21 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Getter
+@Component
 @Slf4j
 public abstract class GenericDaoImpl<P extends Serializable, E extends BaseEntity<P>> implements GenericDao<P, E> {
 
-    @Autowired
     protected SessionFactory sessionFactory;
     private final Class<E> clazz;
 
     protected GenericDaoImpl() {
         Type genericSuperclass = getClass().getGenericSuperclass();
         clazz = (Class<E>) ((ParameterizedType) genericSuperclass).getActualTypeArguments()[1];
+    }
+
+    @Autowired
+    public void setSessionFactory(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
 
     @Override
