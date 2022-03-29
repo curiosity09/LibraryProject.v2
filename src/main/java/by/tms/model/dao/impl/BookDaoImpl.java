@@ -5,6 +5,8 @@ import by.tms.model.entity.Author;
 import by.tms.model.entity.BaseEntity_;
 import by.tms.model.entity.Book;
 import by.tms.model.entity.Book_;
+import by.tms.model.util.LoggerUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
@@ -15,6 +17,7 @@ import javax.persistence.criteria.Root;
 import java.util.List;
 
 @Repository
+@Slf4j
 public class BookDaoImpl extends GenericDaoImpl<Long, Book> implements BookDao {
 
     @Override
@@ -28,7 +31,9 @@ public class BookDaoImpl extends GenericDaoImpl<Long, Book> implements BookDao {
                 .where(
                         cb.equal(from.get(Book_.name), name)
                 );
-        return session.createQuery(criteria).getResultList();
+        List<Book> resultList = session.createQuery(criteria).getResultList();
+        log.debug(LoggerUtil.ENTITY_WAS_FOUND_IN_DAO_BY, resultList, name);
+        return resultList;
     }
 
     @Override
@@ -43,11 +48,13 @@ public class BookDaoImpl extends GenericDaoImpl<Long, Book> implements BookDao {
                 .where(
                         cb.equal(join.get(BaseEntity_.id), authorId)
                 );
-        return session
+        List<Book> resultList = session
                 .createQuery(criteria)
                 .setMaxResults(limit)
                 .setFirstResult(offset)
                 .getResultList();
+        log.debug(LoggerUtil.ENTITY_WAS_FOUND_IN_DAO_BY, resultList, authorId);
+        return resultList;
     }
 
     @Override
@@ -57,10 +64,12 @@ public class BookDaoImpl extends GenericDaoImpl<Long, Book> implements BookDao {
         CriteriaQuery<Long> criteria = cb.createQuery(Long.class);
         Root<Book> root = criteria.from(Book.class);
         Join<Book, Author> authorJoin = root.join(Book_.author);
-        return session
+        Long singleResult = session
                 .createQuery(criteria
                         .select(cb.count(root))
                         .where(cb.equal(authorJoin.get(BaseEntity_.id), authorId)))
                 .getSingleResult();
+        log.debug(LoggerUtil.COUNT_ROW_WAS_FOUND_IN_DAO, singleResult);
+        return singleResult;
     }
 }

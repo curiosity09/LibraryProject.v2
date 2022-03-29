@@ -9,6 +9,8 @@ import by.tms.model.entity.user.Admin;
 import by.tms.model.entity.user.Librarian;
 import by.tms.model.entity.user.User;
 import by.tms.model.entity.user.User_;
+import by.tms.model.util.LoggerUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
@@ -22,6 +24,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Repository
+@Slf4j
 public class AccountDaoImpl extends GenericDaoImpl<Long, Account> implements AccountDao {
 
     @Override
@@ -38,9 +41,11 @@ public class AccountDaoImpl extends GenericDaoImpl<Long, Account> implements Acc
                                 cb.lessThan(orderJoin.get(Order_.rentalPeriod), LocalDateTime.now()),
                                 cb.equal(from.get(User_.isBanned), false))
                 ).distinct(true);
-        return session
+        List<User> resultList = session
                 .createQuery(criteria)
                 .getResultList();
+        log.debug(LoggerUtil.ENTITY_WAS_FOUND_IN_DAO, resultList);
+        return resultList;
     }
 
     @Override
@@ -49,11 +54,13 @@ public class AccountDaoImpl extends GenericDaoImpl<Long, Account> implements Acc
         CriteriaBuilder cb = session.getCriteriaBuilder();
         CriteriaQuery<User> criteria = cb.createQuery(User.class);
         Root<User> from = criteria.from(User.class);
-        return session
+        List<User> resultList = session
                 .createQuery(criteria.select(from))
                 .setMaxResults(limit)
                 .setFirstResult(offset)
                 .getResultList();
+        log.debug(LoggerUtil.ENTITY_WAS_FOUND_IN_DAO, resultList);
+        return resultList;
     }
 
     @Override
@@ -62,11 +69,13 @@ public class AccountDaoImpl extends GenericDaoImpl<Long, Account> implements Acc
         CriteriaBuilder cb = session.getCriteriaBuilder();
         CriteriaQuery<Admin> criteria = cb.createQuery(Admin.class);
         Root<Admin> from = criteria.from(Admin.class);
-        return session
+        List<Admin> resultList = session
                 .createQuery(criteria.select(from))
                 .setMaxResults(limit)
                 .setFirstResult(offset)
                 .getResultList();
+        log.debug(LoggerUtil.ENTITY_WAS_FOUND_IN_DAO, resultList);
+        return resultList;
     }
 
     @Override
@@ -75,11 +84,13 @@ public class AccountDaoImpl extends GenericDaoImpl<Long, Account> implements Acc
         CriteriaBuilder cb = session.getCriteriaBuilder();
         CriteriaQuery<Librarian> criteria = cb.createQuery(Librarian.class);
         Root<Librarian> from = criteria.from(Librarian.class);
-        return session
+        List<Librarian> resultList = session
                 .createQuery(criteria.select(from))
                 .setMaxResults(limit)
                 .setFirstResult(offset)
                 .getResultList();
+        log.debug(LoggerUtil.ENTITY_WAS_FOUND_IN_DAO, resultList);
+        return resultList;
     }
 
     @Override
@@ -89,7 +100,9 @@ public class AccountDaoImpl extends GenericDaoImpl<Long, Account> implements Acc
         CriteriaQuery<Account> criteria = cb.createQuery(Account.class);
         Root<Account> root = criteria.from(Account.class);
         criteria.select(root).where(cb.equal(root.get(Account_.username), username));
-        return Optional.ofNullable(session.createQuery(criteria).uniqueResult());
+        Account account = session.createQuery(criteria).uniqueResult();
+        log.debug(LoggerUtil.ENTITY_WAS_FOUND_IN_DAO_BY, account, username);
+        return Optional.ofNullable(account);
     }
 
     @Override
@@ -98,6 +111,7 @@ public class AccountDaoImpl extends GenericDaoImpl<Long, Account> implements Acc
         if (Objects.equals(false, user.isBanned())) {
             user.setBanned(true);
             session.merge(user);
+            log.debug(LoggerUtil.USER_WAS_BLOCKED_IN_DAO, user);
         }
     }
 
@@ -107,6 +121,7 @@ public class AccountDaoImpl extends GenericDaoImpl<Long, Account> implements Acc
         if (Objects.equals(true, user.isBanned())) {
             user.setBanned(false);
             session.merge(user);
+            log.debug(LoggerUtil.USER_WAS_UNBLOCKED_IN_DAO, user);
         }
     }
 
@@ -116,6 +131,8 @@ public class AccountDaoImpl extends GenericDaoImpl<Long, Account> implements Acc
         CriteriaBuilder cb = session.getCriteriaBuilder();
         CriteriaQuery<Long> criteria = cb.createQuery(Long.class);
         Root<? extends Account> from = criteria.from(clazz);
-        return session.createQuery(criteria.select(cb.count(from))).getSingleResult();
+        Long singleResult = session.createQuery(criteria.select(cb.count(from))).getSingleResult();
+        log.debug(LoggerUtil.COUNT_ROW_WAS_FOUND_IN_DAO, singleResult);
+        return singleResult;
     }
 }

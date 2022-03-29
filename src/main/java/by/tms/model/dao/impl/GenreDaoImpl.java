@@ -3,6 +3,8 @@ package by.tms.model.dao.impl;
 import by.tms.model.dao.GenreDao;
 import by.tms.model.entity.Genre;
 import by.tms.model.entity.Genre_;
+import by.tms.model.util.LoggerUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
@@ -12,7 +14,8 @@ import javax.persistence.criteria.Root;
 import java.util.Optional;
 
 @Repository
-public  class GenreDaoImpl extends GenericDaoImpl<Long, Genre> implements GenreDao {
+@Slf4j
+public class GenreDaoImpl extends GenericDaoImpl<Long, Genre> implements GenreDao {
 
     @Override
     public Optional<Genre> findByName(String name) {
@@ -25,6 +28,8 @@ public  class GenreDaoImpl extends GenericDaoImpl<Long, Genre> implements GenreD
                 .where(
                         cb.equal(from.get(Genre_.name), name)
                 );
-        return Optional.of(session.createQuery(criteria).uniqueResult());
+        Genre genre = session.createQuery(criteria).uniqueResult();
+        log.debug(LoggerUtil.ENTITY_WAS_FOUND_IN_DAO_BY, genre, name);
+        return Optional.of(genre);
     }
 }

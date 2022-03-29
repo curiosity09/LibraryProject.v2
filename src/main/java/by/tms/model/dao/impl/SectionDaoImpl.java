@@ -4,6 +4,8 @@ import by.tms.model.dao.SectionDao;
 import by.tms.model.entity.Section;
 import by.tms.model.entity.Section_;
 
+import by.tms.model.util.LoggerUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
@@ -13,7 +15,8 @@ import javax.persistence.criteria.Root;
 import java.util.Optional;
 
 @Repository
-public  class SectionDaoImpl extends GenericDaoImpl<Long, Section> implements SectionDao {
+@Slf4j
+public class SectionDaoImpl extends GenericDaoImpl<Long, Section> implements SectionDao {
 
     @Override
     public Optional<Section> findByName(String name) {
@@ -26,6 +29,8 @@ public  class SectionDaoImpl extends GenericDaoImpl<Long, Section> implements Se
                 .where(
                         cb.equal(from.get(Section_.name), name)
                 );
-        return Optional.ofNullable(session.createQuery(criteria).uniqueResult());
+        Section section = session.createQuery(criteria).uniqueResult();
+        log.debug(LoggerUtil.ENTITY_WAS_FOUND_IN_DAO_BY, section, name);
+        return Optional.ofNullable(section);
     }
 }

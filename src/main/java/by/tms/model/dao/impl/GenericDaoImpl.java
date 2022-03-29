@@ -2,7 +2,9 @@ package by.tms.model.dao.impl;
 
 import by.tms.model.dao.GenericDao;
 import by.tms.model.entity.BaseEntity;
+import by.tms.model.util.LoggerUtil;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Getter
+@Slf4j
 public abstract class GenericDaoImpl<P extends Serializable, E extends BaseEntity<P>> implements GenericDao<P, E> {
 
     @Autowired
@@ -32,13 +35,16 @@ public abstract class GenericDaoImpl<P extends Serializable, E extends BaseEntit
     @Override
     public Optional<E> findById(P id) {
         Session session = sessionFactory.getCurrentSession();
-        return Optional.ofNullable(session.find(clazz, id));
+        E entity = session.find(clazz, id);
+        log.debug(LoggerUtil.ENTITY_WAS_FOUND_IN_DAO_BY, entity, id);
+        return Optional.ofNullable(entity);
     }
 
     @Override
     public P save(E entity) {
         Session session = sessionFactory.getCurrentSession();
         Serializable id = session.save(entity);
+        log.debug(LoggerUtil.ENTITY_WAS_SAVED_IN_DAO, entity);
         return (P) id;
     }
 
@@ -47,6 +53,7 @@ public abstract class GenericDaoImpl<P extends Serializable, E extends BaseEntit
         if (Objects.nonNull(entity)) {
             Session session = sessionFactory.getCurrentSession();
             session.merge(entity);
+            log.debug(LoggerUtil.ENTITY_WAS_UPDATED_IN_DAO, entity);
         }
     }
 
@@ -57,6 +64,7 @@ public abstract class GenericDaoImpl<P extends Serializable, E extends BaseEntit
             Object persistentInstance = session.load(clazz, entity.getId());
             if (persistentInstance != null) {
                 session.delete(persistentInstance);
+                log.debug(LoggerUtil.ENTITY_WAS_DELETED_IN_DAO, entity);
             }
         }
     }
@@ -67,25 +75,31 @@ public abstract class GenericDaoImpl<P extends Serializable, E extends BaseEntit
         CriteriaBuilder cb = session.getCriteriaBuilder();
         CriteriaQuery<E> criteria = cb.createQuery(clazz);
         Root<E> root = criteria.from(clazz);
-        return session
+        List<E> resultList = session
                 .createQuery(criteria.select(root))
                 .setMaxResults(limit)
                 .setFirstResult(offset)
                 .getResultList();
+        log.debug(LoggerUtil.ENTITY_WAS_FOUND_IN_DAO, resultList);
+        return resultList;
     }
 
     @Override
     public boolean isExist(P id) {
         Session session = sessionFactory.getCurrentSession();
-        return Objects.nonNull(session.get(clazz, id));
+        E entity = session.get(clazz, id);
+        log.debug(LoggerUtil.ENTITY_IS_EXIST_IN_DAO, entity);
+        return Objects.nonNull(entity);
     }
 
     @Override
-    public Long getCountRow(){
+    public Long getCountRow() {
         Session session = sessionFactory.getCurrentSession();
         CriteriaBuilder cb = session.getCriteriaBuilder();
         CriteriaQuery<Long> criteria = cb.createQuery(Long.class);
         Root<E> root = criteria.from(clazz);
-        return session.createQuery(criteria.select(cb.count(root))).getSingleResult();
+        Long singleResult = session.createQuery(criteria.select(cb.count(root))).getSingleResult();
+        log.debug(LoggerUtil.COUNT_ROW_WAS_FOUND_IN_DAO, singleResult);
+        return singleResult;
     }
 }
