@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.event.annotation.AfterTestMethod;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,20 +36,20 @@ class AuthorServiceImplTest {
         TestDataImporter.importTestData(sessionFactory);
     }
 
-    @AfterEach
+    @AfterTestMethod
     public void flush() {
         sessionFactory.close();
     }
 
     @Test
     void findAllAuthor() {
-        List<AuthorDto> allAuthor = authorService.findAllAuthor(LIMIT_10,OFFSET_0);
+        List<AuthorDto> allAuthor = authorService.findAll(LIMIT_10,OFFSET_0);
         assertEquals(3, allAuthor.size());
     }
 
     @Test
     void addNewAuthor() {
-        authorService.addNewAuthor(AuthorDto.builder().fullName("Анджей Сапковский").build());
+        authorService.save(AuthorDto.builder().fullName("Анджей Сапковский").build());
         Optional<AuthorDto> authorDto = authorService.findAuthorByFullName("Анджей Сапковский");
         assertTrue(authorDto.isPresent());
     }
@@ -61,26 +62,26 @@ class AuthorServiceImplTest {
 
     @Test
     void updateAuthor() {
-        Optional<AuthorDto> optionalAuthor = authorService.findAuthorById(2L);
+        Optional<AuthorDto> optionalAuthor = authorService.findById(2L);
         optionalAuthor.ifPresent(author -> {
             author.setFullName("Виктор Ципеленен");
-            authorService.updateAuthor(author);
+            authorService.update(author);
         });
-        Optional<AuthorDto> authorById = authorService.findAuthorById(2L);
+        Optional<AuthorDto> authorById = authorService.findById(2L);
         authorById.ifPresent(authorDto -> assertEquals("Виктор Ципеленен", authorDto.getFullName()));
     }
 
     @Test
     void deleteAuthor() {
-        Optional<AuthorDto> optionalAuthor = authorService.findAuthorById(1L);
-        optionalAuthor.ifPresent(author -> authorService.deleteAuthor(author));
-        Optional<AuthorDto> authorById = authorService.findAuthorById(1L);
+        Optional<AuthorDto> optionalAuthor = authorService.findById(1L);
+        optionalAuthor.ifPresent(author -> authorService.delete(author));
+        Optional<AuthorDto> authorById = authorService.findById(1L);
         assertFalse(authorById.isPresent());
     }
 
     @Test
     void findAuthorById() {
-        Optional<AuthorDto> authorById = authorService.findAuthorById(3L);
+        Optional<AuthorDto> authorById = authorService.findById(3L);
         authorById.ifPresent(authorDto -> assertEquals("Чарльз Буковски", authorDto.getFullName()));
     }
 }

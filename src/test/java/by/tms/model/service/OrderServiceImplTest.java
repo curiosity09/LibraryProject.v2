@@ -4,12 +4,12 @@ import by.tms.model.config.DatabaseConfigTest;
 import by.tms.model.dto.OrderDto;
 import by.tms.util.TestDataImporter;
 import org.hibernate.SessionFactory;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.event.annotation.AfterTestMethod;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,14 +36,14 @@ class OrderServiceImplTest {
         TestDataImporter.importTestData(sessionFactory);
     }
 
-    @AfterEach
+    @AfterTestMethod
     public void flush() {
         sessionFactory.close();
     }
 
     @Test
     void findAllOrder() {
-        List<OrderDto> allOrder = orderService.findAllOrder(LIMIT_10, OFFSET_0);
+        List<OrderDto> allOrder = orderService.findAll(LIMIT_10, OFFSET_0);
         assertEquals(2, allOrder.get(0).getBookList().size());
     }
 
@@ -51,27 +51,27 @@ class OrderServiceImplTest {
     void addOrder() {
         OrderDto order = OrderDto.builder().bookList(null)
                 .user(null).rentalTime(LocalDateTime.now()).rentalPeriod(LocalDateTime.MAX).build();
-        Long id = orderService.addOrder(order);
-        Optional<OrderDto> byId = orderService.findOrderById(id);
+        Long id = orderService.save(order);
+        Optional<OrderDto> byId = orderService.findById(id);
         assertTrue(byId.isPresent());
     }
 
     @Test
     void deleteOrder() {
-        Optional<OrderDto> byId = orderService.findOrderById(3L);
-        byId.ifPresent(order -> orderService.deleteOrder(order));
-        Optional<OrderDto> orderById = orderService.findOrderById(3L);
+        Optional<OrderDto> byId = orderService.findById(3L);
+        byId.ifPresent(order -> orderService.delete(order));
+        Optional<OrderDto> orderById = orderService.findById(3L);
         assertFalse(orderById.isPresent());
     }
 
     @Test
     void updateOrder() {
-        Optional<OrderDto> byId = orderService.findOrderById(2L);
+        Optional<OrderDto> byId = orderService.findById(2L);
         byId.ifPresent(order -> {
             order.setRentalTime(LocalDateTime.of(2020, 12, 31, 10, 12));
-            orderService.updateOrder(order);
+            orderService.update(order);
         });
-        Optional<OrderDto> orderById = orderService.findOrderById(2L);
+        Optional<OrderDto> orderById = orderService.findById(2L);
         orderById.ifPresent(orderDto -> assertEquals(
                 LocalDateTime.of(2020, 12, 31, 10, 12),
                 orderDto.getRentalTime()));
@@ -85,7 +85,7 @@ class OrderServiceImplTest {
 
     @Test
     void findOrderById() {
-        Optional<OrderDto> orderById = orderService.findOrderById(2L);
+        Optional<OrderDto> orderById = orderService.findById(2L);
         orderById.ifPresent(orderDto -> assertEquals("newUser", orderDto.getUser().getUsername()));
     }
 }

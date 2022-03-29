@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.event.annotation.AfterTestMethod;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,14 +34,14 @@ class BookServiceImplTest {
         TestDataImporter.importTestData(sessionFactory);
     }
 
-    @AfterEach
+    @AfterTestMethod
     public void flush() {
         sessionFactory.close();
     }
 
     @Test
     void findBookById() {
-        Optional<BookDto> bookById = bookService.findBookById(1L);
+        Optional<BookDto> bookById = bookService.findById(1L);
         bookById.ifPresent(bookDto -> assertEquals("Азазело", bookDto.getName()));
     }
 
@@ -52,34 +53,34 @@ class BookServiceImplTest {
 
     @Test
     void findAllBook() {
-        List<BookDto> allBook = bookService.findAllBook(10,0);
+        List<BookDto> allBook = bookService.findAll(10,0);
         assertEquals(3, allBook.size());
     }
 
     @Test
     void addNewBook() {
         BookDto book = BookDto.builder().name("Владычица озера").quantity(1).publicationYear(1999).build();
-        Long id = bookService.addNewBook(book);
-        Optional<BookDto> byId = bookService.findBookById(id);
+        Long id = bookService.save(book);
+        Optional<BookDto> byId = bookService.findById(id);
         assertTrue(byId.isPresent());
     }
 
     @Test
     void updateBook() {
-        Optional<BookDto> byId = bookService.findBookById(2L);
+        Optional<BookDto> byId = bookService.findById(2L);
         byId.ifPresent(book -> {
             book.setName("Turkish Gambit");
-            bookService.updateBook(book);
+            bookService.update(book);
         });
-        Optional<BookDto> bookById = bookService.findBookById(2L);
+        Optional<BookDto> bookById = bookService.findById(2L);
         bookById.ifPresent(bookDto -> assertEquals("Turkish Gambit", bookDto.getName()));
     }
 
     @Test
     void deleteBook() {
-        Optional<BookDto> byId = bookService.findBookById(3L);
-        byId.ifPresent(book -> bookService.deleteBook(book));
-        Optional<BookDto> bookById = bookService.findBookById(3L);
+        Optional<BookDto> byId = bookService.findById(3L);
+        byId.ifPresent(book -> bookService.delete(book));
+        Optional<BookDto> bookById = bookService.findById(3L);
         assertFalse(bookById.isPresent());
     }
 }

@@ -5,12 +5,12 @@ import by.tms.model.dto.user.AccountDto;
 import by.tms.model.dto.user.UserDataDto;
 import by.tms.util.TestDataImporter;
 import org.hibernate.SessionFactory;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.event.annotation.AfterTestMethod;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,7 +36,7 @@ class AccountServiceImplTest {
         TestDataImporter.importTestData(sessionFactory);
     }
 
-    @AfterEach
+    @AfterTestMethod
     public void flush() {
         sessionFactory.close();
     }
@@ -74,7 +74,7 @@ class AccountServiceImplTest {
 
     @Test
     void findUserById() {
-        Optional<AccountDto> userById = accountService.findAccountById(2L);
+        Optional<AccountDto> userById = accountService.findById(2L);
         userById.ifPresent(user -> assertEquals("newUser", user.getUsername()));
     }
 
@@ -95,20 +95,20 @@ class AccountServiceImplTest {
 
     @Test
     void updateAccount() {
-        Optional<AccountDto> optionalLibrarian = accountService.findAccountById(6L);
+        Optional<AccountDto> optionalLibrarian = accountService.findById(6L);
         optionalLibrarian.ifPresent(librarian -> {
             librarian.setUsername("librarian");
             accountService.updateLibrarian(librarian);
         });
-        Optional<AccountDto> librarianById = accountService.findAccountById(6L);
+        Optional<AccountDto> librarianById = accountService.findById(6L);
         librarianById.ifPresent(lib -> assertEquals("librarian", lib.getUsername()));
     }
 
     @Test
     void deleteAccount() {
-        Optional<AccountDto> optionalLibrarian = accountService.findAccountById(5L);
-        optionalLibrarian.ifPresent(librarian -> accountService.deleteAccount(librarian));
-        Optional<AccountDto> librarianById = accountService.findAccountById(5L);
+        Optional<AccountDto> optionalLibrarian = accountService.findById(5L);
+        optionalLibrarian.ifPresent(librarian -> accountService.delete(librarian));
+        Optional<AccountDto> librarianById = accountService.findById(5L);
         assertFalse(librarianById.isPresent());
     }
 

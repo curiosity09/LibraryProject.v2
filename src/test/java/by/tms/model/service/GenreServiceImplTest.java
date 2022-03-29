@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.event.annotation.AfterTestMethod;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,20 +36,20 @@ class GenreServiceImplTest {
         TestDataImporter.importTestData(sessionFactory);
     }
 
-    @AfterEach
+    @AfterTestMethod
     public void flush() {
         sessionFactory.close();
     }
 
     @Test
     void findAllGenre() {
-        List<GenreDto> allGenre = genreService.findAllGenre(LIMIT_10,OFFSET_0);
+        List<GenreDto> allGenre = genreService.findAll(LIMIT_10,OFFSET_0);
         assertEquals(3, allGenre.size());
     }
 
     @Test
     void addNewGenre() {
-        genreService.addNewGenre(GenreDto.builder().name("Комедия").build());
+        genreService.save(GenreDto.builder().name("Комедия").build());
         Optional<GenreDto> genre = genreService.findGenreByName("Комедия");
         assertTrue(genre.isPresent());
     }
@@ -61,26 +62,26 @@ class GenreServiceImplTest {
 
     @Test
     void updateGenre() {
-        Optional<GenreDto> byId = genreService.findGenreById(1L);
+        Optional<GenreDto> byId = genreService.findById(1L);
         byId.ifPresent(genre -> {
             genre.setName("Detective");
-            genreService.updateGenre(genre);
+            genreService.update(genre);
         });
-        Optional<GenreDto> genreById = genreService.findGenreById(1L);
+        Optional<GenreDto> genreById = genreService.findById(1L);
         genreById.ifPresent(genreDto -> assertEquals("Detective", genreDto.getName()));
     }
 
     @Test
     void deleteGenre() {
-        Optional<GenreDto> optionalGenre = genreService.findGenreById(2L);
-        optionalGenre.ifPresent(genreDto -> genreService.deleteGenre(genreDto));
-        Optional<GenreDto> genreById = genreService.findGenreById(2L);
+        Optional<GenreDto> optionalGenre = genreService.findById(2L);
+        optionalGenre.ifPresent(genreDto -> genreService.delete(genreDto));
+        Optional<GenreDto> genreById = genreService.findById(2L);
         assertFalse(genreById.isPresent());
     }
 
     @Test
     void findGenreById() {
-        Optional<GenreDto> genreById = genreService.findGenreById(3L);
+        Optional<GenreDto> genreById = genreService.findById(3L);
         genreById.ifPresent(genreDto -> assertEquals("Автобиография", genreDto.getName()));
     }
 }

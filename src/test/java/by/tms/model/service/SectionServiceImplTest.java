@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.event.annotation.AfterTestMethod;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,27 +36,27 @@ class SectionServiceImplTest {
         TestDataImporter.importTestData(sessionFactory);
     }
 
-    @AfterEach
+    @AfterTestMethod
     public void flush() {
         sessionFactory.close();
     }
 
     @Test
     void findAllSection() {
-        List<SectionDto> results = sectionService.findAllSection(LIMIT_10,OFFSET_0);
+        List<SectionDto> results = sectionService.findAll(LIMIT_10,OFFSET_0);
         assertEquals(3, results.size());
     }
 
     @Test
     void addNewSection() {
-        sectionService.addNewSection(SectionDto.builder().name("Plants").build());
+        sectionService.save(SectionDto.builder().name("Plants").build());
         Optional<SectionDto> plants = sectionService.findSectionByName("Plants");
         assertTrue(plants.isPresent());
     }
 
     @Test
     void findSectionById() {
-        Optional<SectionDto> sectionById = sectionService.findSectionById(2L);
+        Optional<SectionDto> sectionById = sectionService.findById(2L);
         sectionById.ifPresent(sectionDto -> assertEquals("Космос",sectionDto.getName()));
     }
 
@@ -70,17 +71,17 @@ class SectionServiceImplTest {
         Optional<SectionDto> byName = sectionService.findSectionByName("Космос");
         byName.ifPresent(section -> {
             section.setName("Planets");
-            sectionService.updateSection(section);
+            sectionService.update(section);
         });
-        Optional<SectionDto> updatedSection = sectionService.findSectionById(2L);
+        Optional<SectionDto> updatedSection = sectionService.findById(2L);
         updatedSection.ifPresent(planets -> assertEquals("Planets", planets.getName()));
     }
 
     @Test
     void deleteSection() {
-        Optional<SectionDto> byId = sectionService.findSectionById(3L);
-        byId.ifPresent(section -> sectionService.deleteSection(section));
-        Optional<SectionDto> sectionById = sectionService.findSectionById(3L);
+        Optional<SectionDto> byId = sectionService.findById(3L);
+        byId.ifPresent(section -> sectionService.delete(section));
+        Optional<SectionDto> sectionById = sectionService.findById(3L);
         assertFalse(sectionById.isPresent());
     }
 }
