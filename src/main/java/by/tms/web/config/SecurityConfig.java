@@ -3,6 +3,7 @@ package by.tms.web.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -26,22 +27,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserDetailsService userDetailsService;
 
     @Autowired
-    public SecurityConfig(UserDetailsService userDetailsService){
+    public SecurityConfig(UserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;
     }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//        auth
-//                .inMemoryAuthentication()
-//                .withUser("user")
-//                .password("{noop}123")
-//                .authorities("USER");
-        auth.userDetailsService(userDetailsService);
+        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    @Override
+    protected AuthenticationManager authenticationManager() throws Exception {
+        return super.authenticationManager();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
@@ -50,22 +52,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.addFilterBefore(new EncodingFilterConfig(), ChannelProcessingFilter.class);
 
         http
-                .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/registerPage","/").not().fullyAuthenticated()
-                .antMatchers("/WEB-INF/page/user/**").hasAuthority("user")
-                .antMatchers("/page/librarian/**").hasAuthority("librarian")
-                .antMatchers("/resources/**","/fragments/**").permitAll()
-                        .and()
+                .antMatchers("/user/**").hasAnyAuthority("user", "admin")
+                .antMatchers("/librarian/**").hasAnyAuthority("librarian", "admin")
+                .antMatchers("/admin/**").hasAuthority("admin")
+                .antMatchers("/resources/**", "/fragments/**", "/", "registerPage").permitAll()
+                .anyRequest().permitAll()
+                .and()
                 .formLogin()
                 .loginPage("/")
-                .defaultSuccessUrl("/userPage")
+                .defaultSuccessUrl("/success")
                 .permitAll()
                 .and()
                 .logout()
-                .permitAll()
-                .logoutSuccessUrl("/");
-
+                .invalidateHttpSession(true)
+                .logoutSuccessUrl("/")
+                .permitAll();
     }
 
     public static class EncodingFilterConfig implements Filter {
