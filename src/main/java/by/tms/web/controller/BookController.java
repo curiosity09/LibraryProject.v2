@@ -10,6 +10,7 @@ import by.tms.model.service.AuthorService;
 import by.tms.model.service.BookService;
 import by.tms.model.service.GenreService;
 import by.tms.model.service.SectionService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,20 +28,13 @@ import java.util.Optional;
 import static by.tms.web.util.PageUtil.*;
 
 @Controller
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class BookController {
 
     private final BookService bookService;
     private final AuthorService authorService;
     private final GenreService genreService;
     private final SectionService sectionService;
-
-    @Autowired
-    public BookController(BookService bookService, AuthorService authorService, GenreService genreService, SectionService sectionService) {
-        this.bookService = bookService;
-        this.authorService = authorService;
-        this.genreService = genreService;
-        this.sectionService = sectionService;
-    }
 
     @ModelAttribute("allAuthors")
     public List<AuthorDto> allAuthors() {
@@ -57,18 +51,20 @@ public class BookController {
         return sectionService.findAll(Integer.MAX_VALUE, OFFSET_ZERO);
     }
 
-    @GetMapping("/showAllBooks")
+    @GetMapping({"/librarian/showAllBooks", "/user/showAllBooks"})
     public String showAllBooks(@SessionAttribute(ACCOUNT_ATTRIBUTE) AccountDto account,
                                Model model,
                                @RequestParam(name = OFFSET_PARAMETER, defaultValue = "0") String offset) {
         model.addAttribute(COUNT_PAGES_ATTRIBUTE, bookService.getCountPages());
         model.addAttribute("allBooks", bookService.findAll(LIMIT_TEN, Integer.parseInt(offset)));
-        if (Objects.equals("user", account.getRole())) {
-            return USER_PREFIX + "allBooks";
-        } else if (Objects.equals("librarian", account.getRole())) {
-            return LIBRARIAN_PREFIX + "allBooks";
+        switch (account.getRole()) {
+            case "user":
+                return USER_PREFIX + "allBooks";
+            case "librarian":
+                return LIBRARIAN_PREFIX + "allBooks";
+            default:
+                return REDIRECT + ERROR_PAGE;
         }
-        return REDIRECT + ERROR_PAGE;
     }
 
     @PostMapping("/addToCart")
@@ -82,10 +78,10 @@ public class BookController {
             }
         }
         model.addAttribute(SHOPPING_CART_ATTRIBUTE, shoppingCart);
-        return REDIRECT + "/showAllBooks";
+        return REDIRECT + "user/showAllBooks";
     }
 
-    @GetMapping("/editBookPage/{id}")
+    @GetMapping("/librarian/editBookPage/{id}")
     public String editBookPage(@PathVariable("id") String id, Model model) {
         Optional<BookDto> bookById = bookService.findById(Long.parseLong(id));
         bookById.ifPresent(bookDto -> model.addAttribute("book", bookDto));
@@ -96,12 +92,12 @@ public class BookController {
     public String editBook(BookDto book) {
         if (Objects.nonNull(book)) {
             bookService.update(book);
-            return REDIRECT + "/showAllBooks";
+            return REDIRECT + "librarian/showAllBooks";
         }
         return REDIRECT + ERROR_PAGE;
     }
 
-    @GetMapping("/addBookPage")
+    @GetMapping("/librarian/addBookPage")
     public String addBookPage(Model model) {
         model.addAttribute("book", BookDto.builder()
                 .author(AuthorDto.builder().build())
@@ -120,7 +116,7 @@ public class BookController {
         return REDIRECT + ERROR_PAGE;
     }
 
-    @GetMapping("/allAuthorBook/{id}")
+    @GetMapping("/user/allAuthorBook/{id}")
     public String allAuthorBook(@PathVariable String id,
                                 Model model,
                                 @RequestParam(name = OFFSET_PARAMETER, defaultValue = "0") String offset) {

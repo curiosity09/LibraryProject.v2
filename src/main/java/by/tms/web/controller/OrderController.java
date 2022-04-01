@@ -4,14 +4,13 @@ import by.tms.model.dto.BookDto;
 import by.tms.model.dto.OrderDto;
 import by.tms.model.dto.ShoppingCart;
 import by.tms.model.dto.user.AccountDto;
-import by.tms.model.service.AccountService;
 import by.tms.model.service.BookService;
 import by.tms.model.service.OrderService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -29,25 +28,13 @@ import java.util.Optional;
 import static by.tms.web.util.PageUtil.*;
 
 @Controller
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class OrderController {
 
     private final OrderService orderService;
     private final BookService bookService;
-    private final AccountService accountService;
 
-    @Autowired
-    public OrderController(OrderService orderService, BookService bookService, AccountService accountService) {
-        this.orderService = orderService;
-        this.bookService = bookService;
-        this.accountService = accountService;
-    }
-
-    @ModelAttribute("allOrders")
-    public List<OrderDto> allOrders() {
-        return orderService.findAll(LIMIT_TEN, OFFSET_ZERO);
-    }
-
-    @GetMapping("/allOrderPage")
+    @GetMapping("/librarian/allOrderPage")
     public String allOrderPage(Model model,
                                @RequestParam(name = OFFSET_PARAMETER, defaultValue = "0") String offset) {
         model.addAttribute(COUNT_PAGES_ATTRIBUTE, orderService.getCountPages());
@@ -55,9 +42,9 @@ public class OrderController {
         return LIBRARIAN_PREFIX + "allOrders";
     }
 
-    @GetMapping("/shoppingCart")
+    @GetMapping("/user/shoppingCart")
     public String shoppingCart() {
-        return USER_PREFIX + SHOPPING_CART_PAGE;
+        return USER_PREFIX + SHOPPING_CART_PREFIX;
     }
 
     @PostMapping("/addOrder")
@@ -67,10 +54,9 @@ public class OrderController {
                            Model model) {
         if (Objects.nonNull(user) && !shoppingCart.getShoppingList().isEmpty()) {
             List<BookDto> selectedBook = shoppingCart.getShoppingList();
-            Optional<AccountDto> userByUsername = accountService.findAccountByUsername(user.getUsername());
             OrderDto orderDto = OrderDto.builder()
                     .bookList(selectedBook)
-                    .user(userByUsername.get())
+                    .user(user)
                     .rentalTime(LocalDateTime.now())
                     .rentalPeriod(setRentalPeriod(period))
                     .build();
@@ -101,7 +87,7 @@ public class OrderController {
         }
     }
 
-    @GetMapping("/showUserOrder")
+    @GetMapping("/user/showUserOrder")
     public String showUserOrder(@SessionAttribute(ACCOUNT_ATTRIBUTE) AccountDto account,
                                 Model model,
                                 @RequestParam(name = OFFSET_PARAMETER, defaultValue = "0") String offset) {
@@ -110,30 +96,31 @@ public class OrderController {
         return USER_PREFIX + "userOrder";
     }
 
-    @GetMapping("/delBookFromOrder/{id}")
+    @GetMapping("/user/delBookFromOrder/{id}")
     public String deleteBookFromOrder(Model model,
                                       @PathVariable String id,
                                       @SessionAttribute(SHOPPING_CART_ATTRIBUTE) ShoppingCart shoppingCart) {
         Optional<BookDto> bookById = bookService.findById(Long.parseLong(id));
         bookById.ifPresent(shoppingCart.getShoppingList()::remove);
         model.addAttribute(SHOPPING_CART_ATTRIBUTE, shoppingCart);
-        return REDIRECT + "/shoppingCart";
+        return REDIRECT + "/user/shoppingCart";
     }
 
-    @GetMapping("/findUserOrder/")
+    @GetMapping("/librarian/findUserOrder")
     public String findUserOrder(Model model,
                                 @RequestParam(USERNAME_PARAMETER) String username,
                                 @RequestParam(name = OFFSET_PARAMETER, defaultValue = "0") String offset) {
         if (Objects.nonNull(username)) {
             model.addAttribute(USERNAME_PARAMETER, username);
             model.addAttribute(COUNT_PAGES_ATTRIBUTE, orderService.getCountPages(username));
-            model.addAttribute("userOrders", orderService.findOrderByUsername(username, LIMIT_TEN, Integer.parseInt(offset)));
+            model.addAttribute("userOrders", orderService.findOrderByUsername(username,
+                    LIMIT_TEN, Integer.parseInt(offset)));
             return LIBRARIAN_PREFIX + "userOrder";
         }
         return REDIRECT + ERROR_PAGE;
     }
 
-    @GetMapping("/finishOrder/{id}")
+    @GetMapping("/librarian/finishOrder/{id}")
     public String finishOrder(@PathVariable String id,
                               @RequestHeader(value = REFERER_HEADER, required = false) final String referer) {
         orderService.delete(OrderDto.builder().id(Long.parseLong(id)).build());

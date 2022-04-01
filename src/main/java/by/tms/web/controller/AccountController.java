@@ -6,7 +6,15 @@ import by.tms.model.entity.user.Admin;
 import by.tms.model.entity.user.Librarian;
 import by.tms.model.entity.user.User;
 import by.tms.model.service.AccountService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,8 +23,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
-import org.springframework.web.bind.support.SessionStatus;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Optional;
@@ -24,45 +32,17 @@ import java.util.Optional;
 import static by.tms.web.util.PageUtil.*;
 
 @Controller
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @SessionAttributes({ACCOUNT_ATTRIBUTE, SHOPPING_CART_ATTRIBUTE})
 public class AccountController {
 
     private final AccountService accountService;
-
-    @Autowired
-    public AccountController(AccountService accountService) {
-        this.accountService = accountService;
-    }
+    private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
 
     @GetMapping("/")
     public String loginPage() {
         return INDEX_PAGE_SUFFIX;
-    }
-
-    @PostMapping("/login")
-    public String login(AccountDto accountDto, Model model) {
-        Optional<AccountDto> accountByUsername = accountService.findAccountByUsername(accountDto.getUsername());
-        if (accountByUsername.isPresent()) {
-            AccountDto account = accountByUsername.get();
-            if (Objects.equals(account.getPassword(), accountDto.getPassword())) {
-                model.addAttribute(ACCOUNT_ATTRIBUTE, account);
-                ShoppingCart shoppingCart = new ShoppingCart(new ArrayList<>());
-                model.addAttribute(SHOPPING_CART_ATTRIBUTE, shoppingCart);
-                if (Objects.equals("user", account.getRole())) {
-                    return REDIRECT + USER_PAGE;
-                } else if (Objects.equals("librarian", account.getRole())) {
-                    return REDIRECT + LIBRARIAN_PAGE;
-                } else if (Objects.equals("admin", account.getRole())) {
-                    return REDIRECT + ADMIN_PAGE;
-                } else {
-                    return "";
-                }
-            } else {
-                return REDIRECT + START_PAGE;
-            }
-        } else {
-            return REDIRECT + START_PAGE;
-        }
     }
 
     @GetMapping(REGISTER_PAGE)
@@ -72,64 +52,104 @@ public class AccountController {
     }
 
     @PostMapping("/register")
-    public String register(Model model, AccountDto account) {
+    public String register(Model model, AccountDto account, HttpServletRequest request) {
         if (Objects.nonNull(account.getUsername()) && Objects.nonNull(account.getPassword())) {
             Optional<AccountDto> accountByUsername = accountService.findAccountByUsername(account.getUsername());
             if (accountByUsername.isEmpty()) {
+                String rawPassword = account.getPassword();
+                account.setPassword(passwordEncoder.encode(rawPassword));
                 accountService.saveUser(account);
-                model.addAttribute(ACCOUNT_ATTRIBUTE, account);
-                ShoppingCart shoppingCart = new ShoppingCart(new ArrayList<>());
-                model.addAttribute(SHOPPING_CART_ATTRIBUTE, shoppingCart);
-                return REDIRECT + USER_PAGE;
+
+                UsernamePasswordAuthenticationToken authenticationToken =
+                        new UsernamePasswordAuthenticationToken(account.getUsername(), rawPassword);
+                authenticationToken.setDetails(new WebAuthenticationDetails(request));
+                Authentication authentication = authenticationManager.authenticate(authenticationToken);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+
+                return REDIRECT + "/success";
             }
             return REDIRECT + REGISTER_PAGE;
         }
         return REDIRECT + REGISTER_PAGE;
     }
 
-    @GetMapping(USER_PAGE)
+    @GetMapping("/success")
+    public String success(
+            @AuthenticationPrincipal org.springframework.security.core.userdetails.User account,
+            Model model) {
+        Optional<AccountDto> accountByUsername = accountService.findAccountByUsername(account.getUsername());
+        if (accountByUsername.isPresent()) {
+            AccountDto accountDto = accountByUsername.get();
+            if (!accountDto.isBanned()) {
+                model.addAttribute(ACCOUNT_ATTRIBUTE, accountDto);
+                switch (accountDto.getRole()) {
+                    case "user":
+                        ShoppingCart shoppingCart = new ShoppingCart(new ArrayList<>());
+                        model.addAttribute(SHOPPING_CART_ATTRIBUTE, shoppingCart);
+                        return REDIRECT + USER_PAGE;
+                    case "librarian":
+                        return REDIRECT + LIBRARIAN_PAGE;
+                    case "admin":
+                        return REDIRECT + ADMIN_PAGE;
+                    default:
+                        return REDIRECT + ERROR_PAGE;
+                }
+            }
+            return REDIRECT + BAN_PAGE;
+        }
+        return REDIRECT + ERROR_PAGE;
+    }
+
+    @GetMapping("/user/userPage")
     public String userPage() {
         return USER_PREFIX + USER_PAGE_SUFFIX;
     }
 
-    @GetMapping(LIBRARIAN_PAGE)
+    @GetMapping("/librarian/librarianPage")
     public String librarianPage() {
         return LIBRARIAN_PREFIX + LIBRARIAN_PAGE_SUFFIX;
     }
 
-    @GetMapping(ADMIN_PAGE)
+    @GetMapping("/admin/adminPage")
     public String adminPage() {
         return ADMIN_PREFIX + ADMIN_PAGE_SUFFIX;
     }
 
-    @GetMapping("/logout")
+/*    @PostMapping("/logout")
     public String logout(SessionStatus sessionStatus) {
         sessionStatus.setComplete();
         return REDIRECT + START_PAGE;
-    }
+    }*/
 
     @GetMapping("/errorPage")
     public String errorPage() {
-        return ERROR_PAGE;
+        return ERROR_PAGE_PREFIX;
     }
 
-    @GetMapping("/showUserInfo")
+    @GetMapping("/banPage")
+    public String banPage() {
+        return BAN_PAGE_PREFIX;
+    }
+
+    @GetMapping("/user/showUserInfo")
     public String showUserInfo(@SessionAttribute(ACCOUNT_ATTRIBUTE) AccountDto account, Model model) {
         Optional<AccountDto> userByUsername = accountService.findAccountByUsername(account.getUsername());
         userByUsername.ifPresent(accountDto -> model.addAttribute(ACCOUNT_ATTRIBUTE, accountDto));
-        return USER_PREFIX + USER_INFO_PAGE;
+        return USER_PREFIX + USER_INFO_PAGE_PREFIX;
     }
 
-    @GetMapping("/editUserPage")
+    @GetMapping("/user/editUserPage")
     public String editUserPage(@SessionAttribute(ACCOUNT_ATTRIBUTE) AccountDto account, Model model) {
         Optional<AccountDto> userByUsername = accountService.findAccountByUsername(account.getUsername());
         userByUsername.ifPresent(accountDto -> model.addAttribute(ACCOUNT_ATTRIBUTE, accountDto));
-        return USER_PREFIX + "editUser";
+        return USER_PREFIX + EDIT_USER_PREFIX;
     }
 
     @PostMapping("/editUser")
     public String editUser(Model model, AccountDto account) {
         if (Objects.nonNull(account.getUsername()) && Objects.nonNull(account.getPassword())) {
+            account.setPassword(passwordEncoder.encode(account.getPassword()));
+
             accountService.updateUser(account);
             model.addAttribute(ACCOUNT_ATTRIBUTE, account);
             return REDIRECT + USER_PAGE;
@@ -138,13 +158,13 @@ public class AccountController {
         }
     }
 
-    @GetMapping("/findUserOrderPage")
+    @GetMapping("/librarian/findUserOrderPage")
     public String findUserOrderPage(Model model) {
-        model.addAttribute(ALL_USERS_PAGE, accountService.findAllUsers(Integer.MAX_VALUE, OFFSET_ZERO));
-        return LIBRARIAN_PREFIX + FIND_USER_ORDER_PAGE;
+        model.addAttribute(ALL_USERS_ATTRIBUTE, accountService.findAllUsers(Integer.MAX_VALUE, OFFSET_ZERO));
+        return LIBRARIAN_PREFIX + FIND_USER_ORDER_PREFIX;
     }
 
-    @GetMapping("/allUsersPage")
+    @GetMapping("/admin/allUsersPage")
     public String allUsersPage(Model model,
                                @RequestParam(name = OFFSET_PARAMETER, defaultValue = "0") String offset) {
         model.addAttribute("allUsers", accountService.findAllUsers(LIMIT_TEN, Integer.parseInt(offset)));
@@ -152,7 +172,7 @@ public class AccountController {
         return ADMIN_PREFIX + "allUsers";
     }
 
-    @GetMapping("/allAdminsPage")
+    @GetMapping("/admin/allAdminsPage")
     public String allAdminsPage(Model model,
                                 @RequestParam(name = OFFSET_PARAMETER, defaultValue = "0") String offset) {
         model.addAttribute("allAdmins", accountService.findAllAdmins(LIMIT_TEN, Integer.parseInt(offset)));
@@ -160,7 +180,7 @@ public class AccountController {
         return ADMIN_PREFIX + "allAdmins";
     }
 
-    @GetMapping("/allLibrariansPage")
+    @GetMapping("/admin/allLibrariansPage")
     public String allLibrariansPage(Model model,
                                     @RequestParam(name = OFFSET_PARAMETER, defaultValue = "0") String offset) {
         model.addAttribute("allLibrarians", accountService.findAllLibrarians(LIMIT_TEN, Integer.parseInt(offset)));
@@ -168,7 +188,7 @@ public class AccountController {
         return ADMIN_PREFIX + "allLibrarians";
     }
 
-    @GetMapping("/blockUserPage")
+    @GetMapping("/admin/blockUserPage")
     public String blockUserPage(Model model) {
         model.addAttribute("debtors", accountService.findAllDebtors());
         return ADMIN_PREFIX + "blockUser";
@@ -184,7 +204,7 @@ public class AccountController {
         return REDIRECT + "/errorPage";
     }
 
-    @GetMapping("/addEmployeePage")
+    @GetMapping("/admin/addEmployeePage")
     public String addEmployeePage(Model model) {
         model.addAttribute(ACCOUNT_ATTRIBUTE, AccountDto.builder().build());
         return ADMIN_PREFIX + "addEmployee";
@@ -192,6 +212,7 @@ public class AccountController {
 
     @PostMapping("/addEmployee")
     public String addEmployee(AccountDto account) {
+        account.setPassword(passwordEncoder.encode(account.getPassword()));
         if (Objects.equals("librarian", account.getRole())) {
             accountService.saveLibrarian(account);
             return REDIRECT + ADMIN_PAGE;
@@ -203,10 +224,16 @@ public class AccountController {
         }
     }
 
-    @GetMapping("/deleteUser/{id}")
-    public String deleteUser(@PathVariable("id") String id) {
+    @GetMapping("/admin/deleteUser/{id}")
+    public String deleteUser(@PathVariable("id") String id, Model model) {
         Optional<AccountDto> userById = accountService.findById(Long.parseLong(id));
-        userById.ifPresent(accountService::delete);
-        return REDIRECT + "/allUsersPage";
+        userById.ifPresent(user -> {
+            if (user.getOrdersAmount() == 0) {
+                accountService.delete(user);
+            } else {
+                model.addAttribute("cannotDel", true);
+            }
+        });
+        return REDIRECT + "/admin/allUsersPage";
     }
 }
