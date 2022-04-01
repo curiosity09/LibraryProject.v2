@@ -25,21 +25,23 @@ import java.util.Objects;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
+@ToString(callSuper = true)
 @Builder
 @Entity
 @Table(name = "`order`", schema = "library_hibernate")
 public class Order extends BaseEntity<Long> {
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "order_book",
             schema = "library_hibernate",
             joinColumns = @JoinColumn(name = "order_id"),
             inverseJoinColumns = @JoinColumn(name = "book_id"))
+    @ToString.Exclude
     private List<Book> book;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id")
+    @ToString.Exclude
     private User account;
     @Column(name = "rental_time", nullable = false)
     private LocalDateTime rentalTime;

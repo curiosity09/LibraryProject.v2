@@ -32,12 +32,15 @@ public class Book extends BaseEntity<Long> {
     private String name;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id")
+    @ToString.Exclude
     private Author author;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "genre_id")
+    @ToString.Exclude
     private Genre genre;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "section_id")
+    @ToString.Exclude
     private Section section;
     private int quantity;
     @Column(name = "publication_year")
