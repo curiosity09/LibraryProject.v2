@@ -27,6 +27,9 @@ public class AccountMapper implements Mapper<Account, AccountDto> {
                     .userData(UserDataDto.builder().build())
                     .password(account.getPassword())
                     .build();
+            if (account.getOrders() != null) {
+                accountDto.setOrdersAmount(account.getOrders().size());
+            }
             if (Objects.nonNull(account.getUserData())) {
                 UserDataDto userDataDto = UserDataDto.builder()
                         .name(account.getUserData().getName())
