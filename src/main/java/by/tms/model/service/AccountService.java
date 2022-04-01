@@ -2,11 +2,12 @@ package by.tms.model.service;
 
 import by.tms.model.dto.user.AccountDto;
 import by.tms.model.entity.user.Account;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface AccountService extends GenericService<AccountDto, Long, Account> {
+public interface AccountService extends GenericService<AccountDto, Long, Account>, UserDetailsService {
 
     List<AccountDto> findAllUsers(int limit, int offset);
 
