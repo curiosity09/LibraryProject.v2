@@ -27,4 +27,5 @@ public class AccountDto implements Serializable {
     private UserDataDto userData;
     private boolean isBanned;
     private Level level;
+    private Integer ordersAmount;
 }
