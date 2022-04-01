@@ -29,8 +29,15 @@
 <div class="container">
     <div class="row justify-content-center mt-5">
         <div class="col-5 mt-5 p-3">
-            <form th:method="post" th:action="@{/login}"
+            <form th:method="post" th:action="@{/}"
                   enctype="application/x-www-form-urlencoded">
+
+                <div th:if="${param.error}" class="alert alert-dark" role="alert">
+                    <span th:text="#{alert.invalid}">Invalid username and password.</span>
+                </div>
+                <div th:if="${param.logout}" class="alert alert-success" role="alert">
+                   <span th:text="#{alert.logout}">You have been logged out.</span>
+                </div>
 
                 <div class="mb-3">
                     <label for="inputUsername" class="form-label" th:text="#{th.username}">Username</label>
@@ -48,7 +55,8 @@
                 <button type="submit" class="btn btn-dark" th:text="#{button.submit}">Submit</button>
                 <p></p>
                 <div class="alert alert-dark" role="alert">
-                    <span th:text="#{alert.loginIf}"></span> <a class="alert-link" th:href="@{/registerPage}" th:text="#{alert.loginReg}"></a>
+                    <span th:text="#{alert.loginIf}"></span> <a class="alert-link" th:href="@{/registerPage}"
+                                                                th:text="#{alert.loginReg}"></a>
                 </div>
             </form>
         </div>

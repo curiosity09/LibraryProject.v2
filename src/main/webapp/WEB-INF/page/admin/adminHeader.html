@@ -8,23 +8,23 @@
                      alt="Library">
             </a>
             <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                <li><a th:href="@{/adminPage}"
+                <li><a th:href="@{/admin/adminPage}"
                        class="nav-link px-2 text-white" th:text="#{button.home}">Home</a></li>
-                <li><a th:href="@{/allUsersPage}"
+                <li><a th:href="@{/admin/allUsersPage}"
                        class="nav-link px-2 text-white" th:text="#{button.allUser}">All users</a></li>
-                <li><a th:href="@{/allAdminsPage}"
+                <li><a th:href="@{/admin/allAdminsPage}"
                        class="nav-link px-2 text-white" th:text="#{button.allAdmins}">All admins</a></li>
-                <li><a th:href="@{/allLibrariansPage}"
+                <li><a th:href="@{/admin/allLibrariansPage}"
                        class="nav-link px-2 text-white" th:text="#{button.allLibrarians}">All librarian</a></li>
-                <li><a th:href="@{/addEmployeePage}"
+                <li><a th:href="@{/admin/addEmployeePage}"
                        class="nav-link px-2 text-white" th:text="#{button.newEmployee}">Add employee</a></li>
-                <li><a th:href="@{/blockUserPage}"
+                <li><a th:href="@{/admin/blockUserPage}"
                        class="nav-link px-2 text-white" th:text="#{button.block}">Block</a></li>
                 <li>
                     <div th:replace="/fragments/locale::locale"></div>
                 </li>
             </ul>
-            <form th:action="@{/logout}" th:method="get" enctype="application/x-www-form-urlencoded">
+            <form th:action="@{/logout}" th:method="post" enctype="application/x-www-form-urlencoded">
                 <div class="text-end">
                     <button type="submit" class="btn btn-outline-light me-2">Log out</button>
                 </div>

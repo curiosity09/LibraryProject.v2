@@ -36,7 +36,7 @@
     </tbody>
 </table>
 <nav aria-label="Page navigation example">
-    <ul class="pagination justify-content-center">
+    <ul class="pagination">
         <li class="page-item" th:each="page,iterStat:${countPages}">
             <a class="page-link" th:href="@{'?offset='+${page}}" th:text="${iterStat.count}"></a>
         </li>

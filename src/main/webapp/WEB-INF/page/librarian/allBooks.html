@@ -34,7 +34,7 @@
         <td th:text="${book.publicationYear}">Year</td>
             <td>
                 <div>
-                    <a th:href="@{/editBookPage/{id}(id=${book.id})}">
+                    <a th:href="@{/librarian/editBookPage/{id}(id=${book.id})}">
                         <input class="btn-dark" type="submit" th:value="Edit">
                     </a>
                 </div>

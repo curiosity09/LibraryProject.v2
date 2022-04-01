@@ -9,25 +9,25 @@
             </a>
 
             <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                <li><a th:href="@{/userPage}"
+                <li><a th:href="@{/user/userPage}"
                        class="nav-link px-2 text-white" th:text="#{button.home}">Home button</a></li>
-                <li><a th:href="@{/showAllBooks}"
+                <li><a th:href="@{/user/showAllBooks}"
                        class="nav-link px-2 text-white" th:text="#{button.allBooks}">All book</a></li>
-                <li><a th:href="@{/allAuthorPage}"
+                <li><a th:href="@{/user/allAuthorPage}"
                        class="nav-link px-2 text-white" th:text="#{button.allAuthors}">All authors</a></li>
-                <li><a th:href="@{/shoppingCart}"
+                <li><a th:href="@{/user/shoppingCart}"
                        class="nav-link px-2 text-white" th:text="#{button.cart}">Cart</a></li>
-                <li><a th:href="@{/showUserOrder}"
+                <li><a th:href="@{/user/showUserOrder}"
                        class="nav-link px-2 text-white" th:text="#{button.myOrder}">My orders</a></li>
-                <li><a th:href="@{/editUserPage}"
+                <li><a th:href="@{/user/editUserPage}"
                        class="nav-link px-2 text-white" th:text="#{button.editUserInfo}">Edit user</a></li>
-                <li><a th:href="@{/showUserInfo}"
+                <li><a th:href="@{/user/showUserInfo}"
                        class="nav-link px-2 text-white" th:text="#{button.aboutUser}">About user</a></li>
                 <li>
                     <div th:replace="~{fragments/locale::locale}"></div>
                 </li>
             </ul>
-            <form th:action="@{/logout}" th:method="get">
+            <form th:action="@{/logout}" th:method="post">
                 <div class="text-end">
                     <button type="submit" class="btn btn-outline-light me-2">Log out</button>
                 </div>

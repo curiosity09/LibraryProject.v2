@@ -28,7 +28,7 @@
         <td th:text="${book.publicationYear}"></td>
         <td>
             <div>
-                <a th:href="@{/delBookFromOrder/{id}(id=${book.id})}">
+                <a th:href="@{/user/delBookFromOrder/{id}(id=${book.id})}">
                     <input class="btn-dark" type="submit" th:value="#{button.delete}">
                 </a>
             </div>

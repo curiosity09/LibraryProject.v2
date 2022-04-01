@@ -24,7 +24,7 @@
         <td th:text="${author.fullName}">Author name</td>
         <td>
             <div>
-                <a th:href="@{/allAuthorBook/{id}(id=${author.id})}">
+                <a th:href="@{/user/allAuthorBook/{id}(id=${author.id})}">
                     <input class="btn-dark" type="submit" th:value="#{button.show}">
                 </a>
             </div>
