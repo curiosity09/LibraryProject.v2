@@ -1,5 +1,6 @@
 package by.tms.web.config;
 
+import by.tms.web.util.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,11 +20,13 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    private static final String TEXT_HTML_CHARSET_UTF_8 = "text/html; charset=UTF-8";
     private final UserDetailsService userDetailsService;
 
     @Autowired
@@ -53,20 +56,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http
                 .authorizeRequests()
-                .antMatchers("/user/**").hasAnyAuthority("user", "admin")
-                .antMatchers("/librarian/**").hasAnyAuthority("librarian", "admin")
-                .antMatchers("/admin/**").hasAuthority("admin")
-                .antMatchers("/resources/**", "/fragments/**", "/", "registerPage").permitAll()
+                .antMatchers("/user/**").hasAnyAuthority(PageUtil.USER_ROLE, PageUtil.ADMIN_ROLE)
+                .antMatchers("/librarian/**").hasAnyAuthority(PageUtil.LIBRARIAN_ROLE,
+                        PageUtil.ADMIN_ROLE)
+                .antMatchers("/admin/**").hasAuthority(PageUtil.ADMIN_ROLE)
+                .antMatchers("/resources/**", "/fragments/**",
+                        PageUtil.START_PAGE, PageUtil.REGISTER_PAGE).permitAll()
                 .anyRequest().permitAll()
                 .and()
                 .formLogin()
-                .loginPage("/")
-                .defaultSuccessUrl("/success")
+                .loginPage(PageUtil.START_PAGE)
+                .defaultSuccessUrl(PageUtil.SUCCESS_PAGE)
                 .permitAll()
                 .and()
                 .logout()
                 .invalidateHttpSession(true)
-                .logoutSuccessUrl("/")
+                .logoutSuccessUrl(PageUtil.START_PAGE)
                 .permitAll();
     }
 
@@ -74,8 +79,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         @Override
         public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
                 throws IOException, ServletException {
-            request.setCharacterEncoding("UTF-8");
-            response.setContentType("text/html; charset=UTF-8");
+            request.setCharacterEncoding(StandardCharsets.UTF_8.name());
+            response.setContentType(TEXT_HTML_CHARSET_UTF_8);
             chain.doFilter(request, response);
         }
     }

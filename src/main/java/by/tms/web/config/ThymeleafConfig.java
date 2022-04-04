@@ -13,14 +13,16 @@ import java.nio.charset.StandardCharsets;
 @Configuration
 public class ThymeleafConfig {
 
+    public static final String WEB_INF_PREFIX = "/WEB-INF/";
+    public static final String HTML_SUFFIX = ".html";
+
     @Bean
     public SpringResourceTemplateResolver templateResolver(){
         SpringResourceTemplateResolver templateResolver = new SpringResourceTemplateResolver();
-        templateResolver.setPrefix("/WEB-INF/");
-        templateResolver.setSuffix(".html");
+        templateResolver.setPrefix(WEB_INF_PREFIX);
+        templateResolver.setSuffix(HTML_SUFFIX);
         templateResolver.setCharacterEncoding(StandardCharsets.UTF_8.name());
-        //true by default
-        templateResolver.setCacheable(false);
+        templateResolver.setCacheable(true);
         return templateResolver;
     }
 

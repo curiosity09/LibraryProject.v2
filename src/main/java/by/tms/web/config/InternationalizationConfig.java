@@ -19,25 +19,30 @@ import java.util.Locale;
 @EnableWebMvc
 public class InternationalizationConfig implements WebMvcConfigurer {
 
+    private static final String PARAM_NAME_LANG = "lang";
+    private static final String LOCALIZATION_BASENAME = "localization";
+    private static final String RESOURCES_HANDLER = "/resources/**";
+    private static final String RESOURCE_LOCATIONS = "/WEB-INF/resources/static/";
+
     @Bean
-    public MessageSource messageSource(){
+    public MessageSource messageSource() {
         ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
-        messageSource.setBasename("localization");
+        messageSource.setBasename(LOCALIZATION_BASENAME);
         messageSource.setDefaultEncoding(StandardCharsets.UTF_8.name());
         return messageSource;
     }
 
     @Bean
-    public LocaleResolver localeResolver(){
+    public LocaleResolver localeResolver() {
         SessionLocaleResolver localeResolver = new SessionLocaleResolver();
         localeResolver.setDefaultLocale(Locale.US);
         return localeResolver;
     }
 
     @Bean
-    public LocaleChangeInterceptor localeChangeInterceptor(){
+    public LocaleChangeInterceptor localeChangeInterceptor() {
         LocaleChangeInterceptor interceptor = new LocaleChangeInterceptor();
-        interceptor.setParamName("lang");
+        interceptor.setParamName(PARAM_NAME_LANG);
         return interceptor;
     }
 
@@ -48,6 +53,6 @@ public class InternationalizationConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/resources/**").addResourceLocations("/WEB-INF/resources/static/");
+        registry.addResourceHandler(RESOURCES_HANDLER).addResourceLocations(RESOURCE_LOCATIONS);
     }
 }
