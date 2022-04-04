@@ -22,7 +22,7 @@
     </thead>
     <tbody>
 
-    <tr th:each="order,iterStat :${userOrders}">
+    <tr th:each="order,iterStat :${userOrder}">
         <td th:text="${iterStat.count}">Count</td>
         <td>
             <ul th:each="book: ${order.bookList}">
