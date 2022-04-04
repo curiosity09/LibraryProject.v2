@@ -1,4 +1,4 @@
-package by.tms.web.controller;
+package by.tms.web.controller.handler;
 
 import by.tms.web.util.PageUtil;
 import lombok.extern.slf4j.Slf4j;
