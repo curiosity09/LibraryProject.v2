@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Admin page</title>
+    <link rel="stylesheet" th:href="@{/resources/css/bootstrap.css}">
+</head>
+<body>
+<div th:replace="page/admin/adminHeader.html ::  header"></div>
+<h2 th:text="#{page.AdmText}">Page</h2>
+<div th:replace="page/admin/adminFooter.html ::  footer"></div>
+<script th:src="@{/resources/js/bootstrap.js}"></script>
+</body>
+</html>

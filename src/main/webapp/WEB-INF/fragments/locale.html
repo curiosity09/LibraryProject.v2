@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:fragment="locale" class="container">
+    <a class="btn btn-group-sm btn-outline-light" th:href="@{?lang=en_US}">EN</a>
+    <a class="btn btn-group-sm btn-outline-light" th:href="@{?lang=ru_RU}">RU</a>
+</div>
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Register page</title>
+    <link rel="stylesheet" th:href="@{/resources/css/bootstrap.css}">
+</head>
+<body>
+<header class="p-3 bg-dark text-white">
+    <div class="container">
+        <div class="d-flex justify-content-lg-start">
+            <a th:href="@{/}"
+               class="d-flex">
+                <img th:src="@{/resources/images/icon.png}" width="50" height="50"
+                     role="img" aria-label="Bootstrap"
+                     alt="Library">
+            </a>
+            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-end mb-md-0">
+                <div th:replace="~{fragments/locale::locale}"></div>
+            </ul>
+            <form th:action="@{/}" th:method="get">
+                <div class="text-end">
+                    <button type="submit" class="btn btn-outline-light me-2">Log In</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</header>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-5 p-3">
+            <form th:method="post" th:action="@{/register}" th:object="${account}"
+                  enctype="application/x-www-form-urlencoded">
+
+                <div class="mb-3">
+                    <label for="inputUsername" class="form-label" th:text="#{th.username}">${user}</label>
+                    <input th:field="*{username}" type="text" class="form-control"
+                           pattern="^[A-za-z][A-Za-z0-9\._]{3,10}$" id="inputUsername"
+                           th:placeholder="#{placeholder.username}" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="inputPassword" class="form-label" th:text="#{label.pass}">${pass}</label>
+                    <input th:field="*{password}" type="password" class="form-control"
+                           pattern="^[A-za-z0-9\._]{4,16}$" id="inputPassword"
+                           th:placeholder="#{placeholder.pass}" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="inputName" class="form-label" th:text="#{label.name}">${name}</label>
+                    <input th:field="*{userData.name}" type="text" class="form-control"
+                           pattern="^([A-Z]{1}[a-z]+|[А-Я]{1}[а-я]+)$" id="inputName"
+                           th:placeholder="#{placeholder.name}">
+                </div>
+
+                <div class="mb-3">
+                    <label for="inputSurName" class="form-label" th:text="#{label.surname}">${surname}</label>
+                    <input th:field="*{userData.surname}" type="text" class="form-control"
+                           pattern="^([A-Z]{1}[a-z]+|[А-Я]{1}[а-я]+)$" id="inputSurName"
+                           th:placeholder="#{placeholder.surname}">
+                </div>
+
+                <div class="mb-3">
+                    <label for="inputPhone" class="form-label" th:text="#{label.phone}">${phone}</label>
+                    <input th:field="*{userData.phoneNumber}" type="text" class="form-control"
+                           pattern="^(\+?375|80)(29|25|44|33)(\d{3})(\d{2})(\d{2})$" id="inputPhone"
+                           th:placeholder="#{placeholder.phone}">
+                </div>
+
+                <div class="mb-3">
+                    <label for="inputEmail" class="form-label" th:text="#{label.email}">Email</label>
+                    <input th:field="*{userData.emailAddress}" type="email" class="form-control"
+                           pattern="[A-za-z0-9\._]+@[a-z]+\.[a-z]{2,4}" id="inputEmail"
+                           th:placeholder="#{placeholder.email}">
+                </div>
+
+                <button type="submit" class="btn btn-dark" th:text="#{button.submit}">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>
+<script th:src="@{/resources/js/bootstrap.js}"></script>
+</body>
+</html>

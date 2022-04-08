@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Admins Page</title>
+    <link rel="stylesheet" th:href="@{/resources/css/bootstrap.css}">
+</head>
+<body>
+<div th:replace="page/admin/adminHeader.html ::  header"></div>
+
+<table class="table table-striped table-bordered">
+    <caption>Admins table</caption>
+
+    <thead class="table-dark">
+    <tr>
+        <th scope="col" th:text="ID">ID</th>
+        <th scope="row" th:text="#{th.username}">Username</th>
+        <th scope="row" th:text="#{th.role}">Role</th>
+        <th scope="row" th:text="#{label.name}">Name</th>
+        <th scope="row" th:text="#{label.surname}">Surname</th>
+        <th scope="row" th:text="#{label.phone}">Phone</th>
+        <th scope="row" th:text="#{label.email}">Email</th>
+        <th scope="col" th:text="#{th.level}">level</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user:${allAdmins}">
+        <td th:text="${user.id}"></td>
+        <td th:text="${user.username}"></td>
+        <td th:text="${user.role}"></td>
+        <td th:text="${user.userData.name}"></td>
+        <td th:text="${user.userData.surname}"></td>
+        <td th:text="${user.userData.phoneNumber}"></td>
+        <td th:text="${user.userData.emailAddress}"></td>
+        <td th:text="${user.level}"></td>
+    </tr>
+    </tbody>
+</table>
+<nav aria-label="Page navigation example">
+    <ul class="pagination">
+        <li class="page-item" th:each="page,iterStat:${countPages}">
+            <a class="page-link" th:href="@{'?offset='+${page}}" th:text="${iterStat.count}"></a>
+        </li>
+    </ul>
+</nav>
+<div th:replace="page/admin/adminFooter.html :: footer"></div>
+<script th:src="@{/resources/js/bootstrap.js}"></script>
+</body>
+</html>
