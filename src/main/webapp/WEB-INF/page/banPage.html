@@ -2,23 +2,10 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Ban page</title>
-    <style>
-        .banPage {
-            width: 800px;
-            background: #bebebf;
-            padding: 5px;
-            padding-right: 20px;
-            border: solid 1px black;
-            float: start;
-
-        }
-        body{
-            background-image: url([[@{/resources/images/banCat.jpg}]]);
-        }
-    </style>
+    <link rel="stylesheet" th:href="@{/resources/css/errorPage.css}">
 </head>
 <body>
-<div class="banPage">
+<div class="ban-page">
 <h1>
     You have been blocked on this site, please <a th:href="@{/}"> try changing you account</a>.
 </h1>

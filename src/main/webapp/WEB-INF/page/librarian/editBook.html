@@ -16,6 +16,11 @@
 
                 <input th:field="*{id}" type="hidden" class="form-control" th:value="${book.id}">
 
+                <div th:if="${#fields.hasErrors('name')}"
+                     class="alert alert-dark" role="alert">
+                    <span th:errors="*{name}">Name error</span>
+                </div>
+
                 <div class="mb-3">
                     <label for="inputNameBook" class="form-label" th:text="#{th.nameBook}">Name book</label>
                     <input th:field="*{name}" type="text"
@@ -53,12 +58,23 @@
                     </label>
                 </div>
 
+                <div th:if="${#fields.hasErrors('quantity')}"
+                     class="alert alert-dark" role="alert">
+                    <span th:errors="*{quantity}">Name error</span>
+                </div>
+
                 <div class="mb-3">
                     <label for="inputQuantity" class="form-label" th:text="#{th.quantity}">Quantity</label>
                     <input th:field="*{quantity}" type="number" min="1" step="1" max="10" class="form-control"
                            id="inputQuantity"
                            th:placeholder="#{placeholder.quantity}" th:value="${book.quantity}" required>
                 </div>
+
+                <div th:if="${#fields.hasErrors('publicationYear')}"
+                     class="alert alert-dark" role="alert">
+                    <span th:errors="*{publicationYear}">Name error</span>
+                </div>
+
                 <div class="mb-3">
                     <label for="inputYear" class="form-label" th:text="#{th.year}">Year</label>
                     <input th:field="*{publicationYear}" type="number" min="1800" max="2030" class="form-control" id="inputYear"

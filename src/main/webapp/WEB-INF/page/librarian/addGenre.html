@@ -20,6 +20,12 @@
                            pattern="^[A-ZА-Яа-яa-z\s]+$" class="form-control" id="inputNameGenre"
                            th:placeholder="#{placeholder.genre}" required>
                 </div>
+
+                <div th:if="${#fields.hasErrors('name')}"
+                     class="alert alert-dark" role="alert">
+                    <span th:errors="*{name}">Name error</span>
+                </div>
+
                 <button type="submit" class="btn btn-dark" th:text="#{button.submit}">Submit</button>
             </form>
         </div>

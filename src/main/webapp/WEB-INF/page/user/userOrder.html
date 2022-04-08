@@ -32,8 +32,8 @@
                 </li>
             </ul>
         </td>
-        <td th:text="${#temporals.format(order.rentalTime, 'dd-MM-yyyy HH:mm')}"></td>
-        <td th:text="${#temporals.format(order.rentalPeriod, 'dd-MM-yyyy HH:mm')}"></td>
+        <td th:text="${#temporals.format(order.rentalTime, 'E, dd MMM yyyy HH:mm')}"></td>
+        <td th:text="${#temporals.format(order.rentalPeriod, 'E, dd MMM yyyy HH:mm')}"></td>
     </tr>
     </tbody>
 </table>

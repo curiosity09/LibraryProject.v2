@@ -2,11 +2,14 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Error Page</title>
+    <link rel="stylesheet" th:href="@{/resources/css/errorPage.css}">
 </head>
 <body>
-<h1>
-    You did something wrong, please <a th:href="@{/}"> try again</a>.
-</h1>
-<span th:text="'Oops, something went wrong due to following reason:' + ${exceptionMessage}">Error text</span>
+<div class="error-page">
+    <h1>
+        You did something wrong, please <a th:href="@{/}"> try again</a>.
+    </h1>
+    <span th:text="'Oops, something went wrong due to following reason:' + ${exceptionMessage}">Error text</span>
+</div>
 </body>
 </html>

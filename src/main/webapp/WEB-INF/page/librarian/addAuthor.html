@@ -5,19 +5,63 @@
     <link rel="stylesheet" th:href="@{/resources/css/bootstrap.css}">
 </head>
 <body>
-<div th:replace="page/librarian/librarianHeader.html :: header"></div>
+
+<header class="p-3 bg-dark text-white">
+    <div class="container" th:fragment="header">
+        <div class="d-flex flex-wrap align-items-start justify-content-center justify-content-lg-start">
+            <a th:href="@{/}"
+               class="d-flex align-items-start mb-2 mb-lg-0 text-white text-decoration-none">
+                <img th:src="@{/resources/images/icon.png}"
+                     class="bi me-2" width="50" height="50" role="img" aria-label="Bootstrap"
+                     alt="Library">
+            </a>
+            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                <li><a th:href="@{/librarian/librarianPage}"
+                       class="nav-link px-2 text-white" th:text="#{button.home}">Home</a></li>
+                <li><a th:href="@{/librarian/showAllBooks}"
+                       class="nav-link px-2 text-white" th:text="#{button.allBooks}">All books</a></li>
+                <li><a th:href="@{/librarian/allOrderPage}"
+                       class="nav-link px-2 text-white" th:text="#{button.allOrd}">All orders</a></li>
+                <li><a th:href="@{/librarian/findUserOrderPage}"
+                       class="nav-link px-2 text-white" th:text="#{button.userOrd}">User order</a></li>
+                <li><a th:href="@{/librarian/addBookPage}"
+                       class="nav-link px-2 text-white" th:text="#{button.addBook}">Add order</a></li>
+                <li><a th:href="@{/librarian/addGenrePage}"
+                       class="nav-link px-2 text-white" th:text="#{button.addGenre}">Add genre</a></li>
+                <li><a th:href="@{/librarian/addAuthorPage}"
+                       class="nav-link px-2 text-white" th:text="#{button.addAuthor}">Add author</a></li>
+                <li><a th:href="@{/librarian/addSectionPage}"
+                       class="nav-link px-2 text-white" th:text="#{button.addSection}">Add section</a></li>
+            </ul>
+
+            <form th:action="@{/logout}" th:method="post"
+                  enctype="application/x-www-form-urlencoded">
+                <div class="text-end">
+                    <button type="submit" class="btn btn-outline-light me-2">Log out</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</header>
+
 <div class="container">
     <div class="row justify-content-center mt-5">
         <div class="col-5 mt-5 p-3">
+
             <form th:method="post" th:action="@{/addAuthor}" th:object="${author}"
                   enctype="application/x-www-form-urlencoded">
-
                 <div class="mb-3">
                     <label for="inputAuthor" class="form-label" th:text="#{th.authName}">Author</label>
-                    <input th:field="*{fullName}" type="text"
+                    <input th:field="*{fullName}" name="fullName" type="text"
                          pattern="^[A-ZА-Яа-яa-z\s]+$"  class="form-control" id="inputAuthor"
                            th:placeholder="#{placeholder.author}" required>
                 </div>
+
+                <div th:if="${#fields.hasErrors('fullName')}"
+                     class="alert alert-dark" role="alert">
+                    <span th:errors="*{fullName}">Name error</span>
+                </div>
+
                 <button type="submit" class="btn btn-dark" th:text="#{button.submit}">Submit</button>
             </form>
         </div>

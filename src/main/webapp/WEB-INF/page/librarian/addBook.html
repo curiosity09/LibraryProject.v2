@@ -14,6 +14,11 @@
             <form th:method="post" th:action="@{/addBook}" th:object="${book}"
                   enctype="application/x-www-form-urlencoded">
 
+                <div th:if="${#fields.hasErrors('name')}"
+                     class="alert alert-dark" role="alert">
+                    <span th:errors="*{name}">Name error</span>
+                </div>
+
                 <div class="mb-3">
                     <label for="inputNameBook" class="form-label" th:text="#{th.nameBook}">Book</label>
                     <input th:field="*{name}" type="text"
@@ -49,11 +54,21 @@
                     </label>
                 </div>
 
+                <div th:if="${#fields.hasErrors('quantity')}"
+                     class="alert alert-dark" role="alert">
+                    <span th:errors="*{quantity}">Name error</span>
+                </div>
+
                 <div class="mb-3">
                     <label for="inputQuantity" class="form-label" th:text="#{th.quantity}">Quantity</label>
                     <input th:field="*{quantity}" type="number" min="1" step="1" max="10" class="form-control"
                            id="inputQuantity"
                            th:placeholder="#{placeholder.quantity}" required>
+                </div>
+
+                <div th:if="${#fields.hasErrors('publicationYear')}"
+                     class="alert alert-dark" role="alert">
+                    <span th:errors="*{publicationYear}">Name error</span>
                 </div>
 
                 <div class="mb-3">
