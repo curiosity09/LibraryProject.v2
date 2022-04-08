@@ -1,4 +1,4 @@
-package by.tms.util;
+package by.tms.model.util;
 
 import by.tms.model.entity.Author;
 import by.tms.model.entity.Book;
