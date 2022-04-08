@@ -44,10 +44,8 @@
             </ul>
 
         </td>
-
-        <td th:text="${#temporals.format(order.rentalTime, 'dd-MM-yyyy HH:mm')}"></td>
-        <td th:text="${#temporals.format(order.rentalPeriod, 'dd-MM-yyyy HH:mm')}"></td>
-
+        <td th:text="${#temporals.format(order.rentalTime, 'E, dd MMM yyyy HH:mm')}"></td>
+        <td th:text="${#temporals.format(order.rentalPeriod, 'E, dd MMM yyyy HH:mm')}"></td>
         <td>
             <span th:if="${order.rentalPeriod<=#temporals.createNow()}" th:text="#{status.exp}">EXP</span>
             <span th:unless="${order.rentalPeriod<=#temporals.createNow()}" th:text="#{status.act}">ACT</span>

@@ -19,7 +19,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,6 +30,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Optional;
@@ -56,7 +59,11 @@ public class AccountController {
     }
 
     @PostMapping("/register")
-    public String register(AccountDto account, HttpServletRequest request) {
+    public String register(@ModelAttribute(ACCOUNT_ATTRIBUTE) @Valid AccountDto account,
+                           Errors errors, HttpServletRequest request) {
+        if (errors.hasErrors()) {
+            return REGISTER_PAGE_SUFFIX;
+        }
         if (Objects.nonNull(account.getUsername()) && Objects.nonNull(account.getPassword())) {
             Optional<AccountDto> accountByUsername = accountService.findAccountByUsername(account.getUsername());
             if (accountByUsername.isEmpty()) {
@@ -72,9 +79,9 @@ public class AccountController {
 
                 return REDIRECT + SUCCESS_PAGE;
             }
-            return REDIRECT + REGISTER_PAGE;
+            return REGISTER_PAGE_SUFFIX;
         }
-        return REDIRECT + REGISTER_PAGE;
+        return REGISTER_PAGE_SUFFIX;
     }
 
     @GetMapping("/success")
@@ -153,7 +160,10 @@ public class AccountController {
     }
 
     @PostMapping("/editUser")
-    public String editUser(Model model, AccountDto account) {
+    public String editUser(Model model, @ModelAttribute(ACCOUNT_ATTRIBUTE) @Valid AccountDto account, Errors errors) {
+        if (errors.hasErrors()) {
+            return USER_PREFIX + EDIT_USER_SUFFIX;
+        }
         if (Objects.nonNull(account.getUsername()) && Objects.nonNull(account.getPassword())) {
             account.setPassword(passwordEncoder.encode(account.getPassword()));
 
@@ -220,7 +230,10 @@ public class AccountController {
     }
 
     @PostMapping("/addEmployee")
-    public String addEmployee(AccountDto account) {
+    public String addEmployee(@ModelAttribute(ACCOUNT_ATTRIBUTE) @Valid AccountDto account, Errors errors) {
+        if (errors.hasErrors()) {
+            return ADMIN_PREFIX + ADD_EMPLOYEE_SUFFIX;
+        }
         account.setPassword(passwordEncoder.encode(account.getPassword()));
         if (Objects.equals(LIBRARIAN_ROLE, account.getRole())) {
             accountService.saveLibrarian(account);

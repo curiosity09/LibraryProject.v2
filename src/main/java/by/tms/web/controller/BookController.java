@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -94,7 +96,10 @@ public class BookController {
     }
 
     @PostMapping("/editBook")
-    public String editBook(BookDto book) {
+    public String editBook(@ModelAttribute(BOOK_ATTRIBUTE) @Valid BookDto book, Errors errors) {
+        if (errors.hasErrors()) {
+            return LIBRARIAN_PREFIX + EDIT_BOOK_SUFFIX;
+        }
         if (Objects.nonNull(book)) {
             bookService.update(book);
             log.debug(LoggerUtil.ENTITY_WAS_UPDATED_IN_CONTROLLER, book);
@@ -114,7 +119,10 @@ public class BookController {
     }
 
     @PostMapping("/addBook")
-    public String addBook(BookDto book) {
+    public String addBook(@ModelAttribute(BOOK_ATTRIBUTE) @Valid BookDto book, Errors errors) {
+        if (errors.hasErrors()) {
+            return LIBRARIAN_PREFIX + ADD_BOOK_SUFFIX;
+        }
         if (Objects.nonNull(book)) {
             bookService.save(book);
             log.debug(LoggerUtil.ENTITY_WAS_SAVED_IN_CONTROLLER, book);

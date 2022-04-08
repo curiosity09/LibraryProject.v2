@@ -17,11 +17,21 @@
 
                 <input th:field="*{id}" type="hidden" class="form-control" th:value="${account.id}">
 
+                <div th:if="${#fields.hasErrors('password')}"
+                     class="alert alert-dark" role="alert">
+                    <span th:errors="*{password}">Name error</span>
+                </div>
+
                 <div class="mb-3">
                     <label for="inputPassword" class="form-label" th:text="#{label.pass}">Pass</label>
                     <input th:field="*{password}" type="password"
                            pattern="^[A-za-z0-9\._]{4,16}$" class="form-control" id="inputPassword"
                            th:placeholder="#{placeholder.pass}" required>
+                </div>
+
+                <div th:if="${#fields.hasErrors('userData.name')}"
+                     class="alert alert-dark" role="alert">
+                    <span th:errors="*{userData.name}">Name error</span>
                 </div>
 
                 <div class="mb-3">
@@ -31,6 +41,11 @@
                            th:placeholder="#{placeholder.name}" th:value="${account.userData.name}">
                 </div>
 
+                <div th:if="${#fields.hasErrors('userData.surname')}"
+                     class="alert alert-dark" role="alert">
+                    <span th:errors="*{userData.surname}">Name error</span>
+                </div>
+
                 <div class="mb-3">
                     <label for="inputSurName" class="form-label" th:text="#{label.surname}">Surname</label>
                     <input th:field="*{userData.surname}" type="text" class="form-control"
@@ -38,11 +53,21 @@
                            th:placeholder="#{placeholder.surname}" th:value="${account.userData.surname}">
                 </div>
 
+                <div th:if="${#fields.hasErrors('userData.phoneNumber')}"
+                     class="alert alert-dark" role="alert">
+                    <span th:errors="*{userData.phoneNumber}">Name error</span>
+                </div>
+
                 <div class="mb-3">
                     <label for="inputPhone" class="form-label" th:text="#{label.phone}">Phone</label>
                     <input th:field="*{userData.phoneNumber}" type="text" class="form-control"
                            pattern="^(\+?375|80)(29|25|44|33)(\d{3})(\d{2})(\d{2})$" id="inputPhone"
                            th:placeholder="#{placeholder.phone}" th:value="${account.userData.phoneNumber}">
+                </div>
+
+                <div th:if="${#fields.hasErrors('userData.emailAddress')}"
+                     class="alert alert-dark" role="alert">
+                    <span th:errors="*{userData.emailAddress}">Name error</span>
                 </div>
 
                 <div class="mb-3">

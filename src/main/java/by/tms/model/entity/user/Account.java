@@ -38,7 +38,6 @@ public abstract class Account extends BaseEntity<Long> {
     protected String password;
     @Column(name = "user_type", insertable = false, updatable = false)
     protected String role;
-    @Column(nullable = false, length = 10)
     @Embedded
     protected UserData userData;
     @OneToMany(mappedBy = "account")

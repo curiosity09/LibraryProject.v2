@@ -3,6 +3,7 @@
 <head>
     <title>User Page</title>
     <link rel="stylesheet" th:href="@{/resources/css/bootstrap.css}">
+    <link rel="stylesheet" th:href="@{/resources/css/customAlert.css}">
 </head>
 <body>
 <div th:replace="page/admin/adminHeader.html ::  header"></div>
@@ -44,8 +45,8 @@
     </tr>
     </tbody>
 </table>
-<div th:if="${param.cannotDel}" style="width: 50%; margin: 0 auto; text-align: center;"
-     class="alert alert-dark" role="alert">
+<div th:if="${param.cannotDel}"
+     class="alert alert-dark alert-custom" role="alert">
     <span th:text="#{alert.cannotDel}">The user cannot be deleted. The user still has active orders.</span>
 </div>
 <nav aria-label="Page navigation example">
