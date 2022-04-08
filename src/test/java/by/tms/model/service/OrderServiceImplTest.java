@@ -2,14 +2,12 @@ package by.tms.model.service;
 
 import by.tms.model.config.DatabaseConfigTest;
 import by.tms.model.dto.OrderDto;
-import by.tms.util.TestDataImporter;
-import org.hibernate.SessionFactory;
+import by.tms.model.util.TestDataImporter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.event.annotation.AfterTestMethod;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,8 +15,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import static by.tms.util.TestDataImporter.LIMIT_10;
-import static by.tms.util.TestDataImporter.OFFSET_0;
+import static by.tms.model.util.TestDataImporter.LIMIT_10;
+import static by.tms.model.util.TestDataImporter.OFFSET_0;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
@@ -29,16 +27,12 @@ class OrderServiceImplTest {
     @Autowired
     private OrderService orderService;
     @Autowired
-    private SessionFactory sessionFactory;
+    private TestDataImporter testDataImporter;
 
     @BeforeEach
     public void initDb() {
-        TestDataImporter.importTestData(sessionFactory);
-    }
-
-    @AfterTestMethod
-    public void flush() {
-        sessionFactory.close();
+        testDataImporter.cleanTestData();
+        testDataImporter.importTestData();
     }
 
     @Test

@@ -2,15 +2,12 @@ package by.tms.model.service;
 
 import by.tms.model.config.DatabaseConfigTest;
 import by.tms.model.dto.BookDto;
-import by.tms.util.TestDataImporter;
-import org.hibernate.SessionFactory;
-import org.junit.jupiter.api.AfterEach;
+import by.tms.model.util.TestDataImporter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.event.annotation.AfterTestMethod;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,16 +24,12 @@ class BookServiceImplTest {
     @Autowired
     private BookService bookService;
     @Autowired
-    private SessionFactory sessionFactory;
+    private TestDataImporter testDataImporter;
 
     @BeforeEach
     public void initDb() {
-        TestDataImporter.importTestData(sessionFactory);
-    }
-
-    @AfterTestMethod
-    public void flush() {
-        sessionFactory.close();
+        testDataImporter.cleanTestData();
+        testDataImporter.importTestData();
     }
 
     @Test

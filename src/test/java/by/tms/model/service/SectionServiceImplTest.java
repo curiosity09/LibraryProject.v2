@@ -2,23 +2,20 @@ package by.tms.model.service;
 
 import by.tms.model.config.DatabaseConfigTest;
 import by.tms.model.dto.SectionDto;
-import by.tms.util.TestDataImporter;
-import org.hibernate.SessionFactory;
-import org.junit.jupiter.api.AfterEach;
+import by.tms.model.util.TestDataImporter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.event.annotation.AfterTestMethod;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
-import static by.tms.util.TestDataImporter.LIMIT_10;
-import static by.tms.util.TestDataImporter.OFFSET_0;
+import static by.tms.model.util.TestDataImporter.LIMIT_10;
+import static by.tms.model.util.TestDataImporter.OFFSET_0;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
@@ -29,21 +26,17 @@ class SectionServiceImplTest {
     @Autowired
     private SectionService sectionService;
     @Autowired
-    private SessionFactory sessionFactory;
+    private TestDataImporter testDataImporter;
 
     @BeforeEach
     public void initDb() {
-        TestDataImporter.importTestData(sessionFactory);
-    }
-
-    @AfterTestMethod
-    public void flush() {
-        sessionFactory.close();
+        testDataImporter.cleanTestData();
+        testDataImporter.importTestData();
     }
 
     @Test
     void findAllSection() {
-        List<SectionDto> results = sectionService.findAll(LIMIT_10,OFFSET_0);
+        List<SectionDto> results = sectionService.findAll(LIMIT_10, OFFSET_0);
         assertEquals(3, results.size());
     }
 
@@ -57,7 +50,7 @@ class SectionServiceImplTest {
     @Test
     void findSectionById() {
         Optional<SectionDto> sectionById = sectionService.findById(2L);
-        sectionById.ifPresent(sectionDto -> assertEquals("Космос",sectionDto.getName()));
+        sectionById.ifPresent(sectionDto -> assertEquals("Космос", sectionDto.getName()));
     }
 
     @Test
