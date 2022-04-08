@@ -3,9 +3,7 @@ package by.tms.model.dao;
 import by.tms.model.config.DatabaseConfigTest;
 import by.tms.model.entity.Book;
 import by.tms.model.entity.Order;
-import by.tms.util.TestDataImporter;
-import org.hibernate.SessionFactory;
-import org.junit.jupiter.api.AfterEach;
+import by.tms.model.util.TestDataImporter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,8 +16,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import static by.tms.util.TestDataImporter.LIMIT_10;
-import static by.tms.util.TestDataImporter.OFFSET_0;
+import static by.tms.model.util.TestDataImporter.LIMIT_10;
+import static by.tms.model.util.TestDataImporter.OFFSET_0;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
@@ -30,16 +28,12 @@ class OrderDaoImplTest {
     @Autowired
     private OrderDao orderDao;
     @Autowired
-    private SessionFactory sessionFactory;
+    private TestDataImporter testDataImporter;
 
     @BeforeEach
     public void initDb() {
-        TestDataImporter.importTestData(sessionFactory);
-    }
-
-    @AfterEach
-    public void flush() {
-        sessionFactory.close();
+        testDataImporter.cleanTestData();
+        testDataImporter.importTestData();
     }
 
     @Test
