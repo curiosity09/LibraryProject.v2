@@ -1,0 +1,21 @@
+.ban-page {
+    width: 800px;
+    background: #bebebf;
+    padding: 5px;
+    padding-right: 20px;
+    border: solid 1px black;
+    float: start;
+}
+
+body {
+    background-image: url(/resources/images/banCat.jpg);
+}
+
+.error-page {
+    width: 800px;
+    background: #bebebf;
+    padding: 5px;
+    padding-right: 20px;
+    border: solid 1px black;
+    float: start;
+}
