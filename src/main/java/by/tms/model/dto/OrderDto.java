@@ -8,7 +8,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.PastOrPresent;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -25,6 +27,9 @@ public class OrderDto implements Serializable {
     private Long id;
     private List<BookDto> bookList;
     private AccountDto user;
+    @DateTimeFormat()
+    @PastOrPresent
     private LocalDateTime rentalTime;
+    @DateTimeFormat()
     private LocalDateTime rentalPeriod;
 }

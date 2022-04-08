@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 @AllArgsConstructor
@@ -20,5 +22,7 @@ import java.io.Serializable;
 public class AuthorDto implements Serializable {
 
     private Long id;
+    @NotBlank
+    @Size(min = 2, max = 50)
     private String fullName;
 }

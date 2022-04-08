@@ -9,6 +9,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 @AllArgsConstructor
@@ -21,11 +25,17 @@ import java.io.Serializable;
 public class AccountDto implements Serializable {
 
     private Long id;
+    @NotBlank
+    @Size(min = 3, max = 20)
     private String username;
+    @NotBlank
+    @Size(min = 4, max = 20)
     private String password;
+    @NotNull
     private String role;
     private UserDataDto userData;
     private boolean isBanned;
     private Level level;
+    @Min(0)
     private Integer ordersAmount;
 }

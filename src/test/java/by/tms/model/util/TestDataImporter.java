@@ -10,18 +10,29 @@ import by.tms.model.entity.user.Level;
 import by.tms.model.entity.user.Librarian;
 import by.tms.model.entity.user.User;
 import by.tms.model.entity.user.UserData;
+import lombok.Getter;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-public final class TestDataImporter {
+@Getter
+@Component("testDataImporter")
+public class TestDataImporter {
 
     public static final int LIMIT_10 = 10;
     public static final int OFFSET_0 = 0;
+    private final SessionFactory sessionFactory;
 
-    public static void importTestData(SessionFactory sessionFactory) {
+    @Autowired
+    public TestDataImporter(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
+
+    public void importTestData() {
         Session session = sessionFactory.getCurrentSession();
 
         Section preSchoolLiteratureSection = saveSection(session, "Дошкольная литература");
@@ -34,7 +45,7 @@ public final class TestDataImporter {
 
         Author akuninAuthor = saveAuthor(session, "Борис Акунин");
         Author pelevinAuthor = saveAuthor(session, "Виктор Пелевин");
-        saveAuthor(session,"Чарльз Буковски");
+        saveAuthor(session, "Чарльз Буковски");
 
         Book azazelloBook = saveBook(session, "Азазело", akuninAuthor, detective,
                 5, animalSection, 1999);
@@ -46,7 +57,7 @@ public final class TestDataImporter {
         User user = saveUser(session, "user", "pass", "Misha", "Ryzgunsky",
                 "ryzgunsky.mihail@gmail.com", "+375445787918");
         User newUser = saveUser(session, "newUser", "pass1", "Sasha", "Egorov",
-                "ryzgunky.mihail@gmail.com","+375445717918");
+                "ryzgunky.mihail@gmail.com", "+375445717918");
         saveAdmin(session, "admin", "pass1", "Dima", "Morozov",
                 "dima@mail.com", "+375445344587", Level.HEAD);
         saveAdmin(session, "newAdmin", "pass", "Misha", "Basalay",
@@ -59,6 +70,18 @@ public final class TestDataImporter {
         saveOrder(session, user, List.of(azazelloBook, generationP), LocalDateTime.now().plusDays(10));
         saveOrder(session, newUser, List.of(azazelloBook, generationP, turkishGambitBook), LocalDateTime.now().plusDays(1));
         saveOrder(session, newUser, List.of(azazelloBook, turkishGambitBook), LocalDateTime.now().plusDays(2));
+    }
+
+    public void cleanTestData() {
+        Session session = sessionFactory.getCurrentSession();
+        session.createQuery("delete from User ").executeUpdate();
+        session.createQuery("delete from Librarian ").executeUpdate();
+        session.createQuery("delete from Admin ").executeUpdate();
+        session.createQuery("delete from Order ").executeUpdate();
+        session.createQuery("delete from Author ").executeUpdate();
+        session.createQuery("delete from Book ").executeUpdate();
+        session.createQuery("delete from Section ").executeUpdate();
+        session.createQuery("delete from Genre ").executeUpdate();
     }
 
     private static Section saveSection(Session session, String name) {
@@ -88,7 +111,7 @@ public final class TestDataImporter {
     }
 
     private static User saveUser(Session session, String username, String password,
-                                    String name, String surname, String email, String phone) {
+                                 String name, String surname, String email, String phone) {
         User user = User.builder().username(username).password(password).role("user")
                 .userData(UserData.builder().name(name).surname(surname)
                         .emailAddress(email).phoneNumber(phone).build()).isBanned(false).build();
