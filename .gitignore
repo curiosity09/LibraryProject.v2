@@ -1,6 +1,60 @@
-/.idea/
-/logs/
-/SecondLibProject.iml
-/target/
+# ===== Build / Maven =====
+target/
+!.mvn/wrapper/maven-wrapper.jar
+*.jar
+*.war
+*.class
 
+# ===== Logs =====
+logs/
+*.log
+*.log.*
 
+# ===== IDE =====
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/
+.settings/
+.project
+.classpath
+.factorypath
+nbproject/private/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+nb-configuration.xml
+
+# ===== OS =====
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# ===== Secrets / local config =====
+# Contains real DB credentials - use application-prod.yml.example as a template
+application-prod.yml
+application-local.yml
+.env
+.env.*
+*.pem
+*.key
+
+# ===== Uploaded files (FilesStorageService) =====
+/WEB-INF/
+uploads/
+src/main/resources/static/uploads/
+
+# ===== H2 database files =====
+*.mv.db
+*.trace.db
+*.lock.db
+
+# ===== Temporary =====
+tmp/
+temp/
+*.tmp
+*.bak
+*.orig
+*.rej

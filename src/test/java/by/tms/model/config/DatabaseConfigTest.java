@@ -1,11 +1,9 @@
 package by.tms.model.config;
 
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
-@Configuration
-@Import(DatabaseConfig.class)
-@ComponentScan("by.tms.model.util")
+@SpringBootTest
+@ActiveProfiles("test")
 public class DatabaseConfigTest {
 }
