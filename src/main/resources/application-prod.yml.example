@@ -1,0 +1,32 @@
+# Template for the local production configuration.
+#
+# Copy this file to `application-prod.yml` (which is git-ignored) and fill in real values:
+#   Copy-Item application-prod.yml.example application-prod.yml
+#
+# The `prod` profile is the default one (see application.yml), so no extra flag is needed.
+# Credentials can also come from environment variables, which is handy for CI / deployment:
+#   $env:DB_USERNAME="postgres"
+#   $env:DB_PASSWORD="your-password"
+#
+# Note: Hibernate creates/updates tables (ddl-auto), but it does NOT create the database or the
+# schema itself. Create them once:
+#   CREATE DATABASE db_library;
+#   CREATE SCHEMA IF NOT EXISTS library_hibernate;
+spring:
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/db_library?currentSchema=library_hibernate}
+    driver-class-name: org.postgresql.Driver
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:}
+  jpa:
+    hibernate:
+      ddl-auto: ${DDL_AUTO:update}
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: false
+
+logging:
+  level:
+    root: info
+    by.tms: ${APP_LOG_LEVEL:info}
