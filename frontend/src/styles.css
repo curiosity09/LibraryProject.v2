@@ -1,0 +1,30 @@
+body {
+  background-color: #f8f9fa;
+}
+
+table caption {
+  caption-side: top;
+}
+
+.book-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.book-list li + li {
+  margin-top: 0.5rem;
+}
+
+.book-list p {
+  margin: 0;
+}
+
+.centered-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+}

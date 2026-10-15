@@ -11,21 +11,18 @@ spring:
       hibernate:
         format_sql: false
         dialect: org.hibernate.dialect.H2Dialect
-  thymeleaf:
-    prefix: classpath:/templates/
-    suffix: .html
-    cache: false
-    encoding: UTF-8
   servlet:
     multipart:
       max-file-size: 100MB
       max-request-size: 100MB
-  messages:
-    basename: localization
-    encoding: UTF-8
   web:
     locale: en_US
     locale-resolver: fixed
+
+# Origins allowed to call the REST API with credentials (Vite dev server by default).
+app:
+  cors:
+    allowed-origins: http://localhost:5173
 
 server:
   port: 8080
