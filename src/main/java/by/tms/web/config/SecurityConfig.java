@@ -51,6 +51,10 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(antMatcher("/api/auth/login"), antMatcher("/api/auth/register")).permitAll()
+                        // Swagger UI and the OpenAPI description must stay reachable for documentation
+                        .requestMatchers(antMatcher("/swagger-ui.html"),
+                                antMatcher("/swagger-ui/**"),
+                                antMatcher("/v3/api-docs/**")).permitAll()
                         .requestMatchers(antMatcher("/api/admin/**")).hasAuthority("admin")
                         .requestMatchers(antMatcher("/api/librarian/**")).hasAnyAuthority("librarian", "admin")
                         .requestMatchers(antMatcher("/api/**")).authenticated()
