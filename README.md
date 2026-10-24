@@ -109,6 +109,18 @@ other `/api/**` endpoint requires an authenticated session.
 Paged endpoints return `{ content, page, size, totalPages, hasNext, hasPrevious }`.
 Errors are returned as `{ status, message, timestamp, errors }`.
 
+## API documentation (Swagger UI)
+
+The API is described with OpenAPI 3 and rendered by Swagger UI (springdoc-openapi). Once the
+backend is running, open:
+
+- Swagger UI — <http://localhost:8080/swagger-ui.html>
+- OpenAPI JSON — <http://localhost:8080/v3/api-docs>
+
+These paths are public. Authenticated calls can be made straight from the UI: execute
+`POST /api/auth/login` first, after which the browser stores the `JSESSIONID` cookie and sends it
+automatically with the following requests.
+
 ## Project layout
 
 ```
